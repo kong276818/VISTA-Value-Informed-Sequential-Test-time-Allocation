@@ -7,10 +7,25 @@ Claude Code operates this repo. Read this file before every task.
 
 | GPU | VRAM | Arch | Notes |
 |---|---|---|---|
-| RTX 4090 x1 | 24 GB | sm_89 (Ada) | fastest, `CUDA_VISIBLE_DEVICES=0` |
+| RTX 4090 x1 | 24 GB | sm_89 (Ada) | fastest, `CUDA_VISIBLE_DEVICES=0` [^xorg] |
 | RTX 3090 x2 | 24 GB | sm_86 (Ampere) | `CUDA_VISIBLE_DEVICES=1,2` |
 
+[^xorg]: GPU 0 carries a permanent ~19 MiB VRAM footprint from Xorg (9 MiB)
+and gnome-shell (10 MiB). GPU 1 and GPU 2 each have ~4 MiB from Xorg only.
+No iGPU is present; display cannot be offloaded. All three GPUs run at
+`gpu_memory_utilization=0.92`; the asymmetry (~15 MiB, 0.06% of VRAM) is
+negligible and documented here for reproducibility.
+
 No NVLink assumed. No multi-node. Single machine.
+
+## Model requirement
+
+**Primary models MUST have a native thinking mode.** Instruct-only models
+(Qwen2.5-Instruct, Llama-3-Instruct, etc.) are invalid for this project —
+the budget grid presupposes a reasoning trace. Using an instruct-only model
+produces numbers silently, but those numbers are meaningless.
+
+Primary model: **Qwen3-8B** (HF: `Qwen/Qwen3-8B`).
 
 ## Hard rules — violating any of these invalidates the paper
 
