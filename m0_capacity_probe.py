@@ -46,18 +46,69 @@ THINK_END_ID   = 151668   # </think>
 # being downloaded. Real datasets come in M0 step 2.
 # ----------------------------------------------------------------------------
 
+_PROMPTS = [
+    # geometry / measurement
+    "A regular hexagon has area 96. Find the area of the triangle formed by three alternating vertices. Show all steps.",
+    "A circle of radius 5 is tangent to both coordinate axes in the first quadrant. Find its equation and verify.",
+    "A trapezoid has parallel sides of length 6 and 10, and a height of 4. Find its area and the length of each non-parallel side if the trapezoid is isosceles.",
+    "A ladder 10 m long leans against a vertical wall. Its foot is 6 m from the wall. How high does the top reach and what angle does it make with the ground?",
+    "Find the number of diagonals of a convex polygon with 12 sides. Derive the general formula for n sides.",
+    "A rectangle has perimeter 36 cm. Find the dimensions that maximize its area and verify it is indeed a maximum.",
+    "A square of side 8 has a circle inscribed in it and a circle circumscribed around it. Find the area between the two circles.",
+    "A cylinder and a cone share the same base radius r and height h. Find the ratio of their volumes and total surface areas.",
+    "Two circles of radii 3 and 5 are externally tangent. Find the length of their common external tangent.",
+    "In triangle ABC, angle A = 45°, angle B = 60°, and side c = 10. Find sides a and b using the sine rule.",
+    # algebra / functions
+    "Let f(x)=x^4-6x^2+8. Find every real root and prove none were missed.",
+    "Factor x^6 - 64 completely over the integers into irreducible factors.",
+    "If the polynomial p(x) = x^3 + ax^2 + bx + 6 has roots 1, 2, and 3, find a, b, and verify by expanding.",
+    "Solve the system: 3x + 2y - z = 7, x - y + 2z = 1, 2x + 3y + z = 12. Verify your solution.",
+    "Find all real solutions to |3x - 2| + |x + 1| = 9.",
+    "Find the range of f(x) = (x^2 - 1)/(x^2 + 1). Show that every value in the range is achieved.",
+    "Solve: 2^(2x) - 5 * 2^x + 4 = 0. Find all real solutions, showing all steps.",
+    "Find all x such that log_3(x) + log_3(x-2) = 1. Check for extraneous solutions.",
+    "Find all local maxima and minima of f(x) = x^3 - 6x^2 + 9x + 2. Confirm using the second derivative test.",
+    "A geometric sequence has a_1 = 3 and a_4 = 81. Find the common ratio, a_7, and the sum of the first 6 terms.",
+    # number theory
+    "Prove that for all positive integers n, 6 divides n^3 - n. Use factoring and divisibility arguments.",
+    "Find all integers n such that n^2 + 3n - 18 is a perfect square.",
+    "Find all positive integer solutions to the Diophantine equation 3x + 5y = 47.",
+    "Find the remainder when 17^100 is divided by 13. Use Fermat's little theorem.",
+    "Prove that sqrt(3) + sqrt(5) is irrational. (Hint: square it and reach a contradiction.)",
+    "Seven distinct integers sum to 0 and their product is 5040. Determine all possible multisets, justifying exhaustiveness.",
+    "Find all prime numbers p such that p^2 + 2 is also prime. Prove no others exist.",
+    "Find all n such that n! + 1 is divisible by n + 1, for 1 <= n <= 10. Check each case.",
+    "The digits of a two-digit number are reversed to form a new number. The sum of original and new is 121, difference is 45. Find both numbers.",
+    "Find all positive integer pairs (x, y) satisfying 1/x + 1/y = 1/6.",
+    # probability / combinatorics
+    "A fair coin is flipped until two consecutive heads appear. Compute the expected number of flips, deriving the recurrence.",
+    "A bag contains 4 red, 3 blue, and 5 green balls. You draw 3 without replacement. What is the probability exactly 2 are red?",
+    "Two dice are rolled. Given the sum is greater than 7, what is the conditional probability that at least one die shows a 6?",
+    "In a class of 40 students, 25 study mathematics, 20 study physics, and 8 study both. How many study neither?",
+    "How many 5-letter strings can be formed from A, B, C, D, E (no repeats) such that the string starts with A or ends with E?",
+    "A committee of 5 is chosen from 8 men and 6 women. How many committees have at least 3 women?",
+    "In how many ways can 8 people be seated at a round table? Account for rotational symmetry and explain your counting.",
+    "A biased coin lands heads with probability 2/3. If flipped 5 times, what is the probability of exactly 3 heads?",
+    "How many 4-digit positive integers have all distinct digits and digit sum equal to 12?",
+    "From a group of 10 people, two teams of 4 are chosen simultaneously. How many ways can this be done?",
+    # analysis / series / induction
+    "Prove by mathematical induction that 1^2 + 2^2 + ... + n^2 = n(n+1)(2n+1)/6 for all positive integers n.",
+    "Compute the sum of the infinite series 1/(1*2) + 1/(2*3) + 1/(3*4) + ... using partial fractions and telescoping.",
+    "The sum of the first n terms of a sequence is S_n = n^2 + 2n. Find a_n for n >= 2 and check if n=1 fits.",
+    "Given vectors a = (2, -1, 3) and b = (-1, 4, 2), find a.b, |a|, |b|, and the angle between them.",
+    "A ball is thrown upward at 20 m/s. Using g = 10 m/s^2, find the max height, time to reach it, and time to return.",
+    # word problems / logic / mixed
+    "A farmer has 100 m of fencing to enclose a rectangular field along a river (no fence on the river side). What dimensions maximize the area?",
+    "Three pipes A, B, C fill a tank in 4, 6, and 12 hours. A and B are open for the first 2 hours, then all three. How long total to fill?",
+    "A store sells apples at $3 and oranges at $5. A customer spends exactly $44 buying some of each. Find all solutions.",
+    "Prove that in any group of 13 people, at least two share a birth month. State which theorem you are applying.",
+    "A ship goes 40 km north, then 30 km east, then 20 km south. How far is it from the starting point and in what direction?",
+]
+
+
 def make_prompts(n):
-    """Prompts long enough to force genuine multi-step reasoning."""
-    base = [
-        "A regular hexagon has area 96. Find the area of the triangle formed "
-        "by three alternating vertices. Show all steps.",
-        "Let f(x)=x^4-6x^2+8. Find every real root and prove none were missed.",
-        "Seven distinct integers sum to 0 and their product is 5040. "
-        "Determine all possible multisets, justifying exhaustiveness.",
-        "A fair coin is flipped until two consecutive heads appear. "
-        "Compute the expected number of flips, deriving the recurrence.",
-    ]
-    return [base[i % len(base)] for i in range(n)]
+    """Return the first n of the fixed prompt list (cycling if n > 50)."""
+    return [_PROMPTS[i % len(_PROMPTS)] for i in range(n)]
 
 
 def format_prompt_ids(tok, problem):
@@ -145,7 +196,6 @@ def run_probe(args):
         max_model_len=B_MAX + 512,
         enable_prefix_caching=True,      # <-- the whole plan depends on this
         enforce_eager=False,
-        swap_space=2,
     )
     tok = llm.get_tokenizer()
 
