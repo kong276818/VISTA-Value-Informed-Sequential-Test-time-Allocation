@@ -1,4 +1,5 @@
 out/
-*.json
+data/d5_logits*.json
+data/d5_prefixes.json
 __pycache__/
 .venv/
