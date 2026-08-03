@@ -359,92 +359,280 @@ def cmd_gen_prefixes(args):
 
     Must run on ONE GPU (the reference card, typically 4090).
     Uses temperature=0.0 for determinism.  min_tokens=B_MAX forces every item
-    to reach the largest checkpoint; items that can't (model refuses to extend
-    thinking) are marked None and skipped by run-d5 / compare-d5.
+    to reach the largest checkpoint; items that can't are marked None and
+    skipped by run-d5 / compare-d5.
+
+    Incremental checkpointing: results are flushed to a JSONL file after each
+    batch so at most one batch is lost on crash.  A config hash in the header
+    prevents mixing items generated under different settings — the same failure
+    mode that caused the D5 data-contamination incident.
     """
+    import hashlib, threading, time
+    from transformers import AutoTokenizer
     from vllm import LLM, SamplingParams
 
     items_data = json.loads(Path(args.items).read_text())
     items = items_data["items"]
     print(f"[gen-prefixes] {len(items)} items, budgets={D5_BUDGETS}, gpu={args.gpu_tag}")
 
-    llm = LLM(
-        model=args.model,
-        dtype="bfloat16",
-        kv_cache_dtype="auto",          # BF16 — never fp8
-        gpu_memory_utilization=args.util,
-        max_model_len=B_MAX + 600,      # prompt (~300) + B_MAX thinking + cue (~10)
-        enable_prefix_caching=True,
-        enforce_eager=False,
-    )
-    tok = llm.get_tokenizer()
+    # Load tokenizer before the model to compute context budget up front.
+    print(f"[gen-prefixes] loading tokenizer for {args.model} ...")
+    tok_pre = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
+    answer_cue_ids_pre = tok_pre.encode("\n</think>\n\nThe answer is ", add_special_tokens=False)
+    prompt_ids_pre = [build_mcq_prompt_ids(tok_pre, it) for it in items]
 
-    # Suffix appended after truncated thinking to form the answer-cue prefix.
-    # The answer token (A–J) is the *next* token after this cue.
-    answer_cue_ids = tok.encode("\n</think>\n\nThe answer is ", add_special_tokens=False)
-
-    # Build prompt token IDs for every item (no re-tokenisation later)
-    prompt_ids_list = [build_mcq_prompt_ids(tok, it) for it in items]
-
-    traj_params = SamplingParams(
-        max_tokens=B_MAX,
-        min_tokens=B_MAX,               # force full budget so all 3 checkpoints exist
-        stop_token_ids=[THINK_END_ID],  # stop after thinking block, not mid-answer
-        temperature=0.0,                # deterministic reference trace
+    # Derive max_model_len from actual prompt data — never hard-code.
+    max_prompt_len = max(len(ids) for ids in prompt_ids_pre)
+    cue_len = len(answer_cue_ids_pre)
+    MARGIN = 64
+    max_model_len = max_prompt_len + B_MAX + cue_len + MARGIN
+    print(
+        f"[gen-prefixes] max_prompt_len={max_prompt_len}  B_MAX={B_MAX}  "
+        f"cue_len={cue_len}  margin={MARGIN}  → max_model_len={max_model_len}"
     )
 
-    print(f"[gen-prefixes] generating {len(items)} traces × {B_MAX} tok ...")
-    traj_out = llm.generate(
-        [{"prompt_token_ids": ids} for ids in prompt_ids_list],
-        traj_params,
+    # Pre-validate: abort if any item would silently overflow.
+    violations = [
+        (i, items[i]["question_id"], len(ids), len(ids) + B_MAX + cue_len)
+        for i, ids in enumerate(prompt_ids_pre)
+        if len(ids) + B_MAX + cue_len > max_model_len
+    ]
+    if violations:
+        print(f"[gen-prefixes] FATAL: {len(violations)} item(s) exceed max_model_len={max_model_len}:")
+        for idx, qid, plen, total in violations[:10]:
+            print(f"  item[{idx}] qid={qid} prompt_len={plen} total_needed={total}")
+        sys.exit(1)
+    print(f"[gen-prefixes] pre-validation PASS — all {len(items)} items fit in {max_model_len} tokens")
+
+    # Config hash — changes to any generation-determining parameter invalidate the
+    # checkpoint and require a fresh run.  This prevents mixing items from
+    # different max_model_len / budget / sampling settings.
+    cfg_key = json.dumps({
+        "model":          args.model,
+        "max_model_len":  max_model_len,
+        "D5_BUDGETS":     D5_BUDGETS,
+        "max_tokens":     B_MAX,
+        "min_tokens":     B_MAX,
+        "temperature":    0.0,
+        "stop_token_ids": [THINK_END_ID],
+    }, sort_keys=True)
+    config_hash = hashlib.sha256(cfg_key.encode()).hexdigest()[:16]
+    print(f"[gen-prefixes] config_hash={config_hash}")
+
+    # Incremental checkpoint: <out>.jsonl
+    # Line 0 is a metadata object (config_hash, run params).
+    # Lines 1+ are completed prefix records, one JSON object each.
+    # The final <out>.json is written only after all items are done.
+    ckpt_path = Path(args.out).with_suffix(".jsonl")
+    out_path  = Path(args.out)
+
+    done_ids: set[str] = set()
+    if ckpt_path.exists():
+        with open(ckpt_path) as f:
+            first = f.readline().strip()
+        stored_hash = ""
+        if first:
+            try:
+                stored_hash = json.loads(first).get("config_hash", "")
+            except json.JSONDecodeError:
+                pass
+        if stored_hash and stored_hash != config_hash:
+            sys.exit(
+                f"[gen-prefixes] FATAL: checkpoint config_hash mismatch\n"
+                f"  stored : {stored_hash}\n"
+                f"  current: {config_hash}\n"
+                f"  Different max_model_len or sampling settings detected.\n"
+                f"  Delete {ckpt_path} to force a clean run."
+            )
+        with open(ckpt_path) as f:
+            f.readline()  # skip header
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        done_ids.add(json.loads(line)["question_id"])
+                    except (json.JSONDecodeError, KeyError):
+                        pass
+        print(f"[gen-prefixes] checkpoint found: {len(done_ids)} items already done")
+    else:
+        ckpt_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(ckpt_path, "w") as f:
+            f.write(json.dumps({
+                "_meta":         True,
+                "config_hash":   config_hash,
+                "ref_gpu_tag":   args.gpu_tag,
+                "model":         args.model,
+                "max_model_len": max_model_len,
+                "budgets":       D5_BUDGETS,
+            }) + "\n")
+
+    pending_items = [it for it in items if it["question_id"] not in done_ids]
+
+    if pending_items:
+        print(f"[gen-prefixes] {len(pending_items)} items to generate"
+              f" ({len(done_ids)} already checkpointed)")
+
+        llm = LLM(
+            model=args.model,
+            dtype="bfloat16",
+            kv_cache_dtype="auto",          # BF16 — never fp8
+            gpu_memory_utilization=args.util,
+            max_model_len=max_model_len,
+            enable_prefix_caching=False,    # 300 unique prompts → 0% hit rate
+            enforce_eager=False,
+        )
+        tok = llm.get_tokenizer()
+        answer_cue_ids = tok.encode("\n</think>\n\nThe answer is ", add_special_tokens=False)
+        pending_ids = [build_mcq_prompt_ids(tok, it) for it in pending_items]
+
+        # Batch size = KV concurrency so no sequence ever needs to be preempted.
+        # Submitting more than floor(kv_tokens / max_model_len) forces immediate
+        # eviction of the excess, causing repeated re-prefill (observed: 9× overhead).
+        try:
+            ec         = llm.llm_engine.cache_config
+            kv_tokens  = ec.num_gpu_blocks * ec.block_size
+            batch_size = max(1, kv_tokens // max_model_len)
+            print(f"[gen-prefixes] KV={kv_tokens} tokens  "
+                  f"max_model_len={max_model_len}  batch_size={batch_size}")
+        except Exception as exc:
+            batch_size = 3
+            print(f"[gen-prefixes] KV cache query failed ({exc}), using batch_size=3")
+
+        traj_params = SamplingParams(
+            max_tokens=B_MAX,
+            min_tokens=B_MAX,               # force full budget so all 3 checkpoints exist
+            stop_token_ids=[THINK_END_ID],  # stop after thinking block, not mid-answer
+            temperature=0.0,                # deterministic reference trace
+        )
+
+        t0_total     = time.time()
+        n_total_done = len(done_ids)
+        monitor_stop = threading.Event()
+
+        def _monitor():
+            import subprocess
+            while not monitor_stop.wait(60):
+                elapsed = time.time() - t0_total
+                try:
+                    r = subprocess.run(
+                        ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used",
+                         "--format=csv,noheader,nounits"],
+                        capture_output=True, text=True, timeout=5,
+                    )
+                    gpu_line = r.stdout.strip().split("\n")[0] if r.stdout.strip() else "?"
+                    sm_pct, mem_mib = (
+                        gpu_line.split(", ") if ", " in gpu_line else ("?", "?")
+                    )
+                except Exception:
+                    sm_pct, mem_mib = "?", "?"
+                print(
+                    f"[gen-prefixes] heartbeat  elapsed={elapsed:.0f}s"
+                    f"  SM={sm_pct}%  mem={mem_mib}MiB",
+                    flush=True,
+                )
+
+        threading.Thread(target=_monitor, daemon=True).start()
+        print(
+            f"[gen-prefixes] generating {len(pending_items)} items, batch={batch_size}"
+            f" (checkpoint written after each batch) ...",
+            flush=True,
+        )
+
+        for batch_start in range(0, len(pending_items), batch_size):
+            batch_end   = min(batch_start + batch_size, len(pending_items))
+            b_items     = pending_items[batch_start:batch_end]
+            b_ids       = pending_ids[batch_start:batch_end]
+
+            t0        = time.time()
+            batch_out = llm.generate(
+                [{"prompt_token_ids": list(ids)} for ids in b_ids],
+                traj_params,
+                use_tqdm=False,
+            )
+            elapsed     = time.time() - t0
+            gen_lens    = [len(o.outputs[0].token_ids) for o in batch_out]
+            short       = sum(1 for gl in gen_lens if gl < B_MAX)
+            tok_per_sec = sum(gen_lens) / elapsed if elapsed > 0 else 0
+
+            # Build prefix records and flush to checkpoint immediately.
+            batch_recs = []
+            for item, p_ids, out in zip(b_items, b_ids, batch_out):
+                thinking = list(out.outputs[0].token_ids)
+                if thinking and thinking[-1] == THINK_END_ID:
+                    thinking = thinking[:-1]
+                budgets_d: dict[str, list[int] | None] = {}
+                for b in D5_BUDGETS:
+                    if b > len(thinking):
+                        budgets_d[str(b)] = None
+                    else:
+                        # prefix: prompt + thinking[:b] + answer_cue
+                        budgets_d[str(b)] = list(p_ids) + thinking[:b] + list(answer_cue_ids)
+                batch_recs.append({
+                    "question_id":  item["question_id"],
+                    "category":     item["category"],
+                    "n_options":    len(item["options"]),
+                    "answer":       item["answer"],
+                    "answer_index": item["answer_index"],
+                    "thinking_len": len(thinking),
+                    "budgets":      budgets_d,
+                })
+
+            with open(ckpt_path, "a") as f:
+                for rec in batch_recs:
+                    f.write(json.dumps(rec) + "\n")
+
+            n_total_done += len(b_items)
+            print(
+                f"[gen-prefixes] batch {batch_start+1}–{batch_end}/{len(pending_items)}"
+                f"  {elapsed:.1f}s  {tok_per_sec:.0f} tok/s"
+                f"  total={n_total_done}/{len(items)}"
+                + (f"  WARN short={short}" if short else ""),
+                flush=True,
+            )
+
+        monitor_stop.set()
+    else:
+        print("[gen-prefixes] all items already checkpointed — consolidating to JSON ...")
+
+    # Consolidate JSONL → final JSON, preserving original item order.
+    print(f"[gen-prefixes] consolidating {ckpt_path.name} → {out_path.name} ...")
+    order = {it["question_id"]: i for i, it in enumerate(items)}
+    all_prefixes: list = []
+    with open(ckpt_path) as f:
+        f.readline()  # skip metadata header
+        for line in f:
+            line = line.strip()
+            if line:
+                try:
+                    all_prefixes.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
+    all_prefixes.sort(key=lambda r: order.get(r["question_id"], 999999))
+
+    n_full = sum(
+        1 for r in all_prefixes
+        if all(v is not None for v in r["budgets"].values())
     )
-
-    prefixes = []
-    n_full, n_partial, n_empty = 0, 0, 0
-    for item, p_ids, out in zip(items, prompt_ids_list, traj_out):
-        thinking = list(out.outputs[0].token_ids)
-        if thinking and thinking[-1] == THINK_END_ID:
-            thinking = thinking[:-1]
-
-        budgets: dict[str, list[int] | None] = {}
-        for b in D5_BUDGETS:
-            if b > len(thinking):
-                budgets[str(b)] = None
-            else:
-                # prefix: prompt + thinking[:b] + answer_cue
-                # Exactly the token IDs that run-d5 will feed to vLLM; never re-derive.
-                budgets[str(b)] = list(p_ids) + thinking[:b] + list(answer_cue_ids)
-
-        n_avail = sum(v is not None for v in budgets.values())
-        if n_avail == len(D5_BUDGETS):
-            n_full += 1
-        elif n_avail > 0:
-            n_partial += 1
-        else:
-            n_empty += 1
-
-        prefixes.append({
-            "question_id":  item["question_id"],
-            "category":     item["category"],
-            "n_options":    len(item["options"]),
-            "answer":       item["answer"],
-            "answer_index": item["answer_index"],
-            "thinking_len": len(thinking),
-            "budgets":      budgets,
-        })
-
+    n_partial = sum(
+        1 for r in all_prefixes
+        if any(v is not None for v in r["budgets"].values())
+        and not all(v is not None for v in r["budgets"].values())
+    )
+    n_empty = len(all_prefixes) - n_full - n_partial
     print(f"[gen-prefixes] full={n_full}  partial={n_partial}  empty={n_empty}")
 
     out_data = {
-        "ref_gpu_tag": args.gpu_tag,
-        "model":       args.model,
-        "budgets":     D5_BUDGETS,
-        "n_items":     len(prefixes),
-        "items":       prefixes,
+        "ref_gpu_tag":   args.gpu_tag,
+        "model":         args.model,
+        "budgets":       D5_BUDGETS,
+        "max_model_len": max_model_len,
+        "config_hash":   config_hash,
+        "n_items":       len(all_prefixes),
+        "items":         all_prefixes,
     }
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.out).write_text(json.dumps(out_data, indent=2))
-    print(f"[gen-prefixes] wrote {args.out}")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(out_data, indent=2))
+    print(f"[gen-prefixes] wrote {out_path}  (checkpoint kept at {ckpt_path})")
 
 
 # ---------------------------------------------------------------------------
@@ -458,12 +646,30 @@ def cmd_run_d5(args):
     prefix_data = json.loads(Path(args.prefixes).read_text())
     items = prefix_data["items"]
 
+    # Compute max_model_len from the actual saved prefix lengths (+ 1 answer token).
+    all_ids = [
+        ids
+        for item in items
+        for ids in item["budgets"].values()
+        if ids is not None
+    ]
+    if not all_ids:
+        sys.exit("[run-d5] no valid prefix IDs found in prefixes file")
+    max_prefix_len = max(len(ids) for ids in all_ids)
+    max_model_len = max_prefix_len + 1   # only 1 answer token generated
+    print(f"[run-d5] max_prefix_len={max_prefix_len}  → max_model_len={max_model_len}")
+
+    # Pre-validate: confirm all prefixes fit.
+    overflow = [len(ids) for ids in all_ids if len(ids) >= max_model_len]
+    if overflow:
+        sys.exit(f"[run-d5] FATAL: {len(overflow)} prefix(es) >= max_model_len={max_model_len}")
+
     llm_kwargs = dict(
         model=args.model,
         dtype="bfloat16",
         kv_cache_dtype="auto",
         gpu_memory_utilization=args.util,
-        max_model_len=B_MAX + 600,
+        max_model_len=max_model_len,
         enable_prefix_caching=True,
         enforce_eager=args.enforce_eager,
     )
