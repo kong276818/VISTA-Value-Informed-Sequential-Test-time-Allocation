@@ -11,6 +11,10 @@ Modern reasoning models (Qwen3, DeepSeek-R1) allow explicit control over how man
 
 The corpus is built once, stored as prefix checkpoints, and all downstream analysis (budget policies, confidence sequences, model comparisons) runs offline on CPU from the frozen tables.
 
+![Why is reasoning-budget selection hard?](img/img1.png)
+
+The core difficulty: trajectory signals are ambiguous (the same reasoning style can lead to correct or incorrect answers), and early stopping hides the counterfactual continuation. VISTA resolves this with occasional randomized full-trajectory audits that reconstruct what would have happened — enabling data-driven estimation of each additional budget token's marginal value.
+
 ---
 
 ## Hardware
