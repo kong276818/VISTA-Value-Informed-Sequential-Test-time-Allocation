@@ -150,10 +150,9 @@ def build_mcq_prompt_ids(tok, item):
 
 
 def brier_score(probs, answer_index):
-    """Multi-class Brier: mean squared deviation from one-hot."""
-    n = len(probs)
+    """Multi-class Brier: summed squared deviation from one-hot (standard formulation, NOT ÷K)."""
     return sum((p - (1.0 if i == answer_index else 0.0)) ** 2
-               for i, p in enumerate(probs)) / n
+               for i, p in enumerate(probs))
 
 
 def bootstrap_mean_ci(data, n_boot=10000, seed=0, level=0.95):
@@ -373,12 +372,13 @@ def cmd_gen_prefixes(args):
 
     items_data = json.loads(Path(args.items).read_text())
     items = items_data["items"]
-    print(f"[gen-prefixes] {len(items)} items, budgets={D5_BUDGETS}, gpu={args.gpu_tag}")
+    budgets = [int(b) for b in args.budgets.split(",")]
+    print(f"[gen-prefixes] {len(items)} items, budgets={budgets}, gpu={args.gpu_tag}")
 
     # Load tokenizer before the model to compute context budget up front.
     print(f"[gen-prefixes] loading tokenizer for {args.model} ...")
     tok_pre = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
-    answer_cue_ids_pre = tok_pre.encode("\n</think>\n\nThe answer is ", add_special_tokens=False)
+    answer_cue_ids_pre = tok_pre.encode("\n</think>\n\nThe answer is **", add_special_tokens=False)
     prompt_ids_pre = [build_mcq_prompt_ids(tok_pre, it) for it in items]
 
     # Derive max_model_len from actual prompt data — never hard-code.
@@ -410,7 +410,7 @@ def cmd_gen_prefixes(args):
     cfg_key = json.dumps({
         "model":          args.model,
         "max_model_len":  max_model_len,
-        "D5_BUDGETS":     D5_BUDGETS,
+        "budgets":        budgets,
         "max_tokens":     B_MAX,
         "min_tokens":     B_MAX,
         "temperature":    0.0,
@@ -463,7 +463,7 @@ def cmd_gen_prefixes(args):
                 "ref_gpu_tag":   args.gpu_tag,
                 "model":         args.model,
                 "max_model_len": max_model_len,
-                "budgets":       D5_BUDGETS,
+                "budgets":       budgets,
             }) + "\n")
 
     pending_items = [it for it in items if it["question_id"] not in done_ids]
@@ -482,7 +482,7 @@ def cmd_gen_prefixes(args):
             enforce_eager=False,
         )
         tok = llm.get_tokenizer()
-        answer_cue_ids = tok.encode("\n</think>\n\nThe answer is ", add_special_tokens=False)
+        answer_cue_ids = tok.encode("\n</think>\n\nThe answer is **", add_special_tokens=False)
         pending_ids = [build_mcq_prompt_ids(tok, it) for it in pending_items]
 
         # Batch size = KV concurrency so no sequence ever needs to be preempted.
@@ -561,7 +561,7 @@ def cmd_gen_prefixes(args):
                 if thinking and thinking[-1] == THINK_END_ID:
                     thinking = thinking[:-1]
                 budgets_d: dict[str, list[int] | None] = {}
-                for b in D5_BUDGETS:
+                for b in budgets:
                     if b > len(thinking):
                         budgets_d[str(b)] = None
                     else:
@@ -624,7 +624,7 @@ def cmd_gen_prefixes(args):
     out_data = {
         "ref_gpu_tag":   args.gpu_tag,
         "model":         args.model,
-        "budgets":       D5_BUDGETS,
+        "budgets":       budgets,
         "max_model_len": max_model_len,
         "config_hash":   config_hash,
         "n_items":       len(all_prefixes),
@@ -672,6 +672,7 @@ def cmd_run_d5(args):
         max_model_len=max_model_len,
         enable_prefix_caching=True,
         enforce_eager=args.enforce_eager,
+        max_logprobs=200,
     )
     if args.max_num_seqs is not None:
         llm_kwargs["max_num_seqs"] = args.max_num_seqs
@@ -688,9 +689,10 @@ def cmd_run_d5(args):
             sys.exit(f"Option ID mismatch for {letter}: expected [{OPTION_IDS[i]}], got {actual}")
 
     # Collect all (item, budget) pairs that have saved prefix IDs
+    budgets = prefix_data["budgets"]
     all_prompts, all_meta = [], []
     for item in items:
-        for b in D5_BUDGETS:
+        for b in budgets:
             ids = item["budgets"].get(str(b))
             if ids is None:
                 continue
@@ -704,11 +706,11 @@ def cmd_run_d5(args):
                 "n_options":    item["n_options"],
             })
 
-    # Request logprobs over all 10 option slots; we'll filter to n_options
+    # Request top-200 logprobs so all option letters (IDs 32-41) are always returned
     lp_params = SamplingParams(
         max_tokens=1,
         temperature=0.0,
-        logprobs=len(OPTION_LETTERS),   # top-10 requested; option IDs always in range
+        logprobs=200,
     )
 
     print(f"[run-d5] {len(all_prompts)} prefix+budget combinations ...")
@@ -718,11 +720,14 @@ def cmd_run_d5(args):
     for meta, o in zip(all_meta, lp_out):
         lp_map = o.outputs[0].logprobs[0]  # dict token_id → Logprob
         n = meta["n_options"]
+        threshold = min(v.logprob for v in lp_map.values())
         raw_lp = [
-            float(lp_map[OPTION_IDS[i]].logprob) if OPTION_IDS[i] in lp_map else float("-inf")
+            float(lp_map[OPTION_IDS[i]].logprob) if OPTION_IDS[i] in lp_map else None
             for i in range(n)
         ]
-        probs = _norm_probs(raw_lp)
+        n_missing = sum(x is None for x in raw_lp)
+        raw_lp_for_norm = [x if x is not None else float("-inf") for x in raw_lp]
+        probs = _norm_probs(raw_lp_for_norm)
         results.append({
             "question_id":  meta["question_id"],
             "category":     meta["category"],
@@ -732,6 +737,8 @@ def cmd_run_d5(args):
             "n_options":    n,
             "option_probs": probs,
             "raw_logprobs": raw_lp,
+            "threshold":    threshold,
+            "n_missing":    n_missing,
         })
 
     output = {
@@ -940,6 +947,8 @@ def main():
     gp.add_argument("--items",   default="data/d5_items.json")
     gp.add_argument("--out",     default="data/d5_prefixes.json")
     gp.add_argument("--util",    type=float, default=0.85)
+    gp.add_argument("--budgets", default="256,2048,8192",
+                    help="comma-separated budget checkpoints (default: D5 original 3)")
 
     # ---- run-d5 (GPU) ------------------------------------------------------
     rdp = sub.add_parser("run-d5")

@@ -1,0 +1,70 @@
+{
+  "dataset": "arc_challenge",
+  "n": 4,
+  "items": [
+    {
+      "question_id": "ds2_0000",
+      "source_id": "Mercury_7043820",
+      "dataset": "arc_challenge",
+      "category": "arc_challenge",
+      "question": "When cold temperatures are produced in a chemical reaction, the reaction is known as",
+      "options": [
+        "exothermic.",
+        "endothermic.",
+        "suspension.",
+        "vaporization."
+      ],
+      "answer": "B",
+      "answer_index": 1,
+      "n_options": 4
+    },
+    {
+      "question_id": "ds2_0001",
+      "source_id": "MCAS_2003_5_33",
+      "dataset": "arc_challenge",
+      "category": "arc_challenge",
+      "question": "Air has no color and cannot be seen, yet it takes up space. What could be done to show that air takes up space?",
+      "options": [
+        "observe clouds forming",
+        "measure the air temperature",
+        "blow up a beach ball or balloon",
+        "weigh a glass before and after it is filled with water"
+      ],
+      "answer": "C",
+      "answer_index": 2,
+      "n_options": 4
+    },
+    {
+      "question_id": "ds2_0002",
+      "source_id": "Mercury_7219678",
+      "dataset": "arc_challenge",
+      "category": "arc_challenge",
+      "question": "Desalination removes salt from water. Removing salt from water can be risky because the process is expensive and slow. Sometimes the technology does not work. A beach community's surface and ground water was decreasing. The community decided to construct a large-scale plant to remove salt from the bay water. The plan to construct a salt-removing plant was accepted because the community",
+      "options": [
+        "needed increased resources.",
+        "had access to advanced technology.",
+        "had unlimited financial resources.",
+        "needed to ease social pressures."
+      ],
+      "answer": "A",
+      "answer_index": 0,
+      "n_options": 4
+    },
+    {
+      "question_id": "ds2_0003",
+      "source_id": "AKDE&ED_2008_8_48",
+      "dataset": "arc_challenge",
+      "category": "arc_challenge",
+      "question": "Which process will most likely lead to the scientific acceptance of a hypothesis?",
+      "options": [
+        "duplicating the results of an experiment",
+        "revising the original hypothesis",
+        "developing a theory based on the data",
+        "changing the experimental procedures"
+      ],
+      "answer": "A",
+      "answer_index": 0,
+      "n_options": 4
+    }
+  ]
+}

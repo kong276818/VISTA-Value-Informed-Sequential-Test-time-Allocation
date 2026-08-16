@@ -1,0 +1,15 @@
+Starting 3 parallel GPU tracks
+  Track 0: GPU 4090, model=m1, datasets=['ds1', 'ds2', 'ds3', 'ds4']
+  Track 1: GPU 3090a, model=m2, datasets=['ds1', 'ds2']
+  Track 2: GPU 3090b, model=m2, datasets=['ds3', 'ds4']
+[m1_ds1_4090] START gen-prefixes → data/prefixes_m1_ds1_4090.json
+[m2_ds1_3090a] START gen-prefixes → data/prefixes_m2_ds1_3090a.json
+[m2_ds3_3090b] START gen-prefixes → data/prefixes_m2_ds3_3090b.json
+[m2_ds3_3090b] FAIL gen-prefixes (rc=1) after 13s — see /home/sclab/paper2/logs/m2_ds3_3090b_gen_prefixes.log
+[track] ABORT remaining cells on this track due to failure
+[m1_ds1_4090] FAIL gen-prefixes (rc=1) after 14s — see /home/sclab/paper2/logs/m1_ds1_4090_gen_prefixes.log
+[track] ABORT remaining cells on this track due to failure
+[m2_ds1_3090a] FAIL gen-prefixes (rc=1) after 14s — see /home/sclab/paper2/logs/m2_ds1_3090a_gen_prefixes.log
+[track] ABORT remaining cells on this track due to failure
+
+All tracks finished in 0.00 h (14s)

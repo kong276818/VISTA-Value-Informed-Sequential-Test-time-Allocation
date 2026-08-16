@@ -1,0 +1,71 @@
+{
+  "dataset": "medmcqa",
+  "note": "GPQA-Diamond gated/unavailable; MedMCQA (validation, single-choice) substituted",
+  "n": 4,
+  "items": [
+    {
+      "question_id": "ds3_0000",
+      "source_id": "ab7c6caa-9d2f-4f10-8379-39906aff6017",
+      "dataset": "medmcqa",
+      "category": "Gynaecology & Obstetrics",
+      "question": "When would you do trans-vaginal sonography in post-menopausal bleeding if endometrial thickness is?",
+      "options": [
+        "5mm",
+        "7mm",
+        "4mm",
+        "9mm"
+      ],
+      "answer": "A",
+      "answer_index": 0,
+      "n_options": 4
+    },
+    {
+      "question_id": "ds3_0001",
+      "source_id": "549d38f4-993a-4009-ae9c-c0a7638437e8",
+      "dataset": "medmcqa",
+      "category": "Dental",
+      "question": "What should be ideal depth of MTA for root end filling material?",
+      "options": [
+        "1 mm",
+        "3 mm",
+        "5 mm",
+        "7 mm"
+      ],
+      "answer": "B",
+      "answer_index": 1,
+      "n_options": 4
+    },
+    {
+      "question_id": "ds3_0002",
+      "source_id": "f4e1dbce-eb9d-441c-9e1a-6f81ae207faf",
+      "dataset": "medmcqa",
+      "category": "Dental",
+      "question": "The soft tissue tooth interface that forms after flap surgery in a previously denuded area is",
+      "options": [
+        "Long junctional epithelium",
+        "Collagen adhesion",
+        "Scar tissue attachment",
+        "Connective tissue attachment"
+      ],
+      "answer": "A",
+      "answer_index": 0,
+      "n_options": 4
+    },
+    {
+      "question_id": "ds3_0003",
+      "source_id": "1a4b278a-1f53-4306-ba5e-7b5e303120be",
+      "dataset": "medmcqa",
+      "category": "Pharmacology",
+      "question": "A 25 yr old person with history of repeated episodes of rheumatic fever is hypersensitive to penicillin. Which of following drug can be prescribed to him?",
+      "options": [
+        "Penicillin G",
+        "Sulfisoxazole",
+        "Sulfasalazine",
+        "Streptomycin"
+      ],
+      "answer": "B",
+      "answer_index": 1,
+      "n_options": 4
+    }
+  ]
+}

@@ -1,0 +1,1168 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  VISTA — Value-Informed Sequential Test-time Allocation
+%  Elsevier CAS single-column (cas-sc), double-blind review
+%
+%  Overleaf: open via "CAS SC" template so cas-sc.cls is available.
+%  Compile: pdflatex -> bibtex -> pdflatex -> pdflatex
+%
+%  NOTE: every \TODO{...} must be filled before submission.
+%        Comment out \DRAFTMODE to hide all TODOs (dangerous).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,fleqn,doubleblind]{cas-sc}
+
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}                          % proposition, theorem, definition, remark
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{booktabs}
+\usepackage{needspace}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{multirow}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{threeparttable}
+\usepackage{tcolorbox}
+\usepackage{xspace}
+\usepackage{xcolor}                          % \TODO color markers
+
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+%% -----------------------------------------------------------------------
+%% TODO marker — comment out \DRAFTMODE line before submission
+%% -----------------------------------------------------------------------
+\newcommand{\DRAFTMODE}{}
+\ifdefined\DRAFTMODE
+  \newcommand{\TODO}[1]{{\color{red}\textbf{[TODO: #1]}}}
+\else
+  \newcommand{\TODO}[1]{#1}
+\fi
+
+%% -----------------------------------------------------------------------
+%% Notation macros
+%% -----------------------------------------------------------------------
+\newcommand{\Hist}{\mathcal{H}}
+\newcommand{\budget}{b}
+\newcommand{\Bmax}{B_{\max}}
+\newcommand{\Brier}{S}
+\newcommand{\cost}{C}
+\newcommand{\lossfn}{L}
+\newcommand{\margval}{V}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Ind}{\mathbf{1}}
+\newcommand{\Real}{\mathbb{R}}
+
+%% -----------------------------------------------------------------------
+%% Theorem environments (amsthm)
+%% -----------------------------------------------------------------------
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{0.7}
+\def\textpagefraction{0.3}
+
+\shorttitle{VISTA}
+\shortauthors{}
+
+\title[mode=title]{VISTA: Value-Informed Sequential Test-time Allocation}
+
+\author[1]{}
+
+\affiliation[1]{organization={}}
+
+%% -----------------------------------------------------------------------
+%% Abstract
+%% -----------------------------------------------------------------------
+\begin{abstract}
+Reasoning language models can spend widely different amounts of test-time
+compute before producing an answer, yet deployment systems still require a rule
+for deciding how much reasoning is worth performing. A fixed global budget
+ignores query-level heterogeneity, whereas many adaptive stopping methods rely
+on confidence, entropy, answer stability, or other signals observed along the
+current trajectory. Such signals may indicate that reasoning has stabilised,
+but they do not by themselves establish whether the current answer is correct
+or whether additional reasoning would improve it.
+
+We study test-time compute selection in a deployment regime with no separate
+held-out calibration set but with outcomes that become available after a delay.
+The setting involves three interlocking obstacles: (i)~\emph{correctness
+non-identifiability}---without structural assumptions, current correctness is
+not identified by the observable reasoning history alone, as two
+data-generating processes can agree on every observable quantity while
+assigning opposite correctness; (ii)~the \emph{missing continuation
+counterfactual}---when a query is stopped at an intermediate checkpoint, the
+prediction a longer trajectory would have produced is unobserved; and
+(iii)~the absence of a held-out calibration split, which rules out standard
+offline stopping-rule fitting. We address the first obstacle by replacing
+current correctness with the \emph{marginal value of thinking}, defined as the
+expected improvement in a proper scoring loss from an additional reasoning
+block, net of its compute cost.
+
+Building on this formulation, we introduce \textbf{VISTA}, a held-out-free
+prequential framework for reasoning-budget selection. VISTA randomly audits a
+subset of deployment queries to reveal longer-budget counterfactuals, uses
+delayed outcomes to evaluate candidate stopping policies, and maintains
+anytime-valid confidence sequences while the deployment stream evolves.
+The method reserves no separate calibration split, performs no language-model
+parameter update, and explicitly charges the compute consumed by exploration.
+
+Before evaluating the adaptive procedure itself, we test the more fundamental
+premise on which it depends: whether the value of additional reasoning varies
+meaningfully across queries and budgets. We therefore audit accuracy, Brier
+score, negative log-likelihood, confidence, and answer transitions across a
+fixed reasoning-budget grid, quantify the gap between the best fixed budget and
+an item-adaptive oracle, and examine whether observable prefix signals predict
+future continuation value.
+\TODO{Insert the headline empirical result after the full evaluation is
+completed.}
+\end{abstract}
+
+%% -----------------------------------------------------------------------
+%% Highlights (3–5 items, max ~85 characters each)
+%% -----------------------------------------------------------------------
+\begin{highlights}
+\item We formulate test-time reasoning as a sequential compute-selection
+problem targeting the marginal value of additional reasoning, not current
+correctness.
+
+\item Correctness is non-identifiable from an unlabeled trajectory alone,
+motivating delayed deployment feedback rather than in-situ confidence proxies.
+
+\item VISTA combines randomized trajectory audits with anytime-valid
+confidence sequences for held-out-free reasoning-budget policy selection.
+
+\item A systematic budget audit quantifies item-level heterogeneity and
+whether observable prefix signals predict future continuation value.
+\end{highlights}
+
+%% -----------------------------------------------------------------------
+%% Keywords
+%% -----------------------------------------------------------------------
+\begin{keywords}
+Test-Time Compute \sep
+Reasoning Language Models \sep
+Adaptive Computation \sep
+Calibration \sep
+Sequential Decision Making \sep
+Anytime-Valid Inference
+\end{keywords}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Reasoning language models have turned inference-time computation into a
+decision variable. For the same query, a model may be allowed to reason for a
+few hundred tokens or for several thousand before committing to an answer.
+Increasing this budget provides additional opportunities to reconsider an
+intermediate conclusion, recover from an error, or solve a difficult problem.
+It can also consume computation without changing the answer, or even replace a
+previously correct answer with an incorrect one. The central deployment
+question is therefore not simply whether more reasoning improves average
+performance, but \emph{when an additional block of reasoning is worth its cost
+for the current query}.
+
+The simplest solution is to choose one global reasoning budget and apply it to
+every query. Such a policy is efficient only when queries benefit from
+additional reasoning in approximately the same way. If some problems are
+resolved reliably with short trajectories while others benefit from
+substantially more computation, a fixed budget must either waste compute on
+the former or under-allocate it to the latter. The potential value of adaptive
+test-time computation therefore rests on a basic empirical premise:
+\emph{the value of additional reasoning must vary meaningfully across queries
+and across stages of a trajectory}. Whether this opportunity exists should be
+measured rather than assumed.
+
+A natural alternative is to inspect the current trajectory and stop when the
+model appears sufficiently certain. Existing approaches use quantities such as
+predictive confidence, entropy, self-consistency, answer convergence, or the
+stability of intermediate predictions. These quantities can provide useful
+information about the trajectory, but they do not directly answer the compute
+allocation question. A high-confidence answer can still be wrong and may be
+corrected by further reasoning. Conversely, even a currently correct answer
+can be altered by continuation. The decision to continue therefore depends not
+only on the state of the current prediction, but on the \emph{counterfactual
+value of additional computation}.
+
+This distinction is particularly important when a labeled calibration set is
+not available at deployment time. Let $\Hist_{\budget}$ denote everything
+observable from a reasoning trajectory up to budget $\budget$, including the
+query, generated reasoning, logits, current answer, and predictive
+distribution. Without an additional assumption linking these observables to
+the unknown ground-truth label, correctness is not identified by
+$\Hist_{\budget}$. In Section~\ref{sec:impossibility}, we formalize this point
+with a two-world construction: the same distribution of observable histories
+can coexist with opposite correctness assignments. Consequently, no function
+of an unlabeled single trajectory can generally provide non-trivial
+distribution-free control of current correctness. Confidence, stability, and
+self-consistency may characterize properties of the model trajectory, but they
+cannot by themselves certify that the trajectory is correct.
+
+Rather than constructing a more elaborate proxy for current correctness, we
+change the target of the decision. Consider a globally fixed grid of reasoning
+budgets
+\begin{equation}
+  \budget_1 < \budget_2 < \cdots < \budget_K .
+\end{equation}
+For item $i$, let $\Brier_{i,j}$ denote a proper scoring loss at checkpoint
+$\budget_j$, and let $\cost_{i,j}$ denote its realised compute. We define the
+marginal value of continuing from $\budget_j$ to $\budget_{j+1}$ as
+\begin{equation}
+  \margval_j(\lambda)
+  =
+  \Exp\!\left[\Brier_{i,j}-\Brier_{i,j+1}\right]
+  -
+  \lambda\,\Exp\!\left[\cost_{i,j+1}-\cost_{i,j}\right],
+  \label{eq:intro-marginal-value}
+\end{equation}
+where $\lambda \geq 0$ is a user-specified exchange rate between predictive
+quality and compute. The resulting decision is not
+\emph{``Is the current answer correct?''}, but
+\emph{``Is another block of reasoning worth its cost?''}
+
+This reformulation is useful because continuation value can be learned from
+outcomes that arrive after the original deployment decision has already been
+made. Many reasoning workloads naturally provide such delayed but verifiable
+feedback. Mathematical answers can eventually be checked, programs can be
+executed against tests, formal proofs can be verified, and multiple-choice
+decisions can later receive labels. These settings make it possible to update
+a reasoning-budget policy from the deployment stream itself, without reserving
+a separate labeled subset purely for calibration. We refer to this setting as
+\emph{held-out-free prequential compute selection}.
+
+The remaining difficulty is counterfactual. When a policy stops an item at
+budget $\budget_j$, the prediction that would have been obtained at
+$\budget_{j+1}$ is normally unobserved. We address this using randomized
+trajectory audits: a controlled subset of arriving queries is continued to a
+longer or maximum budget, revealing the sequence of checkpoint predictions
+that candidate stopping policies would have encountered. Once the delayed label
+arrives, these audited trajectories can be used to evaluate the predictive
+loss and compute consumption of multiple policies on the same item.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{img/img1}
+  \caption{Three interlocking obstacles in deployment-time reasoning-budget
+  selection and the VISTA response.
+  \textbf{(1)} Trajectory signals---confidence, answer stability,
+  entropy---are ambiguous: the same observable pattern is consistent with
+  both correct and incorrect predictions
+  (Proposition~\ref{prop:impossibility}).
+  \textbf{(2)} Stopping at budget $b$ hides the prediction that a longer
+  trajectory would have produced, blocking direct policy comparison from
+  deployment data alone.
+  \textbf{(3)} Randomized full-trajectory audits on a fraction $\rho$ of
+  items reconstruct the counterfactual, enabling importance-weighted
+  comparison of multiple budget policies once delayed labels arrive.}
+  \label{fig:overview}
+\end{figure}
+
+We introduce \textbf{VISTA}---\emph{Value-Informed Sequential Test-time
+Allocation}---for this purpose. VISTA combines randomized
+continuation, importance-weighted evaluation, and simultaneous anytime-valid
+confidence sequences to compare a pre-specified family of reasoning-budget
+policies using deployment feedback. The procedure does not reserve a held-out
+calibration split and does not update model parameters or train an auxiliary
+predictor. Importantly, the cost of randomized exploration is included in the
+total compute accounting; a stopping procedure that saves compute only by
+excluding the cost of learning its policy would provide a misleading deployment
+comparison.
+
+The proposed framework is useful only if adaptive compute allocation has
+something to exploit. We therefore place the empirical audit before the final
+evaluation of VISTA. First, we measure how reasoning budget changes accuracy,
+Brier score, negative log-likelihood, predictive confidence, and answer
+transitions such as correct-to-wrong and wrong-to-correct flips. Second, we
+compare the best global fixed budget with an item-adaptive oracle to quantify
+the maximum compute-selection opportunity in each model--dataset setting.
+Third, we test whether information observable at an intermediate checkpoint is
+predictive of the gain from an additional reasoning block.
+
+In summary, the framework addresses three named obstacles that compound in the
+target regime: \emph{correctness non-identifiability}
+(Section~\ref{sec:impossibility}), the \emph{missing continuation
+counterfactual} (addressed by randomized full-trajectory auditing), and the
+\emph{absence of a held-out calibration split} (addressed by prequential
+updating with delayed feedback).
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item \textbf{Non-identifiability of label-free correctness.}
+We formalize why current correctness cannot, without additional structural
+assumptions, be identified from an unlabeled single reasoning trajectory,
+motivating the shift from correctness to continuation value as the stopping
+target.
+
+\item \textbf{Marginal-value formulation of test-time reasoning.}
+We formulate each additional reasoning block as a discrete continuation
+decision whose value combines improvement in a proper prediction loss with its
+realised compute cost, admitting a reliability--resolution decomposition.
+
+\item \textbf{Held-out-free prequential budget selection.}
+We introduce VISTA, combining randomized trajectory audits, delayed
+deployment feedback, importance-weighted policy evaluation, and anytime-valid
+confidence sequences without reserving a separate calibration split.
+
+\item \textbf{Empirical audit and component analysis.}
+We evaluate how reasoning budget affects predictive quality and answer
+dynamics across datasets, quantify item-level hindsight headroom relative to
+a fixed-budget baseline, test whether observable prefix signals predict future
+continuation value, and characterise the behaviour of individual VISTA
+components via CPU replay experiments on stored checkpoint tables.
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+\label{sec:related}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Marginal returns of test-time compute.}
+The observation that additional reasoning can exhibit diminishing or negative
+returns motivates adaptive allocation of inference-time computation. Prior work
+has primarily characterised such behaviour retrospectively on labelled
+benchmarks or designed heuristics for early termination. We treat the value of
+continuation as a deployment-time quantity that must be estimated and updated
+online.
+
+\paragraph{Reasoning and calibration.}
+Increasing the reasoning budget can change not only top-1 correctness but also
+the predictive distribution. Rather than assuming that longer reasoning
+universally improves or degrades calibration, we treat the relationship between
+reasoning budget and proper scoring loss as an empirical question measured
+across budgets, models, and tasks.
+
+\paragraph{Training-free early exit.}
+Several approaches terminate reasoning without additional model training using
+trial answers, entropy, confidence trajectories, answer convergence, or
+stability of intermediate predictions. Such signals may indicate trajectory
+stabilisation, but without additional assumptions they do not resolve the
+non-identifiability established in
+Proposition~\ref{prop:impossibility}.
+
+\paragraph{Statistical guarantees for stopping.}
+Distribution-free risk control, calibration procedures, and sequential testing
+provide principled mechanisms for selecting stopping rules, but typically rely
+on labelled calibration data sampled before deployment. We study a regime where
+no calibration split is reserved and labels arrive sequentially.
+
+\paragraph{Anytime-valid inference.}
+Confidence sequences and e-processes provide guarantees that remain valid under
+continuous monitoring and optional stopping, making them natural for
+deployment-time budget selection where evidence accumulates and policy updates
+can occur at any time.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preliminaries and an Impossibility Result}
+\label{sec:impossibility}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Fix a query $x$ with ground-truth answer $y^{\star}$. A reasoning model
+produces a trajectory $r_{1:\Bmax}$, and at each checkpoint $\budget$ we may
+force termination and read off a candidate answer $\hat{y}_{\budget}$ together
+with a predictive distribution $\hat{p}_{\budget} \in \Delta^{C-1}$. Write the
+observable history as
+\begin{equation}
+  \Hist_{\budget} =
+  \bigl(x,\;r_{1:\budget},\;\mathrm{logits}_{1:\budget},\;
+  \hat{y}_{\budget},\;\hat{p}_{\budget}\bigr),
+\end{equation}
+and the unobserved correctness indicator as
+$Y_{\budget} = \Ind\{\hat{y}_{\budget} = y^{\star}\}$.
+
+\begin{proposition}[Non-identifiability of label-free correctness]
+\label{prop:impossibility}
+Let $f$ be any measurable estimator
+$\hat{a}_{\budget} = f(\Hist_{\budget})$.
+There exist two joint distributions $\Prob_{0},\Prob_{1}$ over
+$(\Hist_{\budget},Y_{\budget})$ with identical marginals on $\Hist_{\budget}$
+such that $Y_{\budget}=0$ a.s.\ under $\Prob_{0}$ and $Y_{\budget}=1$
+a.s.\ under $\Prob_{1}$. Consequently, for every $\Hist_{\budget}$,
+\begin{equation}
+  \max\Bigl\{|\hat{a}_{\budget}-0|,\;|\hat{a}_{\budget}-1|\Bigr\}
+  \geq \tfrac{1}{2},
+\end{equation}
+and no non-trivial distribution-free finite-sample lower bound on
+$\Prob(Y_{\budget}=1\mid\Hist_{\budget})$ exists.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Construct $\Prob_{1}$ from $\Prob_{0}$ by relabelling $y^{\star}$ to agree
+with $\hat{y}_{\budget}$ on every realisation. Since $y^{\star}$ enters
+$\Hist_{\budget}$ nowhere, the marginal law of $\Hist_{\budget}$ is unchanged,
+so any estimator or stopping rule measurable with respect to $\Hist_{\budget}$
+behaves identically under both distributions. The bound follows pointwise.
+\TODO{Provide the complete proof in Appendix~A.}
+\end{proof}
+
+The obstruction is informational: collecting additional unlabelled trajectories
+cannot remove it without assumptions connecting observable model behaviour to
+ground-truth correctness. Self-consistency, answer stability, and related
+trajectory-based quantities are descriptive signals but do not constitute
+correctness guarantees.
+
+\begin{remark}
+Proposition~\ref{prop:impossibility} does not preclude label-free detection of
+\emph{trajectory stabilisation} such as answer convergence, entropy plateaus,
+or representational saturation. It also does not apply to trained probes that
+condition on labelled supervision, or to procedures that use a separate labeled
+calibration set---both of which supply additional information beyond the raw
+trajectory. The obstruction is specific to estimators that are simultaneously
+(a)~distribution-free, (b)~label-free at deployment time, and (c)~restricted to
+a single unlabeled trajectory. Supplying any one of labelled examples, a
+distributional assumption, or repeated trajectories from the same query opens
+avenues not covered by this result.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Continuation Value and Budget Selection}
+\label{sec:formulation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Loss}
+
+Let $\budget_1 < \cdots < \budget_K = \Bmax$ be a globally fixed budget grid.
+For item $i$ at checkpoint $j$ we use the \emph{summed} multiclass Brier score
+\begin{equation}
+  \Brier_{i,j}
+  = \bigl\lVert\hat{p}_{i,j} - e_{y_i}\bigr\rVert_2^2
+  = \sum_{c=1}^{C}\bigl(\hat{p}_{i,j,c} - \mathbf{1}_{c=y_i}\bigr)^2,
+\end{equation}
+where the sum over classes is not divided by $C$.  This is the standard
+proper-scoring form; dividing by $C$ would yield a differently scaled variant
+with different decomposition constants.
+and define the deployment loss
+\begin{equation}
+  \lossfn^{(\lambda)}_{i,j} = \Brier_{i,j} + \lambda\,\cost_{i,j},
+  \qquad \lambda\geq 0,
+\end{equation}
+where $\cost_{i,j}$ is realised compute and $\lambda$ is a user-specified
+exchange rate between predictive quality and compute, reported over a range
+of values rather than at a single operating point.
+
+\subsection{Marginal value and its decomposition}
+
+\begin{definition}[Marginal value of a reasoning block]
+The marginal value of continuing from checkpoint $j$ to $j+1$ is
+\begin{equation}
+  \margval_j(\lambda)
+  =
+  \Exp\!\left[\Brier_{i,j}-\Brier_{i,j+1}\right]
+  -\lambda\,\Exp\!\left[\cost_{i,j+1}-\cost_{i,j}\right].
+\end{equation}
+\end{definition}
+
+Applying the reliability--resolution--uncertainty decomposition
+$\Exp[\Brier_j] = \mathrm{REL}_j - \mathrm{RES}_j + \mathrm{UNC}$
+and noting that UNC cancels across budgets yields
+\begin{equation}
+  \margval_j(\lambda)
+  =
+  \underbrace{\bigl(\mathrm{RES}_{j+1}-\mathrm{RES}_j\bigr)}_{\text{change in resolution}}
+  -
+  \underbrace{\bigl(\mathrm{REL}_{j+1}-\mathrm{REL}_j\bigr)}_{\text{change in reliability error}}
+  -\lambda\,\Delta\cost_j.
+  \label{eq:decomposition}
+\end{equation}
+Equation~\eqref{eq:decomposition} separates two ways an additional reasoning
+block can change probabilistic quality. Whether further reasoning tends to
+improve accuracy while degrading calibration, improve both, or degrade both is
+an empirical question that may vary across models, datasets, and budget
+intervals. We treat the sign and magnitude of each component as a measurable
+outcome rather than a structural claim.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{VISTA}
+\label{sec:method}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Scope}
+
+\begin{assumption}[Delayed verifiable feedback]
+\label{asm:feedback}
+For each item $i$, the outcome $y_i$ becomes available after a finite delay
+through exact-answer matching, program execution, formal verification, or
+post-hoc adjudication.
+\end{assumption}
+
+Tasks with open-ended generation and no eventual feedback lie outside this
+setting.
+
+\subsection{Randomized full-trajectory audits}
+
+To observe counterfactual predictions at larger budgets, we randomly select
+items for full-trajectory auditing:
+\begin{equation}
+  A_i \sim \mathrm{Bernoulli}(\rho_i).
+\end{equation}
+Audited items ($A_i=1$) are run through $\Bmax$ and all checkpoint predictions
+retained. For policy $\pi$ with stopping checkpoint $\tau_\pi(\Hist_i)$,
+define the realised loss
+\begin{equation}
+  \ell_i(\pi) = \Brier_{i,\tau_\pi} + \lambda\,\cost_{i,\tau_\pi}.
+\end{equation}
+The importance-weighted comparison against a reference policy
+$\pi_{\mathrm{ref}}$ is
+\begin{equation}
+  X_i(\pi)
+  = \frac{A_i}{\rho_i}
+    \bigl[\ell_i(\pi) - \ell_i(\pi_{\mathrm{ref}})\bigr],
+  \label{eq:policy-ipw}
+\end{equation}
+with $\Exp[X_i(\pi)\mid\mathcal{F}_{i-1}] = R(\pi)-R(\pi_{\mathrm{ref}})$
+where $R(\pi)=\Exp[\ell_i(\pi)]$. The audit probability $\rho_i$ may depend
+on past observations, provided it is set before the current outcome is
+revealed. All audit computation counts toward reported total compute.
+
+\subsection{Anytime-valid policy evaluation}
+
+We maintain simultaneous confidence sequences for the excess risk of every
+policy relative to the reference. For finite family $\Pi$, the guarantee is
+\begin{equation}
+  \Prob\!\Bigl(
+    \forall n,\;\forall\pi\in\Pi:\;
+    R(\pi)-R(\pi_{\mathrm{ref}})
+    \in[\underline{\Delta}_{\pi,n},\,\overline{\Delta}_{\pi,n}]
+  \Bigr) \geq 1-\alpha,
+\end{equation}
+constructed via bounded empirical-Bernstein sequences or betting-based methods
+with simultaneous coverage across all policies.
+
+\subsection{Policy family}
+
+Candidate policies include fixed-budget rules, predictive-confidence
+thresholds, entropy thresholds, answer-stability rules, top-1/top-2 margin
+thresholds, and confidence-slope thresholds. A generic threshold policy is
+\begin{equation}
+  \tau_\theta(\Hist_i) = \min\{j : s_{i,j}\leq\theta_j\},
+  \qquad \theta\in\Theta,\quad|\Theta|<\infty.
+\end{equation}
+Every audited trajectory permits reconstruction of the stopping checkpoint and
+realised loss for every member of this finite family.
+
+\begin{algorithm}[t]
+\caption{VISTA: prequential reasoning-budget selection}
+\label{alg:mvtcs}
+\begin{algorithmic}[1]
+\Require budget grid $\{\budget_j\}_{j=1}^{K}$, policy family $\Pi$,
+         exchange rate $\lambda$, confidence level $\alpha$,
+         audit schedule $\{\rho_i\}$
+\State Initialise confidence sequences for all $\pi\in\Pi$
+\For{each arriving item $i$}
+  \State Select the currently preferred active policy $\pi_i$
+  \State Execute reasoning process according to $\pi_i$
+  \State Draw $A_i\sim\mathrm{Bernoulli}(\rho_i)$ before observing outcome
+  \If{$A_i=1$}
+    \State Continue item to $\Bmax$; retain all checkpoint predictions
+  \EndIf
+  \State Deploy the answer produced by $\pi_i$
+  \State \textbf{When $y_i$ arrives:}
+  \If{$A_i=1$}
+    \State Reconstruct $\ell_i(\pi)$ for all $\pi\in\Pi$ from checkpoint predictions
+    \State Form importance-weighted risk differences via Eq.~\eqref{eq:policy-ipw}
+    \State Update confidence sequences for all $\pi\in\Pi$
+    \State Identify currently preferred policy $\pi_{i+1}$ from updated sequences
+  \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{What is and is not learned}
+
+VISTA performs no gradient update to the reasoning model and trains no
+auxiliary predictor. It does learn from the deployment stream: policy-risk
+estimates, confidence sequences, and the active candidate set are
+data-dependent. We therefore call the procedure \emph{held-out-free} rather
+than \emph{training-free}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Experimental Setup}
+\label{sec:experiments}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Models and infrastructure}
+
+The primary model is \textbf{Qwen3-8B} (\texttt{Qwen/Qwen3-8B}), an
+8-billion-parameter model with a native chain-of-thought thinking mode.
+All inference uses bfloat16 weights and bfloat16 key--value caches
+(\texttt{kv\_cache\_dtype=auto}); fp8\_e5m2 KV quantisation is excluded
+after a diagnostic run found top-1 answer-token changes on 4/50 prompts
+(8\%) on the same GPU, a corruption level that would mask sub-0.5\,pp Brier
+differences.
+
+Experiments run on a single workstation with one NVIDIA RTX~4090 (sm\_89,
+Ada) and two RTX~3090 GPUs (sm\_86, Ampere; 24\,GB each, no NVLink).
+Models at the 8B scale fit on a single 24\,GB card in BF16, so inference
+uses independent single-GPU processes with no tensor parallelism; three
+such processes can run simultaneously to maximise throughput.
+
+Before pooling probability measurements across devices, logit reproducibility
+was verified diagnostically. The two RTX~3090 cards produce byte-identical
+outputs (max\,$|\Delta\text{logprob}|=0.065$\,at $b=8192$). RTX~4090 and
+RTX~3090 show non-negligible differences (max\,$|\Delta\text{logprob}|=0.374$
+on BF16), consistent with architecture-level kernel differences between
+sm\_89 and sm\_86. Accordingly, each (model~$\times$~dataset) cell is
+run on a single GPU architecture and probability measurements are
+never pooled across architectures.
+
+\subsection{Datasets}
+
+The evaluation uses four multiple-choice benchmarks: MMLU-Pro ($n=1000$,
+up to 10 options), ARC-Challenge ($n=1000$, 4 options), MedMCQA ($n=500$,
+4 options), and MedQA-USMLE ($n=500$, 4 options). All provide exact labels
+and a fixed option set, which is required for computing Brier score and NLL
+from forced answer-cue logits.
+
+\subsection{Budget grid, forcing protocol, and metric extraction}
+
+The primary budget grid is $\{256,\,512,\,1024,\,2048,\,4096,\,8192\}$
+reasoning tokens, fixed before inspecting primary results. We record the
+natural termination point of each trajectory and distinguish natural stopping
+from forced checkpoint evaluation; forced termination is treated as an explicit
+intervention rather than implicitly equated to an independently generated
+short-budget trajectory.
+
+At each forced checkpoint a standardised answer-cue string
+(\texttt{\textbackslash n</think>\textbackslash n\textbackslash nThe answer
+is **}) is appended, and the model's next-token log-probabilities over bare
+option tokens (A--J, token IDs 32--41) are extracted. The predictive
+distribution $\hat{p}_{i,j}$ is formed by selecting those positions and
+applying softmax. In the diagnostic sample, the target option token ranks
+first with probability exceeding 0.984, confirming stable elicitation.
+Brier score and NLL are computed post-hoc from these stored logit vectors;
+no re-inference is performed after the initial generation pass.
+
+\subsection{Gate~0: opportunity}
+
+For each model--dataset cell we report accuracy, Brier score, NLL, mean
+predictive confidence, answer-flip rate, and correct/wrong transition counts
+at every budget, then compare the best fixed budget against an item-adaptive
+oracle. The primary criterion is whether the oracle reduces compute by at
+least $10\%$ relative to the best fixed budget under matched predictive
+quality.
+
+\subsection{Gate~1: predictability of continuation value}
+
+For each edge $j\!\rightarrow\!j{+}1$, define item-level gain
+$G_{i,j} = \Brier_{i,j}-\Brier_{i,j+1}$.
+We evaluate observable signals (confidence, entropy, top-1/top-2 margin,
+answer stability, confidence slope) via
+$\mathrm{AUC}(s_{i,j},\Ind\{G_{i,j}>0\})$
+and Spearman $\rho$ between $s_{i,j}$ and $G_{i,j}$.
+The pre-specified threshold is $\mathrm{AUC}\geq0.60$ or
+$|\rho_{\mathrm{Spearman}}|\geq0.30$ on a held-out setting; failure terminates
+the instance-adaptive branch.
+
+\subsection{Baselines and metrics}
+
+We compare fixed-budget policies, training-free stopping signals, calibration-
+based procedures with a separate labeled split, and item-adaptive oracles
+(opportunity measurement only). Primary metrics are multiclass Brier score,
+NLL, accuracy, total reasoning tokens, wall-clock latency, total compute
+including audit overhead, and token savings at matched accuracy or Brier score.
+
+\subsection{Ablation design}
+\label{sec:ablation-design}
+
+The core empirical question is whether each structural component of VISTA
+contributes to final policy quality, or whether simpler alternatives suffice.
+All ablations are replay experiments on the stored checkpoint tables; no
+additional GPU inference is required (except the forced-termination protocol,
+which requires independent fixed-budget trajectories and is treated as a
+measurement-validity diagnostic).
+
+\paragraph{Essential ablations.}
+Table~\ref{tab:ablation} lists the five essential ablated variants.
+
+\emph{(A1) Audit weighting correction.}
+``Naive'' policy risk is estimated directly from observed trajectories without
+correcting for the randomized audit probability $\rho$: each trajectory
+is counted at face value regardless of how likely it was to be observed.
+``IPW'' policy risk divides each audited observation by $\rho$, restoring
+the target full-population estimand.
+Ignoring the observation probability attenuates the estimated risk difference
+approximately in proportion to the audit rate; inverse-probability weighting
+recovers the intended estimand.
+\TODO{A stronger counterfactual-missingness test comparing IPW against a
+hold-out of \emph{naturally stopped} items (not uniformly audited ones)
+is pending.}
+
+\emph{(A2) Anytime-valid confidence sequences.}
+``VISTA w/o CS'' replaces confidence sequences with greedy policy selection
+based on the running empirical mean, accepting the first policy whose estimated
+risk advantage exceeds a fixed threshold without a coverage guarantee.
+The expected consequence is inflated false switching under repeated
+monitoring: because the empirical mean is tested repeatedly as the stream
+evolves, the effective type-I error exceeds the nominal level.
+We evaluate by replaying the deployment stream over multiple random
+permutations and reporting the fraction of replays in which each method makes
+an incorrect policy decision.
+
+\emph{(A3) Held-out-free prequential update.}
+``Fixed calibration'' treats the first $N_\text{cal}$ arriving items as a
+labeled calibration set, fits a static stopping policy on them, and freezes
+it for the remainder of the stream.
+Under stationarity this is a competitive baseline.
+Under distribution shift it degrades as the calibration set becomes
+unrepresentative.
+We evaluate on both stationary streams and controlled shift conditions; the
+shift experiments appear in Section~\ref{sec:shift}.
+
+\emph{(A4) Brier objective vs.\ accuracy-only.}
+``Accuracy-only'' replaces the summed multiclass Brier in the deployment loss
+$\lossfn^{(\lambda)}$ with a 0--1 loss $\mathbf{1}[\hat{y}\neq y]$.
+Different predictive objectives may prefer different reasoning budgets,
+making objective choice a first-order decision for any budget-selection policy.
+We compare the budget at which each objective (Brier, accuracy, NLL) is
+minimised and report confidently-wrong rates
+($\max_k \hat{p}_k \geq \tau$, $\tau=0.90$, on incorrect predictions)
+alongside standard accuracy and Brier.
+
+\emph{(A5) Instance-adaptive vs.\ global policy.}
+``Global VISTA'' updates a single per-deployment-stream preferred budget
+without using per-item prefix signals.
+The comparison to full VISTA isolates the incremental value of item-level
+stopping over dataset-level budget adaptation.
+If global adaptation captures most of the oracle gap, the emphasis of the
+paper should shift from instance-adaptive stopping to prequential global
+compute selection.
+
+\paragraph{Additional ablations.}
+\emph{(A6) Prefix-signal ablation.}
+Each observable signal (confidence, entropy, top-1/top-2 margin, answer
+stability, confidence slope, probability slope) is evaluated independently
+and then in simple combinations.
+The AUC and Spearman $\rho$ reported in Gate~1
+(Section~\ref{sec:pilot}) serve as the primary diagnostic; policy results
+under each single signal are reported in Table~\ref{tab:ablation-signals}.
+
+\emph{(A7) Audit probability $\rho$ sensitivity.}
+We evaluate $\rho\in\{0.05,0.10,0.20,0.40,1.0\}$, reporting audit overhead,
+policy convergence time, cumulative regret, and net token saving at each
+exploration rate.
+The curve of net saving versus $\rho$ directly answers the reviewer question
+of how much full-trajectory compute must be consumed to make the adaptive
+policy worthwhile.
+
+\emph{(A8) Forced-termination vs.\ independent generation.}
+Forced checkpoint termination (one long trajectory probed at intermediate
+budgets) and independently generated fixed-budget trajectories may produce
+different answer distributions; this is a measurement-validity concern
+rather than a method comparison.
+We evaluate Brier agreement, flip rates, and budget-curve shape under both
+protocols on a held-out subset.
+This ablation is placed in the appendix unless systematic divergence is
+found.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+\label{sec:results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% -----------------------------------------------------------------------
+%% PILOT DIAGNOSTIC
+%% This subsection reports a 80-item balanced pilot (20 per dataset) run
+%% before the full corpus completed.  Once full-corpus results are available,
+%% remove this subsection and replace with the full-scale budget-response
+%% audit (Section~\ref{sec:audit}) and the remaining analysis sections.
+%% Do NOT promote any claim here to a headline result.
+%% -----------------------------------------------------------------------
+\subsection{Preliminary Budget Audit}
+\label{sec:pilot}
+
+To assess whether a budget-selection opportunity is present at all before
+committing to the full evaluation, we ran a balanced pilot on 80~items drawn
+equally from all four evaluation datasets (20~items per dataset) using
+Qwen3-8B on the RTX~4090 under the same BF16 / forced-checkpoint protocol
+as the main corpus.  The purpose is to validate the research premise---that
+budget effects on predictive quality are non-trivial and heterogeneous---not
+to report final results.
+
+Table~\ref{tab:pilot-budget} shows the summed multiclass Brier score at the
+lowest budget ($b=256$) and at the per-dataset best-fixed budget for each
+dataset.  Brier values are not directly comparable across rows because the
+number of answer options differs ($n_\text{opt}=9$--$10$ for MMLU-Pro
+vs.\ $n_\text{opt}=4$ for the remaining three datasets).
+Budget-response behaviour differed across datasets.
+On MMLU-Pro, Brier decreased monotonically from $b=256$ to $b=4096$ before
+plateauing, with accuracy rising from $0.45$ to $0.80$.
+On ARC-Challenge, Brier improved sharply between $b=256$ and $b=512$ then
+plateaued, with the best-fixed budget at the maximum grid point.
+On MedMCQA, aggregate Brier worsened with increasing budget---the
+best-fixed budget was $b=256$---while accuracy remained largely flat.
+On MedQA-USMLE, Brier showed a non-monotone pattern, dropping sharply only
+at $b=4096$.
+These patterns are preliminary and based on 20~items per dataset; they
+illustrate that budget effects are not uniformly positive and motivate
+measuring them empirically rather than assuming a direction.
+
+The late-budget increase in NLL on several datasets---despite stable or
+improving accuracy---suggests that extreme probability errors may not move
+in the same direction as aggregate accuracy; a full analysis is deferred to
+the complete corpus.  Answer-transition counts from the pilot also showed
+both correct-to-wrong and wrong-to-correct flips at intermediate budget
+edges, indicating that aggregate accuracy gains can mask opposing item-level
+dynamics of continuation.
+
+An item-adaptive oracle that selects the budget minimising per-item Brier was
+computed for each dataset.  The best-fixed budget varied across datasets,
+ranging from $b=256$ (MedMCQA) to $b=8192$ (ARC-Challenge, MedQA-USMLE).
+Within each dataset, oracle-optimal budgets were distributed across the full
+grid rather than concentrated at a single point, suggesting preliminary
+item-level heterogeneity.  Oracle Brier reductions relative to the best-fixed
+budget ranged from approximately $0.5\%$ (ARC-Challenge, where the best-fixed
+budget is near a Brier floor) to approximately $47\%$ (MedQA-USMLE), with
+MMLU-Pro at $18\%$ and MedMCQA at $30\%$.
+These oracle values are an upper bound on the opportunity available to a
+deployable adaptive policy and are not a performance claim for VISTA.
+
+\begin{table}[t]
+\centering
+\caption{Preliminary budget audit on a balanced 80-item pilot
+(20~items per dataset, Qwen3-8B, RTX~4090, BF16).
+Brier values use the summed multiclass form and are not
+directly comparable across datasets with different $n_\text{opt}$.
+``Best-fixed $b$'' is the fixed budget with the lowest mean Brier on this
+pilot.  Oracle Brier reduction is relative to the best-fixed budget;
+it is an opportunity upper bound, not a deployable-method result.
+This table will be replaced by the full-corpus evaluation.}
+\label{tab:pilot-budget}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Dataset & $n_\text{opt}$ &
+  $\text{Brier}_{256}$ &
+  Best-fixed $b$ &
+  $\text{Brier}_{\text{best}}$ &
+  Oracle $\Delta$Brier \\
+\midrule
+MMLU-Pro      & 9--10 & 1.021 & 4096 & 0.394 & $-18\%$ \\
+ARC-Challenge & 4     & 0.461 & 8192 & 0.200 & $-0.5\%$ \\
+MedMCQA       & 4     & 0.808 & 256  & 0.808 & $-30\%$ \\
+MedQA-USMLE   & 4     & 0.562 & 8192 & 0.280 & $-47\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Budget-response audit}
+\label{sec:audit}
+
+\begin{table}[t]
+\centering
+\caption{Predictive quality across reasoning budgets (Qwen3-8B, BF16).
+\TODO{Populate after the primary corpus is complete.}}
+\label{tab:budget-audit}
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Dataset & Budget & Accuracy & Brier & NLL & Confidence &
+C$\rightarrow$W & W$\rightarrow$C \\
+\midrule
+\TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} &
+\TODO{--} & \TODO{--} & \TODO{--} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\TODO{Report whether budget--response curves are monotone, flat, or
+non-monotone for each metric and dataset.  Explicitly report cells where
+accuracy and proper-score (Brier, NLL) optima occur at different budgets.}
+
+\subsection{Adaptive opportunity and oracle ceiling}
+
+\begin{table}[t]
+\centering
+\caption{Best fixed budget versus item-adaptive oracle.
+\TODO{Populate after corpus analysis.}}
+\label{tab:oracle}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Method & Accuracy & Brier & NLL & Tokens & Saving (\%) \\
+\midrule
+Best fixed      & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & --       \\
+Adaptive oracle & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\TODO{Report the distribution of per-item optimal budgets.  A spread across
+budgets is necessary for the adaptive-allocation premise; concentration at
+one budget value would indicate the premise fails for that cell.}
+
+\subsection{Marginal gain distributions}
+\label{sec:marginal-gain}
+
+\TODO{For each edge $j\!\to\!j{+}1$ and each dataset, report the
+distribution of item-level marginal Brier gain
+$G_{i,j}=\Brier_{i,j}-\Brier_{i,j+1}$.  Key quantities: fraction of items
+with positive gain (continuation helps), fraction with negative gain
+(continuation hurts), and fraction with gain below a noise threshold (compute
+is wasted).  Report separately for each dataset and budget edge; do not
+summarise across cells.}
+
+\subsection{Prefix-signal predictability}
+
+\begin{table}[t]
+\centering
+\caption{Prediction of future marginal gain from prefix signals.
+\TODO{Populate after Gate~1 analysis.}}
+\label{tab:signals}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Signal & Sign AUC & Spearman $\rho$ \\
+\midrule
+Confidence       & \TODO{--} & \TODO{--} \\
+Entropy          & \TODO{--} & \TODO{--} \\
+Top-1/top-2 margin & \TODO{--} & \TODO{--} \\
+Answer stability & \TODO{--} & \TODO{--} \\
+Confidence slope & \TODO{--} & \TODO{--} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\TODO{Gate~1 threshold: AUC $\geq0.60$ or $|\rho_{\mathrm{Spearman}}|\geq0.30$
+on a held-out cell.  If no signal clears this bar, report as a finding---it
+motivates the randomized-audit rather than signal-based approach.}
+
+\subsection{VISTA versus baselines}
+
+\begin{table}[t]
+\centering
+\caption{Comparison of deployed reasoning-budget policies.
+All reported compute includes audit overhead.
+\TODO{Populate after VISTA evaluation.}}
+\label{tab:main}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Method & Tokens $\downarrow$ & Brier $\downarrow$ & NLL $\downarrow$ &
+Acc.\ $\uparrow$ & Held-out? \\
+\midrule
+Best fixed           & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
+Confidence stopping  & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
+Entropy stopping     & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
+Stability stopping   & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
+Calibration-based    & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & Yes \\
+VISTA               & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Component ablation}
+\label{sec:ablation}
+
+The following results are CPU replay experiments on the DS1 checkpoint
+table (1000~MMLU-Pro items, 6~budgets each).
+All quantities from A1 and A2 use 200 stream-order permutations;
+A3--A5 are single-permutation calculations.
+
+\begin{table}[t]
+\centering
+\caption{Component ablation summary on DS1 (1000~MMLU-Pro items, 200
+permutations for A1/A2).  Each row summarises a single pairwise comparison.
+Interpretation is restricted to what the DS1 numbers directly imply;
+pending analyses are noted explicitly.}
+\label{tab:ablation}
+\begin{tabular}{@{}lp{2.7cm}p{2.3cm}p{5.4cm}@{}}
+\toprule
+Component & Variant & DS1 result & Interpretation \\
+\midrule
+Audit weighting &
+  Naive vs.\ IPW &
+  ${\approx}5{\times}$ attenuation at $\rho{=}0.20$ &
+  Consistent with the expected $1/\rho$ correction; stronger
+  counterfactual-missingness tests remain pending. \\[4pt]
+Sequential monitoring &
+  Greedy vs.\ CS &
+  Greedy FP $=7\%$ at $\rho{=}0.20$; CS FP $=0$ at all $\rho$ tested &
+  Low-audit greedy monitoring is unstable; repeated stream-order
+  validation is pending. \\[4pt]
+Prequential update &
+  Fixed cal.\ vs.\ online &
+  $\Delta = 0.005$ Brier regret under stationary replay &
+  Similar under stationarity; shift experiments determine practical value. \\[4pt]
+Prediction objective &
+  Accuracy / Brier / NLL &
+  NLL optimum at $b=2048$; Accuracy and Brier optimum at $b=8192$;
+  ConfWrong ($\tau{=}0.90$) increases $0.193{\to}0.216$ &
+  Predictive objectives can prefer different reasoning budgets;
+  DS2--DS4 replication pending. \\[4pt]
+Allocation granularity &
+  Fixed vs.\ matched oracle &
+  $76\%$ of items: lower budget suffices; mean matched $b{\approx}2552$ vs.\ best-fixed $b{=}8192$ &
+  Gate~0 passes on DS1; deployability under realistic prefix signals remains to be tested. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{A1 --- Audit weighting.}
+At audit rate $\rho=0.20$ the IPW policy risk estimate at $b=256$
+is $+1.61$ relative to reference $b=4096$, while the naive unweighted
+estimate is $+0.32$, a ratio of $4.96 \approx 1/\rho$.
+This is consistent with the mechanical effect of omitting the
+$1/\rho$ weight: the naive estimator scales down every observation by $\rho$,
+attenuating the estimated risk difference in proportion to the audit rate.
+IPW recovers the intended full-population estimand.
+A stronger test comparing IPW against a hold-out of \emph{naturally stopped}
+trajectories (rather than uniformly audited ones) is pending.
+
+\paragraph{A2 and A7 --- Sequential monitoring.}
+Across 200~stream-order permutations at $\rho=0.20$, the greedy monitor
+selects a policy worse than the reference in 7.0\% of replays, while the
+CS-based monitor records zero false-positive selections at every tested
+$\rho \in \{0.05, 0.10, 0.20, 0.40, 1.00\}$.
+Greedy false-positive rate increases monotonically as $\rho$ decreases:
+25.0\% at $\rho=0.05$, 18.5\% at $\rho=0.10$, 7.0\% at $\rho=0.20$,
+2.0\% at $\rho=0.40$, and 0\% at $\rho=1.00$ (full trajectory observation).
+These results are consistent with intended anytime-valid behaviour.
+The result covers a single seed (200 permutations); repeated stream-order
+simulations across 100--1000 permutations are needed to distinguish the
+theorem guarantee from its empirical validation.
+
+\paragraph{A3 --- Prequential update.}
+Under stationary DS1~replay, the prequential policy accumulates mean Brier
+regret $+0.1524$ per item versus $+0.1577$ for the frozen fixed-calibration
+policy ($\Delta=0.0053$ Brier units).
+The two methods behave similarly under stationarity.
+Controlled distribution-shift experiments
+(Section~\ref{sec:shift}) are the decisive test; the fixed-calibration
+policy is expected to degrade when its calibration set becomes
+unrepresentative.
+
+\paragraph{A4 --- Prediction objective.}
+On DS1, accuracy and Brier both select $b=8192$ as the optimal fixed budget
+($0.738$ accuracy; Brier $0.4917$), while NLL selects $b=2048$ ($2.458$~nats,
+compared to $2.763$ at $b=8192$).
+Different predictive objectives can prefer different reasoning budgets on
+the same dataset; the practical significance depends on the downstream
+decision task.
+The confident-wrong rate (items where $\max_k \hat{p}_k \geq 0.90$ and
+the prediction is incorrect, $\tau=0.90$) is $19.3\%$ at $b=256$ and
+\emph{increases} to $21.6\%$ at $b=8192$.
+At higher budgets the model becomes more extreme in its predictions: it is
+more confident when correct, but also more confident when incorrect.
+This is consistent with the NLL worsening at $b=8192$ despite accuracy
+improving.
+\TODO{Replicate A4 on DS2--DS4 before drawing cross-dataset conclusions.}
+
+\paragraph{A5 --- Allocation granularity.}
+The best fixed budget on DS1 is $b=8192$ (mean Brier $0.4917$).
+The hindsight per-item oracle---which assigns each item the budget minimising
+its individual Brier score---achieves mean Brier $0.3437$, a $30.1\%$
+relative reduction.
+This oracle is not deployable: it requires the correct answer at prediction
+time and serves as an upper bound only.
+
+The matched-quality token oracle---which assigns each item the \emph{minimum}
+budget $b$ such that its Brier is no worse than the global best-fixed Brier
+($0.4917$)---achieves mean budget ${\approx}2552$ tokens, compared to the
+best-fixed $b=8192$ ($31\%$ of maximum).
+On $76.1\%$ of DS1 items a budget strictly smaller than $b=8192$ already
+meets the quality threshold.
+This result confirms Gate~0 on DS1: a substantial compute reduction is
+available in principle.
+Whether a deployable item-adaptive signal can identify which items need fewer
+tokens remains to be tested.
+
+\subsection{Distribution shift}
+\label{sec:shift}
+
+We evaluate controlled distribution shifts (easier-to-harder transfer, query
+mixture changes) to test whether prequential adaptation outperforms
+fixed-calibration policies when the deployment distribution changes.
+\TODO{Report degradation of fixed-split baselines and VISTA adaptation speed
+under each shift condition.}
+
+\subsection{Cost of the guarantee}
+\label{sec:cost}
+
+We report audit rate, exploration tokens as a fraction of total compute,
+burn-in compute to first meaningful confidence-sequence update, and net compute
+saving after all overhead.
+\TODO{A guarantee whose exploration overhead exceeds its compute saving should
+be reported as a negative result; do not discard such an outcome.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{DS1 preliminary interpretation.}
+The DS1 component analysis suggests that individual elements of VISTA
+address qualitatively different failure modes: audit weighting corrects a
+systematic estimator attenuation that scales with $1/\rho$; sequential
+monitoring prevents premature policy switching under low audit rates;
+prequential updating provides modest gains under stationarity and its value
+is expected primarily under distribution shift; different predictive
+objectives select different budgets for the same data, making objective
+choice non-trivial; and substantial item-level headroom exists relative to
+any fixed-budget policy.
+These results are individually promising but do not yet support a unified
+claim about end-to-end system performance.
+DS2--DS4 results and shift experiments are required before drawing
+cross-dataset conclusions.
+
+\TODO{Interpret budget curves, oracle opportunity, prefix-signal
+predictability, and policy results without assuming uniform behaviour across
+datasets.}
+
+\paragraph{Limitations.}
+Assumption~\ref{asm:feedback} restricts applicability to tasks with eventually
+verifiable outcomes. The policy family is finite and pre-specified, so
+guarantees concern only included candidates. Forced checkpoint evaluation is an
+explicit intervention, and results are interpreted within that measurement
+regime. Experiments are limited to models that fit on single-workstation GPUs;
+whether patterns change at larger scales is an open question. Finally,
+randomized auditing incurs real compute costs, which may conflict with
+per-request latency constraints even when the long-run value is positive.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We study test-time reasoning-budget selection in a deployment regime with no
+held-out calibration set but delayed verifiable feedback. Three interlocking
+obstacles---correctness non-identifiability, the missing continuation
+counterfactual, and the absence of a calibration split---motivate the
+\emph{continuation value} as the decision target and the VISTA
+prequential framework as the evaluation procedure. VISTA combines randomized
+full-trajectory audits, candidate policy reconstruction, delayed labels, and
+anytime-valid confidence sequences without reserving a separate split or
+updating model parameters.
+\TODO{Insert one concise sentence summarising the primary empirical result
+across all four datasets, including the principal compute saving and the
+relationship between accuracy and proper-scoring-loss optima.}
+
+\section*{Data and Code Availability}
+\TODO{Repository URL.}
+Cached checkpoint tables will be released where licensing permits so that the
+online policy-selection procedure can be replayed without full GPU inference.
+
+\section*{Acknowledgements}
+\TODO{Acknowledgements.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{elsarticle-num}
+\bibliography{mvtcs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

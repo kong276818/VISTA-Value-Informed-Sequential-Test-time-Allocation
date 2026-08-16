@@ -311,7 +311,10 @@ def run_probe(args):
     results["logit_fingerprint"] = fingerprint
 
     Path(args.outdir).mkdir(parents=True, exist_ok=True)
-    out = Path(args.outdir) / f"probe_{args.gpu_tag}.json"
+    _dtype_tag = {"auto": "bf16", "fp8_e5m2": "fp8"}.get(
+        args.kv_cache_dtype, args.kv_cache_dtype
+    )
+    out = Path(args.outdir) / f"probe_{args.gpu_tag}_{_dtype_tag}.json"
     out.write_text(json.dumps(results, indent=2))
 
     print(json.dumps({k: v for k, v in results.items()
@@ -370,9 +373,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=DEFAULT_MODEL)
     ap.add_argument("--gpu-tag", default="gpu0")
-    ap.add_argument("--kv-cache-dtype", default="fp8_e5m2",
-                    help="fp8_e5m2 roughly doubles concurrency; auto = bf16")
-    ap.add_argument("--util", type=float, default=0.92)
+    ap.add_argument("--kv-cache-dtype", default="auto",
+                    help="auto = bf16 (paper default); fp8_e5m2 forbidden for primary results")
+    ap.add_argument("--util", type=float, default=0.85)
     ap.add_argument("--outdir", default="out")
     ap.add_argument("--compare", nargs="*", default=None)
     args = ap.parse_args()

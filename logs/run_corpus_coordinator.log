@@ -1,0 +1,20 @@
+Starting 1 parallel GPU tracks
+  Track 0: GPU 4090, model=m1, datasets=['ds1', 'ds2', 'ds3', 'ds4']
+[m1_ds1_4090] START gen-prefixes → data/prefixes_m1_ds1_4090_dry.json
+[m1_ds1_4090] DONE gen-prefixes in 344s
+[m1_ds1_4090] START run-d5 → data/results_m1_ds1_4090_dry.json
+[m1_ds1_4090] DONE run-d5 in 38s
+[m1_ds2_4090] START gen-prefixes → data/prefixes_m1_ds2_4090_dry.json
+[m1_ds2_4090] DONE gen-prefixes in 342s
+[m1_ds2_4090] START run-d5 → data/results_m1_ds2_4090_dry.json
+[m1_ds2_4090] DONE run-d5 in 37s
+[m1_ds3_4090] START gen-prefixes → data/prefixes_m1_ds3_4090_dry.json
+[m1_ds3_4090] DONE gen-prefixes in 342s
+[m1_ds3_4090] START run-d5 → data/results_m1_ds3_4090_dry.json
+[m1_ds3_4090] DONE run-d5 in 36s
+[m1_ds4_4090] START gen-prefixes → data/prefixes_m1_ds4_4090_dry.json
+[m1_ds4_4090] DONE gen-prefixes in 345s
+[m1_ds4_4090] START run-d5 → data/results_m1_ds4_4090_dry.json
+[m1_ds4_4090] DONE run-d5 in 37s
+
+All tracks finished in 0.42 h (1522s)

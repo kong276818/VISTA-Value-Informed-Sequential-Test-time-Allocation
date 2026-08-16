@@ -1,0 +1,7 @@
+Starting 1 parallel GPU tracks
+  Track 0: GPU 4090, model=m1, datasets=['ds1', 'ds2', 'ds3', 'ds4']
+[m1_ds1_4090] START gen-prefixes → data/prefixes_m1_ds1_4090.json
+[m1_ds1_4090] DONE gen-prefixes in 54696s
+[m1_ds1_4090] START run-d5 → data/results_m1_ds1_4090.json
+[m1_ds1_4090] DONE run-d5 in 1061s
+[m1_ds2_4090] START gen-prefixes → data/prefixes_m1_ds2_4090.json

@@ -1,0 +1,7 @@
+Starting 1 parallel GPU tracks
+  Track 0: GPU 4090, model=m1, datasets=['ds1', 'ds2', 'ds3', 'ds4']
+[m1_ds1_4090] SKIP gen-prefixes — data/prefixes_m1_ds1_4090_dry.json already exists
+[m1_ds1_4090] SKIP run-d5 — data/results_m1_ds1_4090_dry.json already exists
+[m1_ds2_4090] SKIP gen-prefixes — data/prefixes_m1_ds2_4090_dry.json already exists
+[m1_ds2_4090] SKIP run-d5 — data/results_m1_ds2_4090_dry.json already exists
+[m1_ds3_4090] START gen-prefixes → data/prefixes_m1_ds3_4090_dry.json
