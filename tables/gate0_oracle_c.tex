@@ -1,0 +1,37 @@
+\begin{table}[t]
+\centering
+\caption{Gate~0 constrained matched-mean-quality oracle (Oracle~C) for all eight
+experimental cells.
+\textbf{Objective:} minimise mean reasoning budget subject to mean Brier $\le$
+best-fixed mean Brier.
+\textbf{Constraint:} $\frac{1}{n}\sum_i S_{i,b_i} \le \bar{S}^{\star}$,
+where $\bar{S}^{\star}=\min_b\frac{1}{n}\sum_i S_{i,b}$ and $b_i\in\{256,\ldots,8192\}$.
+Solved via Lagrangian relaxation with binary search on the dual variable.
+Saving is relative to the best-fixed budget; the best-fixed policy is always
+feasible, so saving $\ge 0$ by construction.
+M2 cells DS3 and DS4 have best-fixed at $b=256$ (the minimum grid point),
+leaving no room for adaptive reduction (Gate~0 \textsc{Fail}).
+\textbf{Bold} marks the saving percentage in passing cells.}
+\label{tab:gate0-oracle-c}
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Model & Dataset & Best-fixed $b$ & $\bar{S}^{\star}$ & Oracle $\bar{b}$ &
+  Oracle $\bar{S}$ & Saving \\
+\midrule
+\multirow{4}{*}{M1 (Qwen3-8B)}
+ & MMLU-Pro       & 8192 & 0.4917 &   461 & 0.4911 & \textbf{94.4\%} \\
+ & ARC-Challenge  & 8192 & 0.0837 &   268 & 0.0834 & \textbf{96.7\%} \\
+ & MedMCQA        & 1024 & 0.6275 &   263 & 0.6248 & \textbf{74.4\%} \\
+ & MedQA-USMLE    & 8192 & 0.4285 &   364 & 0.4274 & \textbf{95.6\%} \\
+\midrule
+\multirow{4}{*}{M2 (DeepSeek-R1-Distill-Llama-8B)}
+ & MMLU-Pro       & 4096 & 0.8782 &   268 & 0.8776 & \textbf{93.5\%} \\
+ & ARC-Challenge  & 2048 & 0.2289 &   280 & 0.2281 & \textbf{86.3\%} \\
+ & MedMCQA        &  256 & 0.8019 &   256 & 0.8019 &          0.0\%  \\
+ & MedQA-USMLE    &  256 & 0.7268 &   256 & 0.7268 &          0.0\%  \\
+\midrule
+\multicolumn{5}{@{}l}{Gate~0 result} &
+  \multicolumn{2}{r@{}}{6 / 8 cells \textsc{Pass}} \\
+\bottomrule
+\end{tabular}
+\end{table}

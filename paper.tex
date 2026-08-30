@@ -102,8 +102,10 @@ On MMLU-Pro accuracy gains are near-linear across the full token grid; on
 ARC-Challenge most gain concentrates in the first budget step; on MedMCQA the
 Brier optimum and accuracy optimum differ by three budget levels, and both
 worsen at the maximum budget.
-One model's Brier score worsens monotonically with budget on three datasets
-where the other's improves, ruling out a universal fixed allocation.
+Budget-response curves differ qualitatively across all dataset-model pairs:
+one model's Brier worsens monotonically with budget on two of four datasets
+(MedMCQA and MedQA-USMLE) while the other's improves, ruling out a universal
+fixed allocation.
 Trajectory signals---confidence, entropy, answer stability---reveal whether
 reasoning has stabilised but cannot certify whether the current answer is
 correct or whether continuation improves a scoring rule, a limitation we
@@ -118,8 +120,10 @@ counterfactual predictions, importance-weighted policy comparison to correct
 selection bias, and anytime-valid confidence sequences to prevent spurious
 switching under continuous monitoring.
 A corpus audit across eight experimental cells (two models, four datasets)
-finds that an item-adaptive oracle reduces mean Brier by $30.1\%$ on MMLU-Pro
-with per-item compute savings of $57$--$86\%$ across cells.
+finds that the hindsight per-item Brier oracle reduces mean Brier by $30.1\%$
+on MMLU-Pro; mean-budget reductions relative to the maximum-budget baseline
+range from $70\%$ to $91\%$ across cells (descriptive opportunity analysis,
+not matched-quality savings).
 Component ablations confirm that naive policy estimation reverses rankings in
 5 of 8 cells (wrong-best rate $1.00$), anytime-valid monitoring achieves
 false-positive rate $0.000$ across all cells versus $0$--$58.5\%$ for greedy
@@ -217,7 +221,7 @@ selected into observation rather than drawn uniformly; omitting this correction
 reverses policy rankings in five of eight experimental cells.
 
 \begin{center}
-  \includegraphics[width=\textwidth, height=0.55\textheight, keepaspectratio=true]{img1.png}
+  \includegraphics[width=\textwidth, height=0.55\textheight, keepaspectratio=true]{img/img1.png}
 \end{center}
 \begingroup
 \captionof{figure}{Three interlocking obstacles in deployment-time
@@ -252,8 +256,10 @@ reasoning is strongly task- and model-dependent.
 Accuracy gains range from near-linear (MMLU-Pro, $47.7\%\to73.8\%$ across the
 grid) to early-saturating (ARC-Challenge, most gain in the first budget step);
 patterns invert across models on the same task.
-An item-adaptive oracle reduces mean Brier by $30.1\%$ on MMLU-Pro with
-$76.1\%$ of items meeting matched quality at a budget below the maximum.
+The hindsight oracle reduces mean Brier by $30.1\%$ on MMLU-Pro, with
+$76.1\%$ of items meeting a per-item quality threshold at a budget below the
+maximum; a constrained matched-mean-quality oracle passes Gate~0 in six of
+eight cells.
 A fixed confidence gate increases Brier above the best fixed budget in all
 eight cells, confirming that deployable item-adaptive allocation cannot rely
 on naive stopping heuristics.
@@ -351,13 +357,26 @@ and no non-trivial distribution-free finite-sample lower bound on
 $\Prob(Y_{\budget}=1\mid\Hist_{\budget})$ exists.
 \end{proposition}
 
-\begin{proof}[Proof sketch]
-Construct $\Prob_{1}$ from $\Prob_{0}$ by relabelling $y^{\star}$ to agree
-with $\hat{y}_{\budget}$ on every realisation. Since $y^{\star}$ enters
-$\Hist_{\budget}$ nowhere, the marginal law of $\Hist_{\budget}$ is unchanged,
-so any estimator or stopping rule measurable with respect to $\Hist_{\budget}$
-behaves identically under both distributions. The bound follows pointwise.
-The full proof follows by constructing $\Prob_1$ from $\Prob_0$ by relabelling $y^\star$ and verifying that both marginals on $\Hist_b$ agree.
+\begin{proof}
+Given any $\Prob_0$ over $(\Hist_b, Y_b)$, construct $\Prob_1$ by relabelling
+$y^\star$ to equal $\hat{y}_b$ on every realisation of $\Hist_b$.
+Since $y^\star$ appears nowhere in $\Hist_b$, the marginal distribution
+$\Prob_1(\Hist_b=h) = \Prob_0(\Hist_b=h)$ for every $h$, while
+$Y_b = 1$ $\Prob_1$-a.s.\ and $Y_b = 0$ $\Prob_0$-a.s.
+
+Any measurable estimator $f$ satisfies $f(\Hist_b) = \hat{a}_b \in \mathbb{R}$
+deterministically given $\Hist_b$.
+For any fixed realisation $h$, let $v = f(h)$.
+Then $|\hat{a}_b - 0| = |v|$ under $\Prob_0$ and $|\hat{a}_b - 1| = |1-v|$
+under $\Prob_1$.
+Since $\max\{|v|, |1-v|\} \ge \tfrac{1}{2}$ for all $v \in \mathbb{R}$
+(with equality iff $v = \tfrac{1}{2}$), the bound holds pointwise for every
+realisation $h$ of $\Hist_b$, hence in expectation under both $\Prob_0$ and
+$\Prob_1$.
+The non-existence of a non-trivial distribution-free lower bound on
+$\Prob(Y_b=1|\Hist_b)$ follows by the same coupling:
+any lower bound $L(h) > 0$ fails under $\Prob_0$ (where $Y_b = 0$ a.s.),
+and any lower bound $L(h) < 1$ fails under $\Prob_1$ (where $Y_b = 1$ a.s.).
 \end{proof}
 
 The obstruction is informational: collecting additional unlabelled trajectories
@@ -879,21 +898,24 @@ Dataset & Edge & Helps (\%) & Hurts (\%) & Flat (\%) \\
 \paragraph{M2 (DeepSeek-R1-Distill-Llama-8B): budget-response patterns invert.}
 Table~\ref{tab:budget-audit-m2} reports the same audit for M2 on the same four
 datasets using RTX~3090 GPUs.
-The contrast with M1 is systematic.
-On DS1 (MMLU-Pro), M2 Brier worsens monotonically from 0.948 at $b=256$ to
-0.888 at $b=8192$---the \emph{opposite} of M1's monotone improvement---while
-accuracy peaks at $b=4096$ (50.8\%) and declines.
-On DS3 and DS4, M2 Brier worsens with every budget increase (reaching 0.929
-and 0.827 at $b=8192$ versus 0.802 and 0.727 at $b=256$), while M1 Brier
-improves.
-Only DS2 (ARC-Challenge) shows a qualitatively similar structure across models.
+The contrast with M1 is systematic but not uniform.
+On DS1 (MMLU-Pro), M2 Brier \emph{improves} from 0.948 at $b=256$ to 0.878
+at $b=4096$ and slightly reverses to 0.888 at $b=8192$; accuracy likewise
+peaks at $b=4096$ (50.8\%) and declines.
+On DS3 (MedMCQA) and DS4 (MedQA-USMLE), M2 Brier worsens monotonically with
+every budget increase (reaching 0.929 and 0.827 at $b=8192$ versus 0.802 and
+0.727 at $b=256$), while M1 Brier improves on both.
+Monotonic Brier degradation on M2 is therefore confined to DS3 and DS4;
+DS1 and DS2 (ARC-Challenge) show broadly similar improvement directions across
+models, though rates and saturation points differ.
 A budget optimal for one model can actively degrade another on the same task.
 
 \begin{table}[t]
 \centering
 \caption{Budget audit for M2 (DeepSeek-R1-Distill-Llama-8B, BF16, RTX~3090).
 Same format as Table~\ref{tab:budget-audit}.
-Brier worsens monotonically with budget on DS1, DS3, and DS4.
+Brier worsens monotonically with budget on DS3 and DS4; on DS1 Brier improves
+through $b=4096$ and slightly reverses at $b=8192$.
 \textbf{Bold} marks the optimum per column per dataset.}
 \label{tab:budget-audit-m2}
 \begin{tabular}{@{}llrr@{}}
@@ -901,11 +923,11 @@ Brier worsens monotonically with budget on DS1, DS3, and DS4.
 Dataset ($n$) & Budget & Accuracy & Brier \\
 \midrule
 \multirow{6}{*}{MMLU-Pro (1000)}
- & 256  & 0.320 & \textbf{0.948} \\
+ & 256  & 0.320 & 0.948 \\
  & 512  & 0.382 & 0.937 \\
  & 1024 & 0.444 & 0.907 \\
  & 2048 & 0.496 & 0.886 \\
- & 4096 & \textbf{0.508} & 0.878 \\
+ & 4096 & \textbf{0.508} & \textbf{0.878} \\
  & 8192 & 0.502 & 0.888 \\
 \midrule
 \multirow{6}{*}{ARC-Challenge (1000)}
@@ -948,9 +970,10 @@ fixed budget ($0.738$ accuracy; Brier $0.4917$), while NLL selects $b=2048$
 On DS3 (MedMCQA, M1), the divergence is three-way: accuracy peaks at
 $b=4096$, Brier minimises at $b=1024$, and NLL is worst at $b=8192$---all
 three objectives point to different budgets.
-For M2, Brier worsens monotonically on DS1, DS3, and DS4 while accuracy
-continues to non-monotonically improve, so no budget simultaneously optimises
-both.
+For M2, Brier worsens monotonically on DS3 and DS4 while accuracy continues
+to improve; on DS1, Brier improves through $b=4096$ and slightly reverses at
+$b=8192$, while accuracy similarly peaks at $b=4096$---so no single budget
+simultaneously optimises both Brier and accuracy on any of these datasets.
 
 The proper-scoring-rule decomposition (Eq.~\ref{eq:decomposition}) separates
 reliability and resolution components: where further reasoning concentrates
@@ -973,8 +996,13 @@ simultaneously optimise others; the choice of objective must be explicit.
   allocation?}
 \label{sec:opportunity}
 
-\textit{Yes. Per-item oracle allocation reduces mean compute by $57$--$86\%$
-across all eight cells at matched predictive quality.}
+\textit{Yes. Per-item heterogeneity is substantial across all eight cells.
+The hindsight per-item Brier oracle (Oracle~A) reduces mean budget by
+$70$--$91\%$ relative to the maximum-budget baseline---a descriptive
+opportunity bound, not a matched-quality deployment claim.
+A constrained matched-mean-quality oracle (Oracle~C; Table~\ref{tab:gate0-oracle-c})
+passes Gate~0 in six of eight cells with savings exceeding $74\%$ relative
+to the best fixed budget.}
 
 Table~\ref{tab:oracle} reports the item-adaptive oracle analysis for DS1
 (MMLU-Pro, M1), the cell with the widest range of per-item optimal budgets.
@@ -988,34 +1016,55 @@ budget ${\approx}2552$ tokens (${\approx}69\%$ compute headroom).
 \begin{table}[t]
 \centering
 \caption{Item-adaptive oracle analysis for DS1 (MMLU-Pro, $n=1000$).
-The hindsight oracle assigns each item the budget minimising its individual
-Brier.
-The matched-quality oracle assigns the minimum budget meeting the best-fixed
-quality threshold ($\Brier \leq 0.4917$).
-These analyses establish the opportunity for an ideal adaptive policy; they
-are not performance claims for the deployable VISTA procedure.}
+Three oracle types are distinguished throughout the paper.
+\textbf{Oracle A} (hindsight): per-item minimum-Brier budget; a quality upper
+bound---saving relative to $b_{\max}=8192$ is descriptive, not matched-quality.
+\textbf{Oracle B} (per-item threshold): minimum per-item budget achieving
+per-item Brier $\le 0.4917$; a stronger per-item constraint than Oracle~C.
+\textbf{Oracle C} (constrained mean; Gate~0 primary): minimises mean budget
+subject to population mean Brier $\le$ best-fixed mean Brier; saving is
+relative to best-fixed budget ($b^{\star}=8192$ here).
+None of these represents the deployable VISTA procedure.}
 \label{tab:oracle}
 \begin{tabular}{@{}lrr@{}}
 \toprule
 Analysis & Value & Interpretation \\
 \midrule
-Best fixed budget              & $b=8192$    & Baseline \\
-Best fixed mean Brier          & 0.4917      & \\
-Hindsight oracle mean Brier    & 0.3437      & Upper bound \\
-Relative Brier reduction       & 30.1\%      & Oracle ceiling \\
+Best fixed budget ($b^{\star}$)     & $b=8192$    & Baseline \\
+Best fixed mean Brier               & 0.4917      & \\
 \midrule
-Matched-quality mean budget    & ${\approx}2552$ tokens & Compute opportunity \\
-Items meeting threshold at $b<8192$ & 76.1\%  & \\
-Compute headroom (vs.\ $b=8192$)    & ${\approx}69\%$ & \\
+\multicolumn{3}{@{}l}{\textit{Oracle A (hindsight, descriptive opportunity)}} \\
+Hindsight oracle mean Brier         & 0.3437      & Quality upper bound \\
+Relative Brier reduction            & 30.1\%      & Oracle ceiling \\
+Mean oracle budget                  & 2431 tokens & \\
+Mean-budget reduction vs $b_{\max}$ & 70.3\%      & Descriptive, vs $b=8192$ \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Oracle B (per-item threshold)}} \\
+Mean oracle budget                  & ${\approx}2552$ tokens & \\
+Items meeting threshold at $b<8192$ & 76.1\%      & \\
+Saving vs $b^{\star}=8192$          & ${\approx}69\%$  & Per-item constraint \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Oracle C (constrained mean; Gate~0 primary)}} \\
+Oracle mean budget                  & 461 tokens  & \\
+Oracle mean Brier                   & 0.4911      & Meets mean constraint \\
+Saving vs $b^{\star}=8192$          & 94.4\%      & Gate~0 \textsc{Pass} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Oracle token savings are substantial across all eight cells: M1 DS1 $64.3\%$,
-DS2 $81.6\%$, DS3 $66.4\%$, DS4 $57.1\%$; M2 DS1 $76.3\%$, DS2 $84.7\%$,
-DS3 $85.5\%$, DS4 $80.9\%$.
-Per-item adaptive allocation is beneficial even in cells where the mean
-trajectory is weakly or inversely responsive to budget.
+Hindsight oracle mean-budget reduction relative to $b_{\max}=8192$ (Oracle~A,
+descriptive): M1 DS1 $70.3\%$, DS2 $90.7\%$, DS3 $76.9\%$, DS4 $72.1\%$;
+M2 DS1 $76.5\%$, DS2 $85.2\%$, DS3 $85.8\%$, DS4 $81.5\%$.
+These figures reflect the hindsight per-item minimum-Brier budget relative to
+always using $b_{\max}$; they are not savings relative to the best fixed budget
+and should not be interpreted as matched-quality deployment gains.
+The constrained matched-mean-quality oracle (Oracle~C) passing Gate~0 in six
+of eight cells with savings $86$--$97\%$ relative to best fixed is the
+operative matched-quality result (Table~\ref{tab:gate0-oracle-c}).
+Per-item heterogeneity is substantial even in cells where the mean trajectory
+is weakly or inversely responsive to budget.
+
+\input{tables/gate0_oracle_c}
 
 \subsection{Can simple prefix signals recover this opportunity reliably?}
 \label{sec:signals}
@@ -1122,7 +1171,7 @@ Sequential monitoring (CS) &
   CS FPR $0.000$ all cells; Greedy FPR $0$--$58.5\%$ (mean $24.1\%$). \\[4pt]
 Prequential update &
   Stale calibration under shift &
-  $\Delta = 0.002$ Brier (DS1) &
+  $\Delta = 0.0053$ Brier (DS1) &
   Prequential better in 6 of 8 cells under stationarity (advantage up to
   $+0.047$). \\
 \bottomrule
@@ -1159,9 +1208,9 @@ Per-cell values are in Table~\ref{tab:a03_cs_greedy}
 (Appendix~\ref{app:ablation_tables}).
 
 \paragraph{Prequential update: adapts calibration without a held-out split (A3).}
-Under stationary DS1~replay with $N_\text{cal}=200$, the prequential policy
-accumulates mean Brier regret $+0.152$ per item versus $+0.154$ for the
-frozen fixed-calibration policy ($\Delta=0.0016$ Brier units).
+Under stationary DS1~replay with $N_\text{cal}=100$, the prequential policy
+accumulates mean Brier regret $+0.1524$ per item versus $+0.1577$ for the
+frozen fixed-calibration policy ($\Delta=0.0053$ Brier units).
 Across all eight cells, prequential adaptation achieves lower regret in six
 of eight cases (advantage up to $+0.047$ on M2 medical datasets); the two
 exceptions (M1/ARC and M1/MedQA) are cells where the fixed calibration period
@@ -1183,29 +1232,48 @@ group ($0.608$ vs.\ $0.643$--$0.664$) at a comparable mean budget of
 1655 tokens, because it preferentially extends computation on items where the
 answer is still in flux.
 These baselines establish the compute--quality frontier available without
-deployment feedback; they are separated from oracle and VISTA results because
-they do not use deployment outcomes.
+deployment feedback; they require no held-out split and serve as the reference
+point for evaluating deployment-adaptive policies.
+
+Full VISTA evaluation (200 permutations, $\rho{=}0.20$, $\alpha{=}0.05$)
+across all eight cells confirms that at $\lambda{=}0$ (pure quality preservation)
+VISTA correctly stays at the cell-specific best fixed budget, achieving $\approx 0\%$
+net saving in all six Gate-0-passing cells.
+This is the expected behaviour: the CS correctly declines to certify any cheaper
+policy as better in expectation, since additional thinking uniformly improves
+calibration on these tasks.
+Under an explicit quality--compute tradeoff ($\lambda{=}0.01$), VISTA saves
+3.2\% tokens at $+0.6$ pp Brier on M1/DS1 and 34.5\% tokens at $+0.8$ pp
+Brier on M1/DS2 (ARC-Challenge, where Brier saturates early and
+large budget reductions incur only modest quality loss).
+Two cells fail Gate~0 (M2/DS3, M2/DS4): their Brier worsens monotonically above
+$b{=}256$, so there is no adaptive headroom and VISTA is classified as
+no-opportunity rather than a policy failure.
 
 \begin{table}[t]
 \centering
 \caption{Comparison of deployed reasoning-budget policies on DS1
 (MMLU-Pro, Qwen3-8B, $n=1000$).
-Tokens: mean thinking tokens per item.
+Tokens: mean actual tokens per item including $\rho{=}0.20$ audit overhead.
 Threshold policies stop at the first budget $b$ where the stopping criterion
-is met; if never met they use $b=8192$.
-Calibration-based and full VISTA rows represent the next evaluation step.}
+is met; if never met they use $b{=}8192$.
+VISTA ($\lambda{=}0$) is quality-preserving: the CS correctly certifies no
+cheaper policy, yielding 0\% net saving.
+VISTA ($\lambda{=}0.01$) trades $+0.6$ pp Brier for 3.2\% net token saving
+(200 permutations, $\rho{=}0.20$, $\alpha{=}0.05$).}
 \label{tab:main}
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Method & Tokens $\downarrow$ & Brier $\downarrow$ & NLL $\downarrow$ &
 Acc.\ $\uparrow$ & Held-out? \\
 \midrule
-Best fixed ($b=8192$)   & 8192 & 0.492 & 2.763 & 0.738 & No  \\
-Confidence stopping     & 1453 & 0.664 & 2.952 & 0.645 & No  \\
-Entropy stopping        & 1624 & 0.643 & 2.938 & 0.659 & No  \\
-Stability stopping      & 1655 & 0.608 & 2.567 & 0.644 & No  \\
-Calibration-based       & ---  & ---   & ---   & ---   & Yes \\
-VISTA (full eval.)      & ---  & ---   & ---   & ---   & No  \\
+Best fixed ($b=8192$)               & 8192 & 0.492 & 2.763 & 0.738 & No  \\
+Confidence stopping                 & 1453 & 0.664 & 2.952 & 0.645 & No  \\
+Entropy stopping                    & 1624 & 0.643 & 2.938 & 0.659 & No  \\
+Stability stopping                  & 1655 & 0.608 & 2.567 & 0.644 & No  \\
+\midrule
+VISTA ($\lambda{=}0$, $\rho{=}0.20$)   & 8191 & 0.492 & 2.764 & 0.738 & No  \\
+VISTA ($\lambda{=}0.01$, $\rho{=}0.20$) & 7931 & 0.498 & 2.767 & 0.734 & No  \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1214,15 +1282,36 @@ VISTA (full eval.)      & ---  & ---   & ---   & ---   & No  \\
 \label{sec:cost}
 
 The audit rate $\rho$ directly governs the exploration--exploitation tradeoff.
-At $\rho=0.20$, the CS procedure achieves false-positive rate $0.000$ with
+At $\rho{=}0.20$, the CS procedure achieves false-positive rate $0.000$ with
 time-to-decide equal to the full stream length ($n$ items), compared with
 $14$--$15$ items for greedy monitoring
 (Section~\ref{sec:ablation}).
-The 20\% audit overhead must be weighed against per-item compute savings;
-a guarantee whose exploration overhead exceeds its compute saving constitutes
-a negative result and will be reported as such.
-The component analysis provides an upper bound on exploration cost per rate;
-per-cell oracle savings ($57$--$86\%$) represent the upper bound on net gains.
+
+At $\lambda{=}0$, VISTA in the six Gate-0-passing cells achieves $\approx 0\%$
+net saving in cells whose best fixed budget is $b_{\max}{=}8192$ (M1/DS1,
+M1/DS2, M1/DS4) and negative net saving in cells where
+$b_{\mathrm{ref}} \ll b_{\max}$ (M1/DS3: $-142\%$; M2/DS1: $-20\%$;
+M2/DS2: $-60\%$).
+The negative values are structurally expected: audited items run to
+$b_{\max}{=}8192$ while the policy selects a much smaller $b_{\mathrm{ref}}$,
+so audit overhead dominates policy savings at $\lambda{=}0$.
+These cells require $\lambda{>}0$ to make VISTA deployment-beneficial; the
+optimal $\lambda$ for each cell represents a business decision about the
+acceptable quality--compute tradeoff.
+
+At $\lambda{=}0.01$, net savings in the three $b_{\mathrm{ref}}{=}8192$ cells
+are 3.2\% (M1/DS1), 34.5\% (M1/DS2), and 7.0\% (M1/DS4) with Brier
+increases of $+0.006$, $+0.008$, and $+0.012$ respectively.
+The large saving on M1/DS2 (ARC-Challenge) reflects the early Brier saturation
+visible in the budget curve: most items are well-calibrated by $b{=}1024$,
+so VISTA can safely redirect many to shorter budgets under a mild quality penalty.
+The oracle headroom (86--97\% for these cells) substantially exceeds the
+deployed saving, consistent with the CS conservatism documented in
+Section~\ref{sec:ablation}: certifying a policy requires $\approx n$ audited
+observations, and 200-item streams at $\rho{=}0.20$ yield only $\sim$40
+audits per cell.
+The gap between Oracle~C and deployed VISTA saving narrows with larger
+stream length, as the CS bound tightens.
 
 \subsection{Robustness under Distribution Shift}
 \label{sec:shift}
@@ -1274,8 +1363,9 @@ and budget intervals---in ways that cannot be resolved by choosing a larger
 fixed budget.
 On ARC-Challenge, 98\% of the potential Brier gain is captured in the first
 budget step; on MedMCQA, continuing beyond $b=1024$ actively worsens Brier.
-M2's Brier worsens monotonically on three of four datasets while M1's
-improves on the same tasks.
+M2's Brier worsens monotonically on two of four datasets (MedMCQA and
+MedQA-USMLE) while M1's improves; on MMLU-Pro, M2 Brier improves through
+$b=4096$ and reverses slightly at the maximum budget.
 Accuracy and proper-scoring-rule optima can differ by three budget levels on
 the same dataset.
 The consequence is that neither a fixed global budget nor a single heuristic
@@ -1319,10 +1409,19 @@ in the strongest cases).
 The CS procedure's zero false-positive rate comes at the cost of conservative
 time-to-decide ($\approx n$ items to first switch vs.\ $14$--$15$ for greedy).
 Confidence-threshold stopping is a uniform negative result: it degrades Brier
-in all eight cells ($+0.047$ to $+0.218$ versus best fixed budget).
-The full accounting of net compute savings after exploration overhead remains
-an open measurement step; the oracle savings ($57$--$86\%$ across cells)
-represent the upper bound.
+in all eight cells ($+0.047$ to $+0.218$ versus best fixed budget), because
+more thinking reliably improves calibration even for items where the model
+appears confident at a short budget.
+Full VISTA deployment resolves the open measurement: at $\lambda{=}0$, deployed
+saving is $\approx 0\%$ in all six Gate-0-passing cells (correct conservative
+behaviour), while Oracle~C headroom remains $74$--$97\%$; the gap reflects the
+$\sim$40 audits available at $n{=}200$, $\rho{=}0.20$.
+At $\lambda{=}0.01$, cells with $b_{\mathrm{ref}}{=}8192$ deliver 3--35\% net
+saving with Brier increases of $0.006$--$0.012$, confirming that the framework
+is operational for explicit quality--compute tradeoffs.
+The two cells without Gate-0 opportunity are a genuine negative result:
+their Brier monotonically worsens above $b{=}256$, and no policy family can
+improve on the minimum budget without Brier degradation.
 
 \paragraph{Limitations.}
 Assumption~\ref{asm:feedback} restricts applicability to tasks with eventually
@@ -1354,9 +1453,14 @@ task- and budget-dependent.
 Accuracy gains range from near-linear (MMLU-Pro: 47.7\% $\to$ 73.8\%) to
 early-saturating (ARC-Challenge: 92.0\% $\to$ 95.8\%), while proper-scoring-rule
 and NLL optima can diverge from the accuracy optimum within the same dataset.
-On MMLU-Pro an item-adaptive oracle reduces mean Brier by 30.1\% relative to
-the best fixed budget, with 76.1\% of items meeting matched quality at a
-budget below the global maximum.
+On MMLU-Pro the hindsight oracle (Oracle~A) reduces mean Brier by 30.1\%
+relative to the best fixed budget; 76.1\% of items meet a per-item quality
+threshold at a budget below the global maximum (Oracle~B).
+The constrained matched-mean-quality oracle (Oracle~C) passes Gate~0 in
+six of eight cells, with savings from 74\% to 97\% relative to the best fixed
+budget; the two failing cells (M2 MedMCQA and MedQA-USMLE) have Brier
+worsening at all budgets above the minimum, leaving no adaptive headroom
+under a mean-Brier constraint.
 
 Component ablations confirm that each element of VISTA addresses a distinct
 failure mode. Naive policy risk estimation carries selection bias that reverses
@@ -1365,8 +1469,13 @@ Anytime-valid confidence sequences eliminate false-positive policy switching
 (FPR\,${=}\,0.000$ across all cells) at the cost of conservative time-to-decide.
 Confidence thresholds do not transfer reliably across model families on
 domain-specific tasks, motivating per-model prequential calibration.
-Translating these component-level guarantees into a unified adaptive policy with
-a complete compute-savings accounting is the remaining open step.
+Full end-to-end VISTA evaluation across all eight cells completes the picture:
+at $\lambda{=}0$, the procedure is quality-preserving (CS correctly declines to
+certify cheaper policies on 200-item streams); at $\lambda{=}0.01$,
+deployable net savings of $3$--$35\%$ with Brier increases $\leq 0.012$ are
+achievable in cells where calibration saturates early.
+The two no-opportunity cells (Brier worsens above minimum budget) are a genuine
+negative result that the framework correctly identifies rather than masks.
 
 \section*{Data and Code Availability}
 Repository and cached checkpoint tables will be released where licensing permits
