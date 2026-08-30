@@ -1,0 +1,538 @@
+{
+  "m1_ds1": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 1000,
+        "auc_confidence": 0.6503756204716191,
+        "auc_entropy": 0.6564883025676501,
+        "auc_margin": 0.6491741204170055,
+        "auc_combination_cv5": 0.6495691061725605,
+        "best_single_auc": 0.6564883025676501,
+        "combo_gain": -0.006919196395089644
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 1000,
+        "auc_confidence": 0.7201234024517476,
+        "auc_entropy": 0.7181183163797601,
+        "auc_margin": 0.7224015388628064,
+        "auc_combination_cv5": 0.718709749924733,
+        "best_single_auc": 0.7224015388628064,
+        "combo_gain": -0.003691788938073426
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 1000,
+        "auc_confidence": 0.7875729427176372,
+        "auc_entropy": 0.7903332822946971,
+        "auc_margin": 0.7869349597645418,
+        "auc_combination_cv5": 0.7870046132227,
+        "best_single_auc": 0.7903332822946971,
+        "combo_gain": -0.003328669071997137
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 1000,
+        "auc_confidence": 0.8133942161339421,
+        "auc_entropy": 0.8141958396752917,
+        "auc_margin": 0.8144444444444444,
+        "auc_combination_cv5": 0.8153102414823924,
+        "best_single_auc": 0.8144444444444444,
+        "combo_gain": 0.0008657970379479796
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 1000,
+        "auc_confidence": 0.8131887081073564,
+        "auc_entropy": 0.8136615213461271,
+        "auc_margin": 0.8131442080378251,
+        "auc_combination_cv5": 0.8182764693447256,
+        "best_single_auc": 0.8136615213461271,
+        "combo_gain": 0.0046149479985985176
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T23:53:49.287779+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 979,
+        "auc_confidence": 0.960912104795019,
+        "auc_entropy": 0.9608474165116844,
+        "auc_margin": 0.9612436322471093,
+        "auc_combination_cv5": 0.9620672884741671,
+        "best_single_auc": 0.9612436322471093,
+        "combo_gain": 0.0008236562270578229
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 979,
+        "auc_confidence": 0.9679427479045145,
+        "auc_entropy": 0.9678202048919171,
+        "auc_margin": 0.9682613597372678,
+        "auc_combination_cv5": 0.9692366195410894,
+        "best_single_auc": 0.9682613597372678,
+        "combo_gain": 0.0009752598038216265
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 979,
+        "auc_confidence": 0.9510611339879632,
+        "auc_entropy": 0.9508451637054741,
+        "auc_margin": 0.9522417715322372,
+        "auc_combination_cv5": 0.953274948131754,
+        "best_single_auc": 0.9522417715322372,
+        "combo_gain": 0.0010331765995167386
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 979,
+        "auc_confidence": 0.9263859148227457,
+        "auc_entropy": 0.9254342136569117,
+        "auc_margin": 0.9290268855579348,
+        "auc_combination_cv5": 0.9296737880202234,
+        "best_single_auc": 0.9290268855579348,
+        "combo_gain": 0.000646902462288601
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 979,
+        "auc_confidence": 0.8052715654952076,
+        "auc_entropy": 0.8043929712460064,
+        "auc_margin": 0.8071352502662407,
+        "auc_combination_cv5": 0.8121944582980699,
+        "best_single_auc": 0.8071352502662407,
+        "combo_gain": 0.005059208031829243
+      }
+    ],
+    "n_items": 979,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T23:53:52.282663+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 500,
+        "auc_confidence": 0.7254141455930772,
+        "auc_entropy": 0.7252590026029546,
+        "auc_margin": 0.72618986054369,
+        "auc_combination_cv5": 0.7239011449253668,
+        "best_single_auc": 0.72618986054369,
+        "combo_gain": -0.0022887156183231117
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 500,
+        "auc_confidence": 0.7944795296167247,
+        "auc_entropy": 0.7925377468060395,
+        "auc_margin": 0.7954594947735192,
+        "auc_combination_cv5": 0.7993624790819508,
+        "best_single_auc": 0.7954594947735192,
+        "combo_gain": 0.003902984308431612
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 500,
+        "auc_confidence": 0.699117199391172,
+        "auc_entropy": 0.6990360223236936,
+        "auc_margin": 0.7002536783358702,
+        "auc_combination_cv5": 0.7045996805788357,
+        "best_single_auc": 0.7002536783358702,
+        "combo_gain": 0.004346002242965552
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 500,
+        "auc_confidence": 0.7587596664903398,
+        "auc_entropy": 0.7593138366205698,
+        "auc_margin": 0.7583818232197285,
+        "auc_combination_cv5": 0.7630867066142412,
+        "best_single_auc": 0.7593138366205698,
+        "combo_gain": 0.003772869993671324
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 500,
+        "auc_confidence": 0.6398254890063853,
+        "auc_entropy": 0.6402010921383375,
+        "auc_margin": 0.6379185807980122,
+        "auc_combination_cv5": 0.6418132676320067,
+        "best_single_auc": 0.6402010921383375,
+        "combo_gain": 0.00161217549366921
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T23:53:53.808134+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 500,
+        "auc_confidence": 0.7826280090892006,
+        "auc_entropy": 0.7843535904050845,
+        "auc_margin": 0.7827134339068186,
+        "auc_combination_cv5": 0.7855540191806958,
+        "best_single_auc": 0.7843535904050845,
+        "combo_gain": 0.0012004287756113285
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 500,
+        "auc_confidence": 0.8105369807497467,
+        "auc_entropy": 0.8089372367087933,
+        "auc_margin": 0.8109635791606676,
+        "auc_combination_cv5": 0.8099819950241123,
+        "best_single_auc": 0.8109635791606676,
+        "combo_gain": -0.000981584136555358
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 500,
+        "auc_confidence": 0.8442279411764706,
+        "auc_entropy": 0.8435294117647059,
+        "auc_margin": 0.8449816176470588,
+        "auc_combination_cv5": 0.8409187442384964,
+        "best_single_auc": 0.8449816176470588,
+        "combo_gain": -0.004062873408562373
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 500,
+        "auc_confidence": 0.8571575907590759,
+        "auc_entropy": 0.8554816419141914,
+        "auc_margin": 0.8578537541254125,
+        "auc_combination_cv5": 0.8545673878468111,
+        "best_single_auc": 0.8578537541254125,
+        "combo_gain": -0.0032863662786014602
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 500,
+        "auc_confidence": 0.8151046154906759,
+        "auc_entropy": 0.8146909792837199,
+        "auc_margin": 0.815587191065458,
+        "auc_combination_cv5": 0.8118272382262055,
+        "best_single_auc": 0.815587191065458,
+        "combo_gain": -0.003759952839252456
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T23:53:55.408864+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 1000,
+        "auc_confidence": 0.45454145396937157,
+        "auc_entropy": 0.46121041429965914,
+        "auc_margin": 0.4551015346209854,
+        "auc_combination_cv5": 0.5443105731963742,
+        "best_single_auc": 0.46121041429965914,
+        "combo_gain": 0.08310015889671507
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 1000,
+        "auc_confidence": 0.5293441199176531,
+        "auc_entropy": 0.5303453100874935,
+        "auc_margin": 0.5329367440813175,
+        "auc_combination_cv5": 0.4717210432399803,
+        "best_single_auc": 0.5329367440813175,
+        "combo_gain": -0.061215700841337206
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 1000,
+        "auc_confidence": 0.5644358046426708,
+        "auc_entropy": 0.5653038601982264,
+        "auc_margin": 0.5644806338028169,
+        "auc_combination_cv5": 0.5649498841306502,
+        "best_single_auc": 0.5653038601982264,
+        "combo_gain": -0.000353976067576256
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 1000,
+        "auc_confidence": 0.5408262122416534,
+        "auc_entropy": 0.542088963963964,
+        "auc_margin": 0.5400934022257552,
+        "auc_combination_cv5": 0.5383096458346286,
+        "best_single_auc": 0.542088963963964,
+        "combo_gain": -0.0037793181293354072
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 1000,
+        "auc_confidence": 0.5536044514893336,
+        "auc_entropy": 0.5539594478568126,
+        "auc_margin": 0.554262845915065,
+        "auc_combination_cv5": 0.5438871062132015,
+        "best_single_auc": 0.554262845915065,
+        "combo_gain": -0.010375739701863562
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T23:53:58.650707+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 1000,
+        "auc_confidence": 0.7677825090075335,
+        "auc_entropy": 0.7691451031772027,
+        "auc_margin": 0.7666011573315864,
+        "auc_combination_cv5": 0.7293662642805754,
+        "best_single_auc": 0.7691451031772027,
+        "combo_gain": -0.039778838896627366
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 1000,
+        "auc_confidence": 0.8710172410634127,
+        "auc_entropy": 0.8706095751113065,
+        "auc_margin": 0.8715302588907822,
+        "auc_combination_cv5": 0.8729306195137427,
+        "best_single_auc": 0.8715302588907822,
+        "combo_gain": 0.0014003606229605614
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 1000,
+        "auc_confidence": 0.8170630279402209,
+        "auc_entropy": 0.8165562053281351,
+        "auc_margin": 0.8178622482131254,
+        "auc_combination_cv5": 0.8179171235851421,
+        "best_single_auc": 0.8178622482131254,
+        "combo_gain": 5.4875372016760515e-05
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 1000,
+        "auc_confidence": 0.7374095482766003,
+        "auc_entropy": 0.7364761293084993,
+        "auc_margin": 0.7397559409120102,
+        "auc_combination_cv5": 0.7326285101042369,
+        "best_single_auc": 0.7397559409120102,
+        "combo_gain": -0.007127430807773338
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 1000,
+        "auc_confidence": 0.7736236760812003,
+        "auc_entropy": 0.7730789386584289,
+        "auc_margin": 0.774761418799647,
+        "auc_combination_cv5": 0.7766239460617194,
+        "best_single_auc": 0.774761418799647,
+        "combo_gain": 0.0018625272620723665
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T23:54:01.777070+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 500,
+        "auc_confidence": 0.48696612312172954,
+        "auc_entropy": 0.48995855403178057,
+        "auc_margin": 0.48677409546974765,
+        "auc_combination_cv5": 0.5094052636526781,
+        "best_single_auc": 0.48995855403178057,
+        "combo_gain": 0.019446709620897562
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 500,
+        "auc_confidence": 0.6048621190130624,
+        "auc_entropy": 0.6004561476259589,
+        "auc_margin": 0.6079549381436173,
+        "auc_combination_cv5": 0.6035859320529653,
+        "best_single_auc": 0.6079549381436173,
+        "combo_gain": -0.00436900609065205
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 500,
+        "auc_confidence": 0.570837789661319,
+        "auc_entropy": 0.5706951871657754,
+        "auc_margin": 0.5703386809269162,
+        "auc_combination_cv5": 0.5774073554359944,
+        "best_single_auc": 0.570837789661319,
+        "combo_gain": 0.006569565774675379
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 500,
+        "auc_confidence": 0.578447933227345,
+        "auc_entropy": 0.5792594064652888,
+        "auc_margin": 0.5774377318494965,
+        "auc_combination_cv5": 0.5763053512822043,
+        "best_single_auc": 0.5792594064652888,
+        "combo_gain": -0.0029540551830845585
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 500,
+        "auc_confidence": 0.5805180458689881,
+        "auc_entropy": 0.5805180458689881,
+        "auc_margin": 0.5804850703203575,
+        "auc_combination_cv5": 0.5800545134422271,
+        "best_single_auc": 0.5805180458689881,
+        "combo_gain": -0.00046353242676100415
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T23:54:03.306139+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "edges": [
+      {
+        "b_lo": 256,
+        "b_hi": 512,
+        "n": 500,
+        "auc_confidence": 0.44194054712025116,
+        "auc_entropy": 0.4408354154654366,
+        "auc_margin": 0.4460727785252098,
+        "auc_combination_cv5": 0.5510621521521435,
+        "best_single_auc": 0.4460727785252098,
+        "combo_gain": 0.10498937362693367
+      },
+      {
+        "b_lo": 512,
+        "b_hi": 1024,
+        "n": 500,
+        "auc_confidence": 0.5424027137736815,
+        "auc_entropy": 0.547155017921147,
+        "auc_margin": 0.5391465053763441,
+        "auc_combination_cv5": 0.5468375620749376,
+        "best_single_auc": 0.547155017921147,
+        "combo_gain": -0.00031745584620934686
+      },
+      {
+        "b_lo": 1024,
+        "b_hi": 2048,
+        "n": 500,
+        "auc_confidence": 0.625085242771413,
+        "auc_entropy": 0.6243521549372614,
+        "auc_margin": 0.6264661756683033,
+        "auc_combination_cv5": 0.6242817006567006,
+        "best_single_auc": 0.6264661756683033,
+        "combo_gain": -0.0021844750116026823
+      },
+      {
+        "b_lo": 2048,
+        "b_hi": 4096,
+        "n": 500,
+        "auc_confidence": 0.5894701292237686,
+        "auc_entropy": 0.5898611777671128,
+        "auc_margin": 0.5901455767077267,
+        "auc_combination_cv5": 0.5832489479633678,
+        "best_single_auc": 0.5901455767077267,
+        "combo_gain": -0.006896628744358924
+      },
+      {
+        "b_lo": 4096,
+        "b_hi": 8192,
+        "n": 500,
+        "auc_confidence": 0.5983836723512088,
+        "auc_entropy": 0.5998561742346414,
+        "auc_margin": 0.5964659954797616,
+        "auc_combination_cv5": 0.5891585506760517,
+        "best_single_auc": 0.5998561742346414,
+        "combo_gain": -0.01069762355858972
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "07",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T23:54:04.834817+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

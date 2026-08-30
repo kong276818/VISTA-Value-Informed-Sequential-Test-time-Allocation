@@ -1,0 +1,166 @@
+{
+  "transfer_results": [
+    {
+      "ds_tag": "ds1",
+      "m1_best_tau": 0.95,
+      "m1_tuned": {
+        "brier": 0.6274950702517917,
+        "acc": 0.669,
+        "tokens": 1708.544,
+        "saving": 0.7914375
+      },
+      "m2_transfer_from_m1": {
+        "brier": 0.9146512528147168,
+        "acc": 0.493,
+        "tokens": 2481.152,
+        "saving": 0.697125
+      },
+      "m2_best_tau": 0.95,
+      "m2_tuned": {
+        "brier": 0.9146512528147168,
+        "acc": 0.493,
+        "tokens": 2481.152,
+        "saving": 0.697125
+      },
+      "m1_transfer_from_m2": {
+        "brier": 0.6274950702517917,
+        "acc": 0.669,
+        "tokens": 1708.544,
+        "saving": 0.7914375
+      },
+      "m1_bmax": {
+        "brier": 0.49172779544264344,
+        "correct": 0.738
+      },
+      "m2_bmax": {
+        "brier": 0.8875208537862682,
+        "correct": 0.502
+      },
+      "m1to_m2_brier_degradation": 0.0,
+      "m2to_m1_brier_degradation": 0.0
+    },
+    {
+      "ds_tag": "ds2",
+      "m1_best_tau": 0.95,
+      "m1_tuned": {
+        "brier": 0.11489644231683864,
+        "acc": 0.9417773237997957,
+        "tokens": 327.38712972420836,
+        "saving": 0.9600357507660878
+      },
+      "m2_transfer_from_m1": {
+        "brier": 0.2793877130207281,
+        "acc": 0.855,
+        "tokens": 546.56,
+        "saving": 0.9332812500000001
+      },
+      "m2_best_tau": 0.95,
+      "m2_tuned": {
+        "brier": 0.2793877130207281,
+        "acc": 0.855,
+        "tokens": 546.56,
+        "saving": 0.9332812500000001
+      },
+      "m1_transfer_from_m2": {
+        "brier": 0.11489644231683864,
+        "acc": 0.9417773237997957,
+        "tokens": 327.38712972420836,
+        "saving": 0.9600357507660878
+      },
+      "m1_bmax": {
+        "brier": 0.0837466578053189,
+        "correct": 0.958120531154239
+      },
+      "m2_bmax": {
+        "brier": 0.2337712346258969,
+        "correct": 0.875
+      },
+      "m1to_m2_brier_degradation": 0.0,
+      "m2to_m1_brier_degradation": 0.0
+    },
+    {
+      "ds_tag": "ds3",
+      "m1_best_tau": 0.95,
+      "m1_tuned": {
+        "brier": 0.7056468280135312,
+        "acc": 0.642,
+        "tokens": 738.304,
+        "saving": 0.909875
+      },
+      "m2_transfer_from_m1": {
+        "brier": 0.9480540205805074,
+        "acc": 0.516,
+        "tokens": 942.08,
+        "saving": 0.885
+      },
+      "m2_best_tau": 0.7,
+      "m2_tuned": {
+        "brier": 0.8748070623350036,
+        "acc": 0.514,
+        "tokens": 454.144,
+        "saving": 0.9445625
+      },
+      "m1_transfer_from_m2": {
+        "brier": 0.7063472639907037,
+        "acc": 0.616,
+        "tokens": 364.032,
+        "saving": 0.9555625
+      },
+      "m1_bmax": {
+        "brier": 0.6624095663106709,
+        "correct": 0.666
+      },
+      "m2_bmax": {
+        "brier": 0.929208800504507,
+        "correct": 0.526
+      },
+      "m1to_m2_brier_degradation": 0.07324695824550376,
+      "m2to_m1_brier_degradation": 0.0007004359771725088
+    },
+    {
+      "ds_tag": "ds4",
+      "m1_best_tau": 0.95,
+      "m1_tuned": {
+        "brier": 0.6005113305584653,
+        "acc": 0.694,
+        "tokens": 780.288,
+        "saving": 0.9047499999999999
+      },
+      "m2_transfer_from_m1": {
+        "brier": 0.8317808064697639,
+        "acc": 0.568,
+        "tokens": 1548.288,
+        "saving": 0.8109999999999999
+      },
+      "m2_best_tau": 0.7,
+      "m2_tuned": {
+        "brier": 0.7855144488307415,
+        "acc": 0.536,
+        "tokens": 577.536,
+        "saving": 0.9295
+      },
+      "m1_transfer_from_m2": {
+        "brier": 0.6434709740510832,
+        "acc": 0.652,
+        "tokens": 336.896,
+        "saving": 0.958875
+      },
+      "m1_bmax": {
+        "brier": 0.4285405371228361,
+        "correct": 0.782
+      },
+      "m2_bmax": {
+        "brier": 0.8273067421373839,
+        "correct": 0.568
+      },
+      "m1to_m2_brier_degradation": 0.046266357639022426,
+      "m2to_m1_brier_degradation": 0.04295964349261794
+    }
+  ],
+  "_meta": {
+    "ablation": "13",
+    "model_tag": "m1+m2",
+    "ds_tag": "all",
+    "timestamp": "2026-08-29T22:32:07.335024+00:00"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "reason": "Requires GPU inference: independent generation vs. forced-checkpoint comparison.",
+  "recovery_script": "recover_m1_ds2.py can be extended for this experiment.",
+  "estimated_items": "100-200 items \u00d7 2 models \u00d7 2 datasets \u00d7 4 budgets",
+  "paper_placement": "APPENDIX"
+}

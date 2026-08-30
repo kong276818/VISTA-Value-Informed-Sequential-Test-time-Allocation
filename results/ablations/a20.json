@@ -1,0 +1,706 @@
+{
+  "m1_ds1": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.6830819186408872,
+        "mean_tokens": 1273.088,
+        "token_saving": 0.84459375,
+        "mean_regret_vs_oracle": 0.3393483631763232,
+        "sequential": {
+          "mean_regret": 0.3393483631763232,
+          "std_regret": 5.131586511573118e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.6830819186408872,
+        "mean_tokens": 1273.088,
+        "token_saving": 0.84459375,
+        "mean_regret_vs_oracle": 0.3393483631763232,
+        "sequential": {
+          "mean_regret": 0.3393483631763233,
+          "std_regret": 5.528964099882131e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.6830819186408872,
+        "mean_tokens": 1273.088,
+        "token_saving": 0.84459375,
+        "mean_regret_vs_oracle": 0.3393483631763232,
+        "sequential": {
+          "mean_regret": 0.3393483631763233,
+          "std_regret": 5.651586958817083e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.6830819186408872,
+        "mean_tokens": 1273.088,
+        "token_saving": 0.84459375,
+        "mean_regret_vs_oracle": 0.3393483631763232,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.49172779544264344,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.1479942399780794,
+        "sequential": {
+          "mean_regret": 0.1623906819010268,
+          "std_regret": 0.011771431628579203
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.49172779544264344,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.1479942399780794
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.49172779544264344,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.1479942399780794
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.49172779544264344,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.1479942399780794
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.49172779544264344,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.1479942399780794
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 1000,
+    "oracle_mean_brier": 0.3437335554645641,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:12:37.015818+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.13062174935228527,
+        "mean_tokens": 283.1950970377937,
+        "token_saving": 0.9654302860061287,
+        "mean_regret_vs_oracle": 0.07982058593263827,
+        "sequential": {
+          "mean_regret": 0.07982058593263819,
+          "std_regret": 7.222388325888864e-17
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.13062174935228527,
+        "mean_tokens": 283.1950970377937,
+        "token_saving": 0.9654302860061287,
+        "mean_regret_vs_oracle": 0.07982058593263827,
+        "sequential": {
+          "mean_regret": 0.07982058593263819,
+          "std_regret": 7.856128041056239e-17
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.13062174935228527,
+        "mean_tokens": 283.1950970377937,
+        "token_saving": 0.9654302860061287,
+        "mean_regret_vs_oracle": 0.07982058593263827,
+        "sequential": {
+          "mean_regret": 0.07982058593263819,
+          "std_regret": 7.846685939036434e-17
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.13062174935228527,
+        "mean_tokens": 283.1950970377937,
+        "token_saving": 0.9654302860061287,
+        "mean_regret_vs_oracle": 0.07982058593263827,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.0837466578053189,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.03294549438567188,
+        "sequential": {
+          "mean_regret": 0.03986921368997645,
+          "std_regret": 0.0059819786390449
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.0837466578053189,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.03294549438567188
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.0837466578053189,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.03294549438567188
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.0837466578053189,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.03294549438567188
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.0837466578053189,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.03294549438567188
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 979,
+    "oracle_mean_brier": 0.050801163419647015,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:12:44.312605+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.7153218821570437,
+        "mean_tokens": 513.536,
+        "token_saving": 0.9373125,
+        "mean_regret_vs_oracle": 0.27955658912188175,
+        "sequential": {
+          "mean_regret": 0.27955658912188186,
+          "std_regret": 3.9319702500294477e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.7153218821570437,
+        "mean_tokens": 513.536,
+        "token_saving": 0.9373125,
+        "mean_regret_vs_oracle": 0.27955658912188175,
+        "sequential": {
+          "mean_regret": 0.27955658912188186,
+          "std_regret": 3.6970490803187145e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.7153218821570437,
+        "mean_tokens": 513.536,
+        "token_saving": 0.9373125,
+        "mean_regret_vs_oracle": 0.27955658912188175,
+        "sequential": {
+          "mean_regret": 0.27955658912188186,
+          "std_regret": 4.0925563150009604e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.7153218821570437,
+        "mean_tokens": 513.536,
+        "token_saving": 0.9373125,
+        "mean_regret_vs_oracle": 0.27955658912188175,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.6274926225428731,
+        "mean_tokens": 1024.0,
+        "token_saving": 0.875,
+        "mean_regret_vs_oracle": 0.19172732950771115,
+        "sequential": {
+          "mean_regret": 0.2202933748638533,
+          "std_regret": 0.016296115223462426
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.6624095663106709,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.22664427327550898
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.6624095663106709,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.22664427327550898
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.6274926225428731,
+        "mean_tokens": 1024.0,
+        "token_saving": 0.875,
+        "mean_regret_vs_oracle": 0.19172732950771115
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.6624095663106709,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.22664427327550898
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 500,
+    "oracle_mean_brier": 0.43576529303516204,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-30T00:12:48.091264+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.646080705131677,
+        "mean_tokens": 488.448,
+        "token_saving": 0.940375,
+        "mean_regret_vs_oracle": 0.3511573031609329,
+        "sequential": {
+          "mean_regret": 0.3511573031609331,
+          "std_regret": 3.6175319193981604e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.646080705131677,
+        "mean_tokens": 488.448,
+        "token_saving": 0.940375,
+        "mean_regret_vs_oracle": 0.3511573031609329,
+        "sequential": {
+          "mean_regret": 0.351157303160933,
+          "std_regret": 3.712964398638023e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.646080705131677,
+        "mean_tokens": 488.448,
+        "token_saving": 0.940375,
+        "mean_regret_vs_oracle": 0.3511573031609329,
+        "sequential": {
+          "mean_regret": 0.3511573031609331,
+          "std_regret": 3.5494301343372343e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.646080705131677,
+        "mean_tokens": 488.448,
+        "token_saving": 0.940375,
+        "mean_regret_vs_oracle": 0.3511573031609329,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.4285405371228361,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.13361713515209184,
+        "sequential": {
+          "mean_regret": 0.15559192303491104,
+          "std_regret": 0.02178237076768148
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.4285405371228361,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.13361713515209184
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.4285405371228361,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.13361713515209184
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.4285405371228361,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.13361713515209184
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.4285405371228361,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.13361713515209184
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 500,
+    "oracle_mean_brier": 0.29492340197074424,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-30T00:12:51.865436+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.9603856241021852,
+        "mean_tokens": 1906.176,
+        "token_saving": 0.7673125000000001,
+        "mean_regret_vs_oracle": 0.4075677070814488,
+        "sequential": {
+          "mean_regret": 0.40756770708144835,
+          "std_regret": 6.424925991439416e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.9603856241021852,
+        "mean_tokens": 1906.176,
+        "token_saving": 0.7673125000000001,
+        "mean_regret_vs_oracle": 0.4075677070814488,
+        "sequential": {
+          "mean_regret": 0.4075677070814483,
+          "std_regret": 5.946994199833023e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.9603856241021852,
+        "mean_tokens": 1906.176,
+        "token_saving": 0.7673125000000001,
+        "mean_regret_vs_oracle": 0.4075677070814488,
+        "sequential": {
+          "mean_regret": 0.4075677070814483,
+          "std_regret": 6.461431452669619e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.9603856241021852,
+        "mean_tokens": 1906.176,
+        "token_saving": 0.7673125000000001,
+        "mean_regret_vs_oracle": 0.4075677070814488,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.8782421508782848,
+        "mean_tokens": 4096.0,
+        "token_saving": 0.5,
+        "mean_regret_vs_oracle": 0.3254242338575485,
+        "sequential": {
+          "mean_regret": 0.34888029945528093,
+          "std_regret": 0.01855906410313746
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.8875208537862682,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.3347029367655318
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.8875208537862682,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.3347029367655318
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.8782421508782848,
+        "mean_tokens": 4096.0,
+        "token_saving": 0.5,
+        "mean_regret_vs_oracle": 0.3254242338575485
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.8875208537862682,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.3347029367655318
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 1000,
+    "oracle_mean_brier": 0.5528179170207363,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:12:59.107456+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.3083408422628116,
+        "mean_tokens": 389.12,
+        "token_saving": 0.9525,
+        "mean_regret_vs_oracle": 0.17190568194004593,
+        "sequential": {
+          "mean_regret": 0.17190568194004582,
+          "std_regret": 2.6256278107838633e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.3083408422628116,
+        "mean_tokens": 389.12,
+        "token_saving": 0.9525,
+        "mean_regret_vs_oracle": 0.17190568194004593,
+        "sequential": {
+          "mean_regret": 0.17190568194004588,
+          "std_regret": 2.485045045847266e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.3083408422628116,
+        "mean_tokens": 389.12,
+        "token_saving": 0.9525,
+        "mean_regret_vs_oracle": 0.17190568194004593,
+        "sequential": {
+          "mean_regret": 0.1719056819400458,
+          "std_regret": 2.595274417835296e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.3083408422628116,
+        "mean_tokens": 389.12,
+        "token_saving": 0.9525,
+        "mean_regret_vs_oracle": 0.17190568194004593,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.2288789448203363,
+        "mean_tokens": 2048.0,
+        "token_saving": 0.75,
+        "mean_regret_vs_oracle": 0.09244378449757061,
+        "sequential": {
+          "mean_regret": 0.10274019999944574,
+          "std_regret": 0.00871283518817929
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.2337712346258969,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.09733607430313122
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.2337712346258969,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.09733607430313122
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.2288789448203363,
+        "mean_tokens": 2048.0,
+        "token_saving": 0.75,
+        "mean_regret_vs_oracle": 0.09244378449757061
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.2337712346258969,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.09733607430313122
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 1000,
+    "oracle_mean_brier": 0.13643516032276568,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:13:06.386544+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.9437424079750287,
+        "mean_tokens": 648.704,
+        "token_saving": 0.9208125,
+        "mean_regret_vs_oracle": 0.36816853243912717,
+        "sequential": {
+          "mean_regret": 0.3681685324391278,
+          "std_regret": 4.3172835307518774e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.9437424079750287,
+        "mean_tokens": 648.704,
+        "token_saving": 0.9208125,
+        "mean_regret_vs_oracle": 0.36816853243912717,
+        "sequential": {
+          "mean_regret": 0.3681685324391278,
+          "std_regret": 4.188737265214578e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.9437424079750287,
+        "mean_tokens": 648.704,
+        "token_saving": 0.9208125,
+        "mean_regret_vs_oracle": 0.36816853243912717,
+        "sequential": {
+          "mean_regret": 0.3681685324391277,
+          "std_regret": 4.60999336587874e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.9437424079750287,
+        "mean_tokens": 648.704,
+        "token_saving": 0.9208125,
+        "mean_regret_vs_oracle": 0.36816853243912717,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.8018814153738532,
+        "mean_tokens": 256.0,
+        "token_saving": 0.96875,
+        "mean_regret_vs_oracle": 0.22630753983795154,
+        "sequential": {
+          "mean_regret": 0.25553776593162214,
+          "std_regret": 0.026955455007767252
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.929208800504507,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.3536349249686053
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.929208800504507,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.3536349249686053
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.8018814153738532,
+        "mean_tokens": 256.0,
+        "token_saving": 0.96875,
+        "mean_regret_vs_oracle": 0.22630753983795154
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.929208800504507,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.3536349249686053
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 500,
+    "oracle_mean_brier": 0.5755738755359017,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-30T00:13:10.150684+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "variants": {
+      "VISTA_Full": {
+        "mean_brier": 0.8124481064842549,
+        "mean_tokens": 1045.504,
+        "token_saving": 0.872375,
+        "mean_regret_vs_oracle": 0.4058682903555627,
+        "sequential": {
+          "mean_regret": 0.4058682903555626,
+          "std_regret": 4.1108887347388877e-16
+        }
+      },
+      "VISTA_minus_Audit": {
+        "mean_brier": 0.8124481064842549,
+        "mean_tokens": 1045.504,
+        "token_saving": 0.872375,
+        "mean_regret_vs_oracle": 0.4058682903555627,
+        "sequential": {
+          "mean_regret": 0.40586829035556266,
+          "std_regret": 4.306295096764918e-16
+        }
+      },
+      "VISTA_minus_IPW": {
+        "mean_brier": 0.8124481064842549,
+        "mean_tokens": 1045.504,
+        "token_saving": 0.872375,
+        "mean_regret_vs_oracle": 0.4058682903555627,
+        "sequential": {
+          "mean_regret": 0.4058682903555627,
+          "std_regret": 4.50155399631902e-16
+        }
+      },
+      "VISTA_minus_CS": {
+        "mean_brier": 0.8124481064842549,
+        "mean_tokens": 1045.504,
+        "token_saving": 0.872375,
+        "mean_regret_vs_oracle": 0.4058682903555627,
+        "note": "CS removal effect quantified via A01/A03 wrong-selection rate"
+      },
+      "VISTA_minus_ItemAdapt": {
+        "mean_brier": 0.7268204624430346,
+        "mean_tokens": 256.0,
+        "token_saving": 0.96875,
+        "mean_regret_vs_oracle": 0.32024064631434224,
+        "sequential": {
+          "mean_regret": 0.3505313037273014,
+          "std_regret": 0.024151490299470783
+        }
+      },
+      "VISTA_minus_Prequential": {
+        "mean_brier": 0.827306742137384,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.42072692600869166
+      },
+      "VISTA_minus_Feedback": {
+        "mean_brier": 0.827306742137384,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.42072692600869166
+      },
+      "Fixed_BestGlobal": {
+        "mean_brier": 0.7268204624430346,
+        "mean_tokens": 256.0,
+        "token_saving": 0.96875,
+        "mean_regret_vs_oracle": 0.32024064631434224
+      },
+      "Fixed_Bmax": {
+        "mean_brier": 0.827306742137384,
+        "mean_tokens": 8192.0,
+        "token_saving": 0.0,
+        "mean_regret_vs_oracle": 0.42072692600869166
+      }
+    },
+    "tau_conf": 0.85,
+    "tau_margin": 0.45,
+    "rho": 0.2,
+    "n_perm": 200,
+    "n_items": 500,
+    "oracle_mean_brier": 0.40657981612869226,
+    "_meta": {
+      "ablation": "20",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-30T00:13:13.815461+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

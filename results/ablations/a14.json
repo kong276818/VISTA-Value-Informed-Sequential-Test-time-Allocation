@@ -1,0 +1,624 @@
+{
+  "m1": {
+    "transfer_results": [
+      {
+        "source": "ds1",
+        "target": "ds2",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "target_transferred": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "target_tuned": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds1",
+        "target": "ds3",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "target_transferred": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "target_tuned": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds1",
+        "target": "ds4",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "target_transferred": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "target_tuned": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds2",
+        "target": "ds1",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "target_transferred": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "target_tuned": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds2",
+        "target": "ds3",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "target_transferred": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "target_tuned": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds2",
+        "target": "ds4",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "target_transferred": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "target_tuned": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds3",
+        "target": "ds1",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "target_transferred": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "target_tuned": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds3",
+        "target": "ds2",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "target_transferred": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "target_tuned": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds3",
+        "target": "ds4",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "target_transferred": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "target_tuned": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds4",
+        "target": "ds1",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "target_transferred": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "target_tuned": {
+          "brier": 0.6274950702517917,
+          "acc": 0.669,
+          "tokens": 1708.544,
+          "saving": 0.7914375
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds4",
+        "target": "ds2",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "target_transferred": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "target_tuned": {
+          "brier": 0.11489644231683864,
+          "acc": 0.9417773237997957,
+          "tokens": 327.38712972420836,
+          "saving": 0.9600357507660878
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds4",
+        "target": "ds3",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.6005113305584653,
+          "acc": 0.694,
+          "tokens": 780.288,
+          "saving": 0.9047499999999999
+        },
+        "target_transferred": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "target_tuned": {
+          "brier": 0.7056468280135312,
+          "acc": 0.642,
+          "tokens": 738.304,
+          "saving": 0.909875
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      }
+    ],
+    "model": "m1",
+    "_meta": {
+      "ablation": "14",
+      "model_tag": "m1",
+      "ds_tag": "all",
+      "timestamp": "2026-08-29T22:32:07.614925+00:00"
+    }
+  },
+  "m2": {
+    "transfer_results": [
+      {
+        "source": "ds1",
+        "target": "ds2",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "target_transferred": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "target_tuned": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds1",
+        "target": "ds3",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "target_transferred": {
+          "brier": 0.9480540205805074,
+          "acc": 0.516,
+          "tokens": 942.08,
+          "saving": 0.885
+        },
+        "target_tuned": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "brier_degradation": 0.07324695824550376,
+        "token_saving_delta": -0.05956249999999996
+      },
+      {
+        "source": "ds1",
+        "target": "ds4",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "target_transferred": {
+          "brier": 0.8317808064697639,
+          "acc": 0.568,
+          "tokens": 1548.288,
+          "saving": 0.8109999999999999
+        },
+        "target_tuned": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "brier_degradation": 0.046266357639022426,
+        "token_saving_delta": -0.11850000000000005
+      },
+      {
+        "source": "ds2",
+        "target": "ds1",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "target_transferred": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "target_tuned": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds2",
+        "target": "ds3",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "target_transferred": {
+          "brier": 0.9480540205805074,
+          "acc": 0.516,
+          "tokens": 942.08,
+          "saving": 0.885
+        },
+        "target_tuned": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "brier_degradation": 0.07324695824550376,
+        "token_saving_delta": -0.05956249999999996
+      },
+      {
+        "source": "ds2",
+        "target": "ds4",
+        "tau_from_source": 0.95,
+        "source_tuned": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "target_transferred": {
+          "brier": 0.8317808064697639,
+          "acc": 0.568,
+          "tokens": 1548.288,
+          "saving": 0.8109999999999999
+        },
+        "target_tuned": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "brier_degradation": 0.046266357639022426,
+        "token_saving_delta": -0.11850000000000005
+      },
+      {
+        "source": "ds3",
+        "target": "ds1",
+        "tau_from_source": 0.7,
+        "source_tuned": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "target_transferred": {
+          "brier": 0.9590681978027876,
+          "acc": 0.437,
+          "tokens": 1462.528,
+          "saving": 0.82146875
+        },
+        "target_tuned": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "brier_degradation": 0.044416944988070806,
+        "token_saving_delta": 0.12434374999999998
+      },
+      {
+        "source": "ds3",
+        "target": "ds2",
+        "tau_from_source": 0.7,
+        "source_tuned": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "target_transferred": {
+          "brier": 0.3476561289497227,
+          "acc": 0.802,
+          "tokens": 307.712,
+          "saving": 0.9624375000000001
+        },
+        "target_tuned": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "brier_degradation": 0.06826841592899457,
+        "token_saving_delta": 0.029156249999999995
+      },
+      {
+        "source": "ds3",
+        "target": "ds4",
+        "tau_from_source": 0.7,
+        "source_tuned": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "target_transferred": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "target_tuned": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      },
+      {
+        "source": "ds4",
+        "target": "ds1",
+        "tau_from_source": 0.7,
+        "source_tuned": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "target_transferred": {
+          "brier": 0.9590681978027876,
+          "acc": 0.437,
+          "tokens": 1462.528,
+          "saving": 0.82146875
+        },
+        "target_tuned": {
+          "brier": 0.9146512528147168,
+          "acc": 0.493,
+          "tokens": 2481.152,
+          "saving": 0.697125
+        },
+        "brier_degradation": 0.044416944988070806,
+        "token_saving_delta": 0.12434374999999998
+      },
+      {
+        "source": "ds4",
+        "target": "ds2",
+        "tau_from_source": 0.7,
+        "source_tuned": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "target_transferred": {
+          "brier": 0.3476561289497227,
+          "acc": 0.802,
+          "tokens": 307.712,
+          "saving": 0.9624375000000001
+        },
+        "target_tuned": {
+          "brier": 0.2793877130207281,
+          "acc": 0.855,
+          "tokens": 546.56,
+          "saving": 0.9332812500000001
+        },
+        "brier_degradation": 0.06826841592899457,
+        "token_saving_delta": 0.029156249999999995
+      },
+      {
+        "source": "ds4",
+        "target": "ds3",
+        "tau_from_source": 0.7,
+        "source_tuned": {
+          "brier": 0.7855144488307415,
+          "acc": 0.536,
+          "tokens": 577.536,
+          "saving": 0.9295
+        },
+        "target_transferred": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "target_tuned": {
+          "brier": 0.8748070623350036,
+          "acc": 0.514,
+          "tokens": 454.144,
+          "saving": 0.9445625
+        },
+        "brier_degradation": 0.0,
+        "token_saving_delta": 0.0
+      }
+    ],
+    "model": "m2",
+    "_meta": {
+      "ablation": "14",
+      "model_tag": "m2",
+      "ds_tag": "all",
+      "timestamp": "2026-08-29T22:32:07.881141+00:00"
+    }
+  }
+}

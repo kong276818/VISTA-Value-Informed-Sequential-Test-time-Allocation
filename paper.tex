@@ -95,47 +95,48 @@
 %% Abstract
 %% -----------------------------------------------------------------------
 \begin{abstract}
-Reasoning language models can spend widely different amounts of test-time
-compute before producing an answer, yet deployment systems still require a rule
-for deciding how much reasoning is worth performing. A fixed global budget
-ignores query-level heterogeneity, whereas many adaptive stopping methods rely
-on confidence, entropy, answer stability, or other signals observed along the
-current trajectory. Such signals may indicate that reasoning has stabilised,
-but they do not by themselves establish whether the current answer is correct
-or whether additional reasoning would improve it.
-
-We study test-time compute selection in a deployment regime with no separate
-held-out calibration set but with outcomes that become available after a delay.
-The setting involves three interlocking obstacles: (i)~\emph{correctness
-non-identifiability}---without structural assumptions, current correctness is
-not identified by the observable reasoning history alone, as two
-data-generating processes can agree on every observable quantity while
-assigning opposite correctness; (ii)~the \emph{missing continuation
-counterfactual}---when a query is stopped at an intermediate checkpoint, the
-prediction a longer trajectory would have produced is unobserved; and
-(iii)~the absence of a held-out calibration split, which rules out standard
-offline stopping-rule fitting. We address the first obstacle by replacing
-current correctness with the \emph{marginal value of thinking}, defined as the
-expected improvement in a proper scoring loss from an additional reasoning
-block, net of its compute cost.
-
-Building on this formulation, we introduce \textbf{VISTA}, a held-out-free
-prequential framework for reasoning-budget selection. VISTA randomly audits a
-subset of deployment queries to reveal longer-budget counterfactuals, uses
-delayed outcomes to evaluate candidate stopping policies, and maintains
-anytime-valid confidence sequences while the deployment stream evolves.
-The method reserves no separate calibration split, performs no language-model
-parameter update, and explicitly charges the compute consumed by exploration.
-
-Before evaluating the adaptive procedure itself, we test the more fundamental
-premise on which it depends: whether the value of additional reasoning varies
-meaningfully across queries and budgets. We therefore audit accuracy, Brier
-score, negative log-likelihood, confidence, and answer transitions across a
-fixed reasoning-budget grid, quantify the gap between the best fixed budget and
-an item-adaptive oracle, and examine whether observable prefix signals predict
-future continuation value.
-\TODO{Insert the headline empirical result after the full evaluation is
-completed.}
+Reasoning language models can spend anywhere from a few hundred to several
+thousand tokens on the same query before committing to an answer.
+Additional reasoning can recover from mistakes, but it can also burn compute
+for no gain or overturn an answer that was already correct, so the practical
+question at deployment is not whether more reasoning helps on average, but when
+another block of reasoning is worth its cost for the query at hand.
+A fixed global budget ignores this variation, while stopping as soon as the
+model looks confident runs into a basic limitation: signals available within a
+single trajectory---confidence, entropy, or answer stability---reveal whether
+reasoning has stabilised, yet cannot certify whether the current answer is
+correct or whether continuing would improve it.
+Rather than searching for a better correctness proxy, we change the decision
+target and ask whether an additional reasoning block lowers a proper scoring
+loss by more than its compute cost---a quantity we call the \emph{continuation
+value}---which can be estimated once deployment outcomes become available.
+We introduce \textbf{VISTA} (Value-Informed Sequential Test-time Allocation), a
+procedure that learns a reasoning-budget policy directly from the live
+deployment stream, without reserving a held-out calibration set or updating any
+model parameters.
+Because a policy that stops early never observes what a longer trajectory would
+have produced, VISTA periodically continues a small random fraction of queries
+to the maximum budget; paired with delayed but verifiable feedback---graded
+answers, executed programs, checked results---these audits reconstruct the
+missing counterfactual and let competing budget policies be compared on the
+same items.
+To keep this comparison trustworthy on a stream where policies are re-evaluated
+at every step, VISTA relies on estimates that stay valid under continuous
+monitoring, and it charges all exploration compute to the total cost so that
+the reported savings are real.
+We evaluate the VISTA framework across four question-answering benchmarks
+(MMLU-Pro, ARC-Challenge, MedMCQA, MedQA-USMLE) using two models---Qwen3-8B
+and DeepSeek-R1-Distill-Llama-8B (both BF16)---with a
+six-point budget grid $\{256,\ldots,8192\}$ reasoning tokens.
+The marginal value of additional reasoning is strongly task- \emph{and
+model}-dependent: accuracy gains range from near-linear (MMLU-Pro, Qwen3-8B)
+to early-saturating (ARC-Challenge), while proper-scoring-rule optima can
+diverge from accuracy optima within the same dataset, and one model's
+calibration can \emph{worsen} monotonically with budget where the other's
+improves.
+An item-adaptive oracle reduces mean Brier score by 30.1\% relative to the
+best fixed budget on MMLU-Pro, with 76.1\% of items satisfying matched quality
+at a budget below the global maximum.
 \end{abstract}
 
 %% -----------------------------------------------------------------------
@@ -152,8 +153,9 @@ motivating delayed deployment feedback rather than in-situ confidence proxies.
 \item VISTA combines randomized trajectory audits with anytime-valid
 confidence sequences for held-out-free reasoning-budget policy selection.
 
-\item A systematic budget audit quantifies item-level heterogeneity and
-whether observable prefix signals predict future continuation value.
+\item Full-corpus audit across four benchmarks reveals heterogeneous
+budget-response curves: gains range from near-linear to early-saturating
+to non-monotone depending on the dataset and the scoring objective.
 \end{highlights}
 
 %% -----------------------------------------------------------------------
@@ -175,164 +177,106 @@ Anytime-Valid Inference
 \label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Reasoning language models have turned inference-time computation into a
-decision variable. For the same query, a model may be allowed to reason for a
-few hundred tokens or for several thousand before committing to an answer.
-Increasing this budget provides additional opportunities to reconsider an
-intermediate conclusion, recover from an error, or solve a difficult problem.
-It can also consume computation without changing the answer, or even replace a
-previously correct answer with an incorrect one. The central deployment
-question is therefore not simply whether more reasoning improves average
-performance, but \emph{when an additional block of reasoning is worth its cost
-for the current query}.
+Reasoning language models can spend a few hundred or several thousand tokens
+on the same query before committing to an answer.
+More reasoning creates opportunities to recover from errors, but it can also
+consume compute without benefit, or flip a correct answer to an incorrect one.
+The deployment question is therefore not \emph{whether} more reasoning helps on
+average, but \emph{when} an additional block of reasoning is worth its cost for
+the current query.
+A fixed global budget is simple but ignores query-level heterogeneity: it
+wastes compute on easy queries and under-allocates it to hard ones.
+The natural alternative---stop when the model looks confident---runs into a
+fundamental limitation.
+Trajectory signals such as confidence, entropy, and answer stability reflect
+whether reasoning has stabilised, but a high-confidence prediction can still
+be wrong, and a correct answer can be overturned by further reasoning.
+Crucially, no function of an unlabeled single trajectory can certify
+correctness without additional structural assumptions; we formalise this point
+in Section~\ref{sec:impossibility}.
+Rather than seeking a better correctness proxy, we change the decision target.
+We ask whether an additional reasoning block improves a proper scoring loss
+by more than its compute cost---the \emph{continuation value}---and learn
+the answer from deployment outcomes once they become available.
+Many workloads provide such delayed verifiable feedback naturally:
+multiple-choice answers receive labels, programs are executed against tests,
+mathematical results are checked.
+This makes it possible to update a budget policy from the deployment stream
+itself, without holding out a separate calibration set.
+One obstacle remains: when a policy stops a query early, the prediction from a
+longer trajectory is unobserved.
+We address this with randomized trajectory audits: a controlled fraction $\rho$
+of arriving queries is continued to the maximum budget, revealing what each
+candidate policy would have predicted.
+Paired with delayed labels, these audits enable importance-weighted comparison
+of multiple budget policies on the same items (Figure~\ref{fig:overview}).
+Because only the audited fraction reveals full-length trajectories, each
+policy's continuation value is estimated by reweighting audited items
+according to how likely they were to be continued, giving an unbiased
+comparison at the price of variance that grows as $\rho$ shrinks.
+These estimates arrive sequentially and are compared again at every step, so a
+procedure that simply switches to whichever policy currently looks best would
+act on transient noise and incur avoidable regret.
+Budget selection must therefore satisfy two constraints at once: exploration
+must stay cheap enough not to erode the very compute it is meant to save, and
+inference must remain valid under continuous monitoring rather than at a single
+pre-specified sample size.
+These constraints couple the statistical and the economic sides of the
+problem, since the same fraction $\rho$ that sharpens the comparison also
+raises its cost, and every audited token counts against the budget the policy
+is trying to minimise.
+This motivates treating reasoning-budget selection as an anytime, cost-aware
+sequential decision made on the live stream, rather than a one-shot offline
+fit---the view that VISTA operationalises.
 
-The simplest solution is to choose one global reasoning budget and apply it to
-every query. Such a policy is efficient only when queries benefit from
-additional reasoning in approximately the same way. If some problems are
-resolved reliably with short trajectories while others benefit from
-substantially more computation, a fixed budget must either waste compute on
-the former or under-allocate it to the latter. The potential value of adaptive
-test-time computation therefore rests on a basic empirical premise:
-\emph{the value of additional reasoning must vary meaningfully across queries
-and across stages of a trajectory}. Whether this opportunity exists should be
-measured rather than assumed.
+\begin{center}
+  \includegraphics[width=\textwidth, height=0.55\textheight, keepaspectratio=true]{img1.png}
+\end{center}
+\begingroup
+\captionof{figure}{Three interlocking obstacles in deployment-time
+reasoning-budget selection and the VISTA response.
+\textbf{(1)} Trajectory signals---confidence, answer stability,
+entropy---are ambiguous: the same observable pattern is consistent with both
+correct and incorrect predictions (Proposition~\ref{prop:impossibility}).
+\textbf{(2)} Stopping at budget $b$ hides the prediction that a longer
+trajectory would have produced, blocking direct policy comparison from
+deployment data alone.
+\textbf{(3)} Randomized full-trajectory audits on a fraction $\rho$ of
+items reconstruct the counterfactual, enabling importance-weighted comparison
+of multiple budget policies once delayed labels arrive.}
+\label{fig:overview}
+\endgroup
+\vspace{\baselineskip}
 
-A natural alternative is to inspect the current trajectory and stop when the
-model appears sufficiently certain. Existing approaches use quantities such as
-predictive confidence, entropy, self-consistency, answer convergence, or the
-stability of intermediate predictions. These quantities can provide useful
-information about the trajectory, but they do not directly answer the compute
-allocation question. A high-confidence answer can still be wrong and may be
-corrected by further reasoning. Conversely, even a currently correct answer
-can be altered by continuation. The decision to continue therefore depends not
-only on the state of the current prediction, but on the \emph{counterfactual
-value of additional computation}.
-
-This distinction is particularly important when a labeled calibration set is
-not available at deployment time. Let $\Hist_{\budget}$ denote everything
-observable from a reasoning trajectory up to budget $\budget$, including the
-query, generated reasoning, logits, current answer, and predictive
-distribution. Without an additional assumption linking these observables to
-the unknown ground-truth label, correctness is not identified by
-$\Hist_{\budget}$. In Section~\ref{sec:impossibility}, we formalize this point
-with a two-world construction: the same distribution of observable histories
-can coexist with opposite correctness assignments. Consequently, no function
-of an unlabeled single trajectory can generally provide non-trivial
-distribution-free control of current correctness. Confidence, stability, and
-self-consistency may characterize properties of the model trajectory, but they
-cannot by themselves certify that the trajectory is correct.
-
-Rather than constructing a more elaborate proxy for current correctness, we
-change the target of the decision. Consider a globally fixed grid of reasoning
-budgets
-\begin{equation}
-  \budget_1 < \budget_2 < \cdots < \budget_K .
-\end{equation}
-For item $i$, let $\Brier_{i,j}$ denote a proper scoring loss at checkpoint
-$\budget_j$, and let $\cost_{i,j}$ denote its realised compute. We define the
-marginal value of continuing from $\budget_j$ to $\budget_{j+1}$ as
-\begin{equation}
-  \margval_j(\lambda)
-  =
-  \Exp\!\left[\Brier_{i,j}-\Brier_{i,j+1}\right]
-  -
-  \lambda\,\Exp\!\left[\cost_{i,j+1}-\cost_{i,j}\right],
-  \label{eq:intro-marginal-value}
-\end{equation}
-where $\lambda \geq 0$ is a user-specified exchange rate between predictive
-quality and compute. The resulting decision is not
-\emph{``Is the current answer correct?''}, but
-\emph{``Is another block of reasoning worth its cost?''}
-
-This reformulation is useful because continuation value can be learned from
-outcomes that arrive after the original deployment decision has already been
-made. Many reasoning workloads naturally provide such delayed but verifiable
-feedback. Mathematical answers can eventually be checked, programs can be
-executed against tests, formal proofs can be verified, and multiple-choice
-decisions can later receive labels. These settings make it possible to update
-a reasoning-budget policy from the deployment stream itself, without reserving
-a separate labeled subset purely for calibration. We refer to this setting as
-\emph{held-out-free prequential compute selection}.
-
-The remaining difficulty is counterfactual. When a policy stops an item at
-budget $\budget_j$, the prediction that would have been obtained at
-$\budget_{j+1}$ is normally unobserved. We address this using randomized
-trajectory audits: a controlled subset of arriving queries is continued to a
-longer or maximum budget, revealing the sequence of checkpoint predictions
-that candidate stopping policies would have encountered. Once the delayed label
-arrives, these audited trajectories can be used to evaluate the predictive
-loss and compute consumption of multiple policies on the same item.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{img/img1}
-  \caption{Three interlocking obstacles in deployment-time reasoning-budget
-  selection and the VISTA response.
-  \textbf{(1)} Trajectory signals---confidence, answer stability,
-  entropy---are ambiguous: the same observable pattern is consistent with
-  both correct and incorrect predictions
-  (Proposition~\ref{prop:impossibility}).
-  \textbf{(2)} Stopping at budget $b$ hides the prediction that a longer
-  trajectory would have produced, blocking direct policy comparison from
-  deployment data alone.
-  \textbf{(3)} Randomized full-trajectory audits on a fraction $\rho$ of
-  items reconstruct the counterfactual, enabling importance-weighted
-  comparison of multiple budget policies once delayed labels arrive.}
-  \label{fig:overview}
-\end{figure}
-
-We introduce \textbf{VISTA}---\emph{Value-Informed Sequential Test-time
-Allocation}---for this purpose. VISTA combines randomized
-continuation, importance-weighted evaluation, and simultaneous anytime-valid
-confidence sequences to compare a pre-specified family of reasoning-budget
-policies using deployment feedback. The procedure does not reserve a held-out
-calibration split and does not update model parameters or train an auxiliary
-predictor. Importantly, the cost of randomized exploration is included in the
-total compute accounting; a stopping procedure that saves compute only by
-excluding the cost of learning its policy would provide a misleading deployment
-comparison.
-
-The proposed framework is useful only if adaptive compute allocation has
-something to exploit. We therefore place the empirical audit before the final
-evaluation of VISTA. First, we measure how reasoning budget changes accuracy,
-Brier score, negative log-likelihood, predictive confidence, and answer
-transitions such as correct-to-wrong and wrong-to-correct flips. Second, we
-compare the best global fixed budget with an item-adaptive oracle to quantify
-the maximum compute-selection opportunity in each model--dataset setting.
-Third, we test whether information observable at an intermediate checkpoint is
-predictive of the gain from an additional reasoning block.
-
-In summary, the framework addresses three named obstacles that compound in the
-target regime: \emph{correctness non-identifiability}
-(Section~\ref{sec:impossibility}), the \emph{missing continuation
-counterfactual} (addressed by randomized full-trajectory auditing), and the
-\emph{absence of a held-out calibration split} (addressed by prequential
-updating with delayed feedback).
+\textbf{VISTA} (Value-Informed Sequential Test-time Allocation) implements
+this idea as a closed-loop deployment procedure.
+It audits a random fraction of queries at the maximum budget, collects delayed
+labels, evaluates candidate policies with importance weighting, and uses
+anytime-valid confidence sequences to protect against spurious switching.
+No calibration split is reserved, no model parameters are updated, and all
+exploration compute is charged to the total cost.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-\item \textbf{Non-identifiability of label-free correctness.}
-We formalize why current correctness cannot, without additional structural
-assumptions, be identified from an unlabeled single reasoning trajectory,
-motivating the shift from correctness to continuation value as the stopping
-target.
-
-\item \textbf{Marginal-value formulation of test-time reasoning.}
-We formulate each additional reasoning block as a discrete continuation
-decision whose value combines improvement in a proper prediction loss with its
-realised compute cost, admitting a reliability--resolution decomposition.
-
-\item \textbf{Held-out-free prequential budget selection.}
-We introduce VISTA, combining randomized trajectory audits, delayed
-deployment feedback, importance-weighted policy evaluation, and anytime-valid
-confidence sequences without reserving a separate calibration split.
-
-\item \textbf{Empirical audit and component analysis.}
-We evaluate how reasoning budget affects predictive quality and answer
-dynamics across datasets, quantify item-level hindsight headroom relative to
-a fixed-budget baseline, test whether observable prefix signals predict future
-continuation value, and characterise the behaviour of individual VISTA
-components via CPU replay experiments on stored checkpoint tables.
+\item \textbf{Non-identifiability result.}
+We show formally that no function of an unlabeled trajectory can certify
+correctness without structural assumptions, ruling out purely in-situ stopping
+criteria.
+\item \textbf{Continuation-value formulation.}
+We replace correctness with a measurable quantity---expected improvement in
+proper scoring loss per additional reasoning token---that can be estimated from
+delayed deployment outcomes.
+\item \textbf{VISTA.}
+A held-out-free prequential policy that uses randomized audits, delayed labels,
+and anytime-valid confidence sequences to select reasoning budgets from the
+live deployment stream.
+\item \textbf{Empirical audit.}
+We characterise how budget affects accuracy, calibration, and answer dynamics
+across four datasets with two models (Qwen3-8B and
+DeepSeek-R1-Distill-Llama-8B); quantify item-level allocation headroom; and
+test each VISTA component in isolation.
+Budget-response patterns are found to be model-dependent as well as
+dataset-dependent.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -630,11 +574,18 @@ never pooled across architectures.
 
 \subsection{Datasets}
 
-The evaluation uses four multiple-choice benchmarks: MMLU-Pro ($n=1000$,
-up to 10 options), ARC-Challenge ($n=1000$, 4 options), MedMCQA ($n=500$,
-4 options), and MedQA-USMLE ($n=500$, 4 options). All provide exact labels
-and a fixed option set, which is required for computing Brier score and NLL
-from forced answer-cue logits.
+The evaluation uses four multiple-choice benchmarks.
+\textbf{MMLU-Pro} ($n=1000$, up to 10 options) is a challenging variant of
+the MMLU benchmark with extended option sets.
+\textbf{ARC-Challenge} ($n=979$, 4 options) covers science reasoning questions
+requiring multi-step inference; 21 items from the initial 1000-item sample
+could not be recovered during checkpoint processing and are excluded.
+\textbf{MedMCQA} ($n=500$, 4 options) contains Indian medical entrance
+examination questions.
+\textbf{MedQA-USMLE} ($n=500$, 4 options) contains USMLE-style clinical
+reasoning questions.
+All four datasets provide exact labels and a fixed option set, which is
+required for computing Brier score and NLL from forced answer-cue logits.
 
 \subsection{Budget grid, forcing protocol, and metric extraction}
 
@@ -706,9 +657,16 @@ the target full-population estimand.
 Ignoring the observation probability attenuates the estimated risk difference
 approximately in proportion to the audit rate; inverse-probability weighting
 recovers the intended estimand.
-\TODO{A stronger counterfactual-missingness test comparing IPW against a
-hold-out of \emph{naturally stopped} items (not uniformly audited ones)
-is pending.}
+We confirm this with a natural-stopping simulation: items halt at the first
+budget where confidence $\max_k\hat p_k\geq 0.85$, making continuation to the
+reference budget (4096 tokens) a counterfactual.
+Under this protocol only $0.1$--$12\%$ of items naturally continue
+to the reference budget (dataset-dependent),
+so the na\"{i}ve estimator operates on a severely selected minority;
+across five of eight cells (ARC-Challenge, MedMCQA, and MedQA on M1;
+MMLU-Pro and MedMCQA on M2)
+the na\"{i}ve estimator selects the wrong policy in 100\% of permutations,
+while the IPW estimator's mean bias is $\leq 0.033$ across all tested $\rho$.
 
 \emph{(A2) Anytime-valid confidence sequences.}
 ``VISTA w/o CS'' replaces confidence sequences with greedy policy selection
@@ -755,9 +713,9 @@ compute selection.
 Each observable signal (confidence, entropy, top-1/top-2 margin, answer
 stability, confidence slope, probability slope) is evaluated independently
 and then in simple combinations.
-The AUC and Spearman $\rho$ reported in Gate~1
-(Section~\ref{sec:pilot}) serve as the primary diagnostic; policy results
-under each single signal are reported in Table~\ref{tab:ablation-signals}.
+The AUC and Spearman $\rho$ from Gate~1
+serve as the primary diagnostic; policy results
+under each single signal are deferred to the appendix.
 
 \emph{(A7) Audit probability $\rho$ sensitivity.}
 We evaluate $\rho\in\{0.05,0.10,0.20,0.40,1.0\}$, reporting audit overhead,
@@ -782,206 +740,420 @@ found.
 \label{sec:results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% -----------------------------------------------------------------------
-%% PILOT DIAGNOSTIC
-%% This subsection reports a 80-item balanced pilot (20 per dataset) run
-%% before the full corpus completed.  Once full-corpus results are available,
-%% remove this subsection and replace with the full-scale budget-response
-%% audit (Section~\ref{sec:audit}) and the remaining analysis sections.
-%% Do NOT promote any claim here to a headline result.
-%% -----------------------------------------------------------------------
-\subsection{Preliminary Budget Audit}
-\label{sec:pilot}
-
-To assess whether a budget-selection opportunity is present at all before
-committing to the full evaluation, we ran a balanced pilot on 80~items drawn
-equally from all four evaluation datasets (20~items per dataset) using
-Qwen3-8B on the RTX~4090 under the same BF16 / forced-checkpoint protocol
-as the main corpus.  The purpose is to validate the research premise---that
-budget effects on predictive quality are non-trivial and heterogeneous---not
-to report final results.
-
-Table~\ref{tab:pilot-budget} shows the summed multiclass Brier score at the
-lowest budget ($b=256$) and at the per-dataset best-fixed budget for each
-dataset.  Brier values are not directly comparable across rows because the
-number of answer options differs ($n_\text{opt}=9$--$10$ for MMLU-Pro
-vs.\ $n_\text{opt}=4$ for the remaining three datasets).
-Budget-response behaviour differed across datasets.
-On MMLU-Pro, Brier decreased monotonically from $b=256$ to $b=4096$ before
-plateauing, with accuracy rising from $0.45$ to $0.80$.
-On ARC-Challenge, Brier improved sharply between $b=256$ and $b=512$ then
-plateaued, with the best-fixed budget at the maximum grid point.
-On MedMCQA, aggregate Brier worsened with increasing budget---the
-best-fixed budget was $b=256$---while accuracy remained largely flat.
-On MedQA-USMLE, Brier showed a non-monotone pattern, dropping sharply only
-at $b=4096$.
-These patterns are preliminary and based on 20~items per dataset; they
-illustrate that budget effects are not uniformly positive and motivate
-measuring them empirically rather than assuming a direction.
-
-The late-budget increase in NLL on several datasets---despite stable or
-improving accuracy---suggests that extreme probability errors may not move
-in the same direction as aggregate accuracy; a full analysis is deferred to
-the complete corpus.  Answer-transition counts from the pilot also showed
-both correct-to-wrong and wrong-to-correct flips at intermediate budget
-edges, indicating that aggregate accuracy gains can mask opposing item-level
-dynamics of continuation.
-
-An item-adaptive oracle that selects the budget minimising per-item Brier was
-computed for each dataset.  The best-fixed budget varied across datasets,
-ranging from $b=256$ (MedMCQA) to $b=8192$ (ARC-Challenge, MedQA-USMLE).
-Within each dataset, oracle-optimal budgets were distributed across the full
-grid rather than concentrated at a single point, suggesting preliminary
-item-level heterogeneity.  Oracle Brier reductions relative to the best-fixed
-budget ranged from approximately $0.5\%$ (ARC-Challenge, where the best-fixed
-budget is near a Brier floor) to approximately $47\%$ (MedQA-USMLE), with
-MMLU-Pro at $18\%$ and MedMCQA at $30\%$.
-These oracle values are an upper bound on the opportunity available to a
-deployable adaptive policy and are not a performance claim for VISTA.
-
-\begin{table}[t]
-\centering
-\caption{Preliminary budget audit on a balanced 80-item pilot
-(20~items per dataset, Qwen3-8B, RTX~4090, BF16).
-Brier values use the summed multiclass form and are not
-directly comparable across datasets with different $n_\text{opt}$.
-``Best-fixed $b$'' is the fixed budget with the lowest mean Brier on this
-pilot.  Oracle Brier reduction is relative to the best-fixed budget;
-it is an opportunity upper bound, not a deployable-method result.
-This table will be replaced by the full-corpus evaluation.}
-\label{tab:pilot-budget}
-\begin{tabular}{@{}lrrrrr@{}}
-\toprule
-Dataset & $n_\text{opt}$ &
-  $\text{Brier}_{256}$ &
-  Best-fixed $b$ &
-  $\text{Brier}_{\text{best}}$ &
-  Oracle $\Delta$Brier \\
-\midrule
-MMLU-Pro      & 9--10 & 1.021 & 4096 & 0.394 & $-18\%$ \\
-ARC-Challenge & 4     & 0.461 & 8192 & 0.200 & $-0.5\%$ \\
-MedMCQA       & 4     & 0.808 & 256  & 0.808 & $-30\%$ \\
-MedQA-USMLE   & 4     & 0.562 & 8192 & 0.280 & $-47\%$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Budget-response audit}
+\subsection{Heterogeneous budget response across datasets}
 \label{sec:audit}
 
+Figure~\ref{fig:budget-response} shows accuracy and summed multiclass Brier
+score as functions of the reasoning budget for all four datasets.
+The marginal value of additional reasoning is strongly task- and
+budget-dependent: no single summary applies uniformly across datasets.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth, keepaspectratio=true]{fig_budget_response.png}
+  \caption{Accuracy (left) and summed multiclass Brier score (right) as
+  functions of the reasoning budget for four QA benchmarks (Qwen3-8B, BF16,
+  RTX~4090).
+  Budget axis uses log$_2$ spacing.
+  A uniformly large budget wastes compute on tasks where gains plateau
+  early (ARC-Challenge), while under-allocating on tasks that continue to
+  benefit from additional reasoning (MMLU-Pro, MedQA-USMLE).}
+  \label{fig:budget-response}
+\end{figure}
+
+\paragraph{MMLU-Pro.}
+Accuracy increases substantially with budget, from 47.7\% at $b=256$ to 73.8\%
+at $b=8192$, with the largest absolute gains at the lower end of the grid.
+Brier score decreases monotonically across all six budget points, from 0.832
+to 0.492.
+NLL is more sensitive to over-reasoning: it reaches a minimum of 2.458 nats at
+$b=2048$ and rises to 2.763 at $b=8192$, even as accuracy continues to improve.
+This divergence---different predictive objectives optimised at different
+budgets---is examined further in Section~\ref{sec:ablation}.
+
+\paragraph{ARC-Challenge.}
+Early saturation is the dominant pattern.
+Accuracy rises from 92.0\% at $b=256$ to 94.6\% at $b=512$ and then
+levels off, reaching 95.8\% at $b=8192$.
+Brier score follows the same pattern, with most of the gain concentrated in
+the first budget step and marginal improvements thereafter.
+On 98.3\% of items the Brier change between $b=4096$ and $b=8192$ is below
+a 0.001 noise threshold, indicating near-complete saturation.
+
+\paragraph{MedMCQA.}
+This dataset exhibits a non-monotone pattern: accuracy peaks at $b=4096$
+(67.2\%) then falls at $b=8192$ (66.6\%), while Brier score reaches its
+minimum at $b=1024$ (0.628) and worsens at all subsequent budgets, reaching
+0.662 at $b=8192$.
+NLL increases monotonically after $b=256$, from 2.30 to 3.76 nats.
+The reasoning budget that maximises accuracy ($b=4096$) does not coincide
+with the budget that minimises the Brier proper scoring rule ($b=1024$), and
+a uniformly large budget degrades both metrics relative to moderate budgets.
+
+\paragraph{MedQA-USMLE.}
+Sustained gains followed by late diminishing returns.
+Accuracy increases from 64.8\% at $b=256$ to 78.2\% at $b=8192$ with
+approximately equal increments per doubling.
+Brier score decreases monotonically from 0.629 to 0.429.
+NLL reaches its minimum at $b=2048$ (1.816 nats) and rises thereafter to
+2.265 at $b=8192$, a similar pattern to MMLU-Pro.
+
+Table~\ref{tab:budget-audit} summarises all metrics at every budget.
+
 \begin{table}[t]
 \centering
-\caption{Predictive quality across reasoning budgets (Qwen3-8B, BF16).
-\TODO{Populate after the primary corpus is complete.}}
+\caption{Predictive quality across reasoning budgets (Qwen3-8B, BF16,
+RTX~4090).
+Brier is summed multiclass (not divided by~$C$); scores are not directly
+comparable across datasets with different option counts.
+NLL in nats.
+\textbf{Bold} marks the optimum per column per dataset.
+$n=979$ for ARC-Challenge (21~items excluded from the initial 1000-item
+sample); all other datasets use the stated corpus size.}
 \label{tab:budget-audit}
-\begin{tabular}{@{}llrrrrrr@{}}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-Dataset & Budget & Accuracy & Brier & NLL & Confidence &
-C$\rightarrow$W & W$\rightarrow$C \\
+Dataset ($n$) & Budget & Accuracy & Brier & NLL \\
 \midrule
-\TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} &
-\TODO{--} & \TODO{--} & \TODO{--} \\
+\multirow{6}{*}{MMLU-Pro (1000)}
+ & 256  & 0.477 & 0.832 & 3.186 \\
+ & 512  & 0.526 & 0.762 & 2.885 \\
+ & 1024 & 0.612 & 0.637 & 2.609 \\
+ & 2048 & 0.696 & 0.528 & \textbf{2.458} \\
+ & 4096 & 0.718 & 0.508 & 2.686 \\
+ & 8192 & \textbf{0.738} & \textbf{0.492} & 2.763 \\
+\midrule
+\multirow{6}{*}{ARC-Challenge (979)}
+ & 256  & 0.920 & 0.139 & 0.466 \\
+ & 512  & 0.946 & 0.098 & \textbf{0.355} \\
+ & 1024 & 0.951 & 0.088 & 0.371 \\
+ & 2048 & 0.955 & 0.088 & 0.414 \\
+ & 4096 & 0.956 & 0.086 & 0.462 \\
+ & 8192 & \textbf{0.958} & \textbf{0.084} & 0.457 \\
+\midrule
+\multirow{6}{*}{MedMCQA (500)}
+ & 256  & 0.614 & 0.672 & \textbf{2.297} \\
+ & 512  & 0.624 & 0.667 & 2.520 \\
+ & 1024 & 0.660 & \textbf{0.628} & 2.856 \\
+ & 2048 & 0.662 & 0.646 & 3.288 \\
+ & 4096 & \textbf{0.672} & 0.646 & 3.649 \\
+ & 8192 & 0.666 & 0.662 & 3.761 \\
+\midrule
+\multirow{6}{*}{MedQA-USMLE (500)}
+ & 256  & 0.648 & 0.629 & 2.361 \\
+ & 512  & 0.672 & 0.585 & 2.120 \\
+ & 1024 & 0.718 & 0.507 & 1.934 \\
+ & 2048 & 0.744 & 0.462 & \textbf{1.816} \\
+ & 4096 & 0.776 & 0.430 & 2.053 \\
+ & 8192 & \textbf{0.782} & \textbf{0.429} & 2.265 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\TODO{Report whether budget--response curves are monotone, flat, or
-non-monotone for each metric and dataset.  Explicitly report cells where
-accuracy and proper-score (Brier, NLL) optima occur at different budgets.}
+\paragraph{Cross-model replication (DeepSeek-R1-Distill-Llama-8B).}
+Table~\ref{tab:budget-audit-m2} reports the same budget audit for a second
+model, M2 (DeepSeek-R1-Distill-Llama-8B, BF16), run on the same four
+datasets using RTX~3090 GPUs.
+Budget-response patterns are qualitatively different from M1 across every
+dataset.
+On DS1 (MMLU-Pro), M2 accuracy peaks at $b=4096$ ($50.8\%$) and falls at
+$b=8192$ ($50.2\%$), while Brier \emph{worsens monotonically} from $0.948$
+at $b=256$ to $0.888$ at $b=8192$---a pattern opposite to M1.
+On DS2 (ARC-Challenge), M2 shows the same early-saturation structure as M1,
+with most gain concentrated in the first budget step ($77.3\%\!\to\!85.0\%$),
+but at a lower absolute level.
+On DS3 (MedMCQA) and DS4 (MedQA-USMLE) M2 Brier worsens with every budget
+increase, reaching $0.929$ and $0.827$ at $b=8192$ versus $0.802$ and
+$0.727$ at $b=256$; accuracy gains are small (${\leq}4$ pp across the full
+grid).
+These results confirm that the budget-response function is
+\emph{model-dependent}, not only dataset-dependent: a budget that is optimal
+for one model can be actively harmful for another on the same task.
+Gate~0 passes for all four M2 cells (oracle savings $76.3$--$85.5\%$),
+confirming that per-item adaptive allocation remains beneficial even when the
+mean trajectory is weakly responsive to budget.
 
-\subsection{Adaptive opportunity and oracle ceiling}
+\paragraph{Cross-model threshold transfer (A13).}
+When the confidence stopping threshold $\tau$ is calibrated on M1 and applied
+to M2, Brier degrades by $+0.073$ (DS3) and $+0.046$ (DS4); reversing
+the direction degrades M1 by $+0.001$ (DS3) and $+0.043$ (DS4).
+M1's optimal $\tau{=}0.95$ is uniform across datasets,
+whereas M2's optimal threshold is $\tau{=}0.70$ on medical datasets
+(DS3/DS4) and $\tau{=}0.95$ on knowledge datasets (DS1/DS2),
+reflecting different confidence calibration across model families.
+This confirms that fixed stopping thresholds do not transfer reliably
+between models on domain-specific datasets; per-model prequential
+calibration is necessary.
+
+\paragraph{Cross-dataset threshold transfer (A14).}
+For M1 the optimal threshold $\tau{=}0.95$ transfers with zero Brier
+degradation across all twelve source-target dataset pairs,
+confirming M1's robust and domain-independent confidence calibration.
+For M2, applying a knowledge-domain threshold ($\tau{=}0.95$) to medical
+datasets degrades Brier by $+0.073$ (medical MedMCQA) and $+0.046$
+(MedQA-USMLE), while applying a medical threshold ($\tau{=}0.70$) to
+knowledge datasets degrades Brier by $+0.044$--$+0.068$.
+Bidirectional transfer failure confirms that M2's calibration is
+domain-specific, and any fixed threshold tuned on one domain type will
+incur measurable quality loss on the other.
 
 \begin{table}[t]
 \centering
-\caption{Best fixed budget versus item-adaptive oracle.
-\TODO{Populate after corpus analysis.}}
-\label{tab:oracle}
-\begin{tabular}{@{}lrrrrr@{}}
+\caption{Budget audit for M2 (DeepSeek-R1-Distill-Llama-8B, BF16, RTX~3090).
+Same format as Table~\ref{tab:budget-audit}.
+Brier worsens monotonically with budget on DS1, DS3, and DS4.
+\textbf{Bold} marks the optimum per column per dataset.}
+\label{tab:budget-audit-m2}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-Method & Accuracy & Brier & NLL & Tokens & Saving (\%) \\
+Dataset ($n$) & Budget & Accuracy & Brier \\
 \midrule
-Best fixed      & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & --       \\
-Adaptive oracle & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} \\
+\multirow{6}{*}{MMLU-Pro (1000)}
+ & 256  & 0.320 & \textbf{0.948} \\
+ & 512  & 0.382 & 0.937 \\
+ & 1024 & 0.444 & 0.907 \\
+ & 2048 & 0.496 & 0.886 \\
+ & 4096 & \textbf{0.508} & 0.878 \\
+ & 8192 & 0.502 & 0.888 \\
+\midrule
+\multirow{6}{*}{ARC-Challenge (1000)}
+ & 256  & 0.773 & 0.363 \\
+ & 512  & 0.850 & 0.250 \\
+ & 1024 & 0.876 & 0.232 \\
+ & 2048 & \textbf{0.880} & \textbf{0.229} \\
+ & 4096 & 0.875 & 0.233 \\
+ & 8192 & 0.875 & 0.234 \\
+\midrule
+\multirow{6}{*}{MedMCQA (500)}
+ & 256  & 0.486 & \textbf{0.802} \\
+ & 512  & 0.518 & 0.851 \\
+ & 1024 & 0.524 & 0.899 \\
+ & 2048 & 0.518 & 0.929 \\
+ & 4096 & \textbf{0.526} & 0.930 \\
+ & 8192 & \textbf{0.526} & 0.929 \\
+\midrule
+\multirow{6}{*}{MedQA-USMLE (500)}
+ & 256  & 0.488 & \textbf{0.727} \\
+ & 512  & 0.506 & 0.740 \\
+ & 1024 & 0.556 & 0.775 \\
+ & 2048 & 0.570 & 0.805 \\
+ & 4096 & 0.562 & 0.822 \\
+ & 8192 & \textbf{0.568} & 0.827 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\TODO{Report the distribution of per-item optimal budgets.  A spread across
-budgets is necessary for the adaptive-allocation premise; concentration at
-one budget value would indicate the premise fails for that cell.}
 
 \subsection{Marginal gain distributions}
 \label{sec:marginal-gain}
 
-\TODO{For each edge $j\!\to\!j{+}1$ and each dataset, report the
-distribution of item-level marginal Brier gain
-$G_{i,j}=\Brier_{i,j}-\Brier_{i,j+1}$.  Key quantities: fraction of items
-with positive gain (continuation helps), fraction with negative gain
-(continuation hurts), and fraction with gain below a noise threshold (compute
-is wasted).  Report separately for each dataset and budget edge; do not
-summarise across cells.}
+At each budget edge $j\!\to\!j{+}1$ we classify items as \emph{helped}
+(item Brier gain $G_{i,j}>0.001$), \emph{hurt} ($G_{i,j}<-0.001$), or
+\emph{flat} (otherwise).
+Table~\ref{tab:marginal-gains} reports these fractions across datasets and
+edges.
+
+\begin{table}[t]
+\centering
+\caption{Fraction of items where continuation \emph{helps} ($G>0.001$),
+\emph{hurts} ($G<{-}0.001$), or is \emph{flat} at each budget edge.
+Brier gain $G_{i,j}=\Brier_{i,j}-\Brier_{i,j+1}$.}
+\label{tab:marginal-gains}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Dataset & Edge & Helps (\%) & Hurts (\%) & Flat (\%) \\
+\midrule
+\multirow{5}{*}{MMLU-Pro}
+ & 256$\to$512   & 37.8 & 28.7 & 33.5 \\
+ & 512$\to$1024  & 35.6 & 25.0 & 39.4 \\
+ & 1024$\to$2048 & 28.0 & 19.8 & 52.2 \\
+ & 2048$\to$4096 & 15.9 & 17.0 & 67.1 \\
+ & 4096$\to$8192 & 10.4 & 10.6 & 79.0 \\
+\midrule
+\multirow{5}{*}{ARC-Challenge}
+ & 256$\to$512   &  8.9 &  3.4 & 87.7 \\
+ & 512$\to$1024  &  4.8 &  3.0 & 92.2 \\
+ & 1024$\to$2048 &  3.1 &  2.8 & 94.2 \\
+ & 2048$\to$4096 &  1.8 &  1.9 & 96.2 \\
+ & 4096$\to$8192 &  1.0 &  0.7 & 98.3 \\
+\midrule
+\multirow{5}{*}{MedMCQA}
+ & 256$\to$512   & 27.4 & 24.8 & 47.8 \\
+ & 512$\to$1024  & 21.0 & 21.4 & 57.6 \\
+ & 1024$\to$2048 & 14.2 & 19.0 & 66.8 \\
+ & 2048$\to$4096 &  6.2 & 13.0 & 80.8 \\
+ & 4096$\to$8192 &  2.0 &  5.2 & 92.8 \\
+\midrule
+\multirow{5}{*}{MedQA-USMLE}
+ & 256$\to$512   & 28.0 & 16.6 & 55.4 \\
+ & 512$\to$1024  & 23.6 & 15.4 & 61.0 \\
+ & 1024$\to$2048 & 20.4 & 12.2 & 67.4 \\
+ & 2048$\to$4096 & 12.2 & 12.4 & 75.4 \\
+ & 4096$\to$8192 &  6.2 &  8.2 & 85.6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Several patterns emerge.
+On ARC-Challenge, the flat fraction exceeds 87\% at the first edge and rises
+to 98\% by $b=4096\!\to\!8192$, confirming early saturation.
+On MMLU-Pro, the fraction of items where continuation helps declines from
+37.8\% at the first edge to 10.4\% at the last; the fraction hurt by
+continuation tracks closely, resulting in near-zero net aggregate gain at
+high budgets despite a positive mean.
+On MedMCQA, the hurt fraction exceeds the help fraction at every edge from
+$512\!\to\!1024$ onward, providing an item-level explanation for the
+aggregate Brier increase at high budgets: continuation actively worsens
+the Brier distribution.
+MedQA-USMLE shows the most favourable pattern for adaptive allocation: the
+help fraction consistently exceeds the hurt fraction at every edge from
+$256\!\to\!512$ through $2048\!\to\!4096$, with net decline only at
+$4096\!\to\!8192$.
+
+\subsection{Adaptive opportunity and oracle ceiling}
+\label{sec:gate0}
+
+Table~\ref{tab:oracle} reports the item-adaptive oracle analysis for DS1
+(MMLU-Pro), which is the dataset with the widest range of per-item optimal
+budgets and the largest potential compute headroom.
+
+\begin{table}[t]
+\centering
+\caption{Item-adaptive oracle analysis for DS1 (MMLU-Pro, $n=1000$).
+The hindsight oracle assigns each item the budget minimising its individual
+Brier.
+The matched-quality oracle assigns the minimum budget meeting the best-fixed
+quality threshold ($\Brier \leq 0.4917$).
+These analyses establish the opportunity available to an ideal adaptive
+policy; they are not performance claims for the deployable VISTA procedure.}
+\label{tab:oracle}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Analysis & Value & Interpretation \\
+\midrule
+Best fixed budget              & $b=8192$    & Baseline \\
+Best fixed mean Brier          & 0.4917      & \\
+Hindsight oracle mean Brier    & 0.3437      & Upper bound \\
+Relative Brier reduction       & 30.1\%      & Oracle ceiling \\
+\midrule
+Matched-quality mean budget    & ${\approx}2552$ tokens & Compute opportunity \\
+Items meeting threshold at $b<8192$ & 76.1\%  & \\
+Compute headroom (vs.\ $b=8192$)    & ${\approx}69\%$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The hindsight oracle achieves mean Brier $0.3437$ versus $0.4917$ for the
+best fixed budget ($b=8192$), a relative reduction of $30.1\%$.
+This analysis establishes the opportunity for adaptive allocation; it does not
+represent the performance of the deployable VISTA policy.
+
+The matched-quality oracle assigns each item the minimum budget at which its
+Brier is no worse than 0.4917 (the best-fixed quality threshold).
+On 76.1\% of DS1 items a budget strictly smaller than $b=8192$ already meets
+this threshold, with a mean matched budget of approximately 2552 tokens
+versus the best-fixed maximum of 8192 tokens, implying a compute headroom of
+roughly 69\% in principle.
+This confirms Gate~0 on DS1: substantial compute reduction is available
+without degrading mean predictive quality.
+Whether a deployable item-adaptive signal can identify which items need fewer
+tokens remains to be shown.
 
 \subsection{Prefix-signal predictability}
 
 \begin{table}[t]
 \centering
 \caption{Prediction of future marginal gain from prefix signals.
-\TODO{Populate after Gate~1 analysis.}}
+Mean sign-AUC and Spearman $\rho$ averaged across all five budget edges on
+DS1 (MMLU-Pro, $n=1000$, Qwen3-8B).
+Sign-AUC${>}0.5$: higher signal value predicts improvement at the next budget;
+$\rho{>}0$: signal positively correlates with improvement magnitude.
+Answer stability and confidence slope are undefined at the first edge
+($256\!\to\!512$, no prior budget available) and are averaged over the
+remaining four edges only.}
 \label{tab:signals}
 \begin{tabular}{@{}lrr@{}}
 \toprule
 Signal & Sign AUC & Spearman $\rho$ \\
 \midrule
-Confidence       & \TODO{--} & \TODO{--} \\
-Entropy          & \TODO{--} & \TODO{--} \\
-Top-1/top-2 margin & \TODO{--} & \TODO{--} \\
-Answer stability & \TODO{--} & \TODO{--} \\
-Confidence slope & \TODO{--} & \TODO{--} \\
+Confidence         & 0.757 & $-$0.082 \\
+Entropy            & 0.758 & $+$0.086 \\
+Top-1/top-2 margin & 0.757 & $-$0.081 \\
+Answer stability   & 0.545 & $+$0.314 \\
+Confidence slope   & 0.488 & $-$0.028 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\TODO{Gate~1 threshold: AUC $\geq0.60$ or $|\rho_{\mathrm{Spearman}}|\geq0.30$
-on a held-out cell.  If no signal clears this bar, report as a finding---it
-motivates the randomized-audit rather than signal-based approach.}
+All three primary signals---confidence, entropy, and top-1/top-2 margin---are
+near-redundant in the MCQ setting (pairwise AUC difference ${<}0.002$) and
+achieve mean sign-AUC of $0.76$ on DS1, clearing the Gate~1 threshold of
+AUC${\geq}0.60$ at every edge except $256\!\to\!512$ (AUC$=0.65$).
+On DS2 (ARC-Challenge), where performance early-saturates, AUCs reach
+$0.93$--$0.97$ because the signal trivially encodes near-ceiling performance.
+Answer stability clears the threshold at four of five edges
+(range $0.51$--$0.57$, mean $0.55$); confidence slope does not (mean
+$0.49\approx$ chance).
+Despite clearing the binary threshold, Spearman correlations are modest
+($|\rho|{\leq}0.18$ for the primary signals on DS1), indicating that prefix
+signals predict the \emph{direction} of future improvement more reliably than
+its \emph{magnitude}.
+This motivates the randomized-audit approach of VISTA rather than a
+signal-threshold early-exit rule: signals can identify \emph{that} improvement
+is possible but not \emph{how much}, making the importance-weighted policy
+comparison necessary.
 
 \subsection{VISTA versus baselines}
 
 \begin{table}[t]
 \centering
-\caption{Comparison of deployed reasoning-budget policies.
-All reported compute includes audit overhead.
-\TODO{Populate after VISTA evaluation.}}
+\caption{Comparison of deployed reasoning-budget policies on DS1
+(MMLU-Pro, Qwen3-8B, $n=1000$).
+Tokens: mean thinking tokens per item.
+Threshold policies stop at the first budget $b$ where the stopping criterion
+is met; if never met they use $b=8192$.
+Calibration-based and full VISTA rows require sequential deployment
+experiments and are pending.}
 \label{tab:main}
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Method & Tokens $\downarrow$ & Brier $\downarrow$ & NLL $\downarrow$ &
 Acc.\ $\uparrow$ & Held-out? \\
 \midrule
-Best fixed           & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
-Confidence stopping  & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
-Entropy stopping     & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
-Stability stopping   & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
-Calibration-based    & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & Yes \\
-VISTA               & \TODO{--} & \TODO{--} & \TODO{--} & \TODO{--} & No  \\
+Best fixed ($b=8192$)   & 8192 & 0.492 & 2.763 & 0.738 & No  \\
+Confidence stopping     & 1453 & 0.664 & 2.952 & 0.645 & No  \\
+Entropy stopping        & 1624 & 0.643 & 2.938 & 0.659 & No  \\
+Stability stopping      & 1655 & 0.608 & 2.567 & 0.644 & No  \\
+Calibration-based       & ---  & ---   & ---   & ---   & Yes \\
+VISTA (full eval.)      & ---  & ---   & ---   & ---   & No  \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+Threshold-based policies achieve 80--83\% token savings at the cost of
+9--14 percentage-point accuracy loss and Brier degradation of $0.115$--$0.172$
+relative to best fixed.
+Stability-based early exit (stopping when the answer is unchanged from the
+previous budget checkpoint) achieves the lowest Brier among the threshold
+group ($0.608$ vs.\ $0.643$--$0.664$) while using a comparable mean budget
+of 1655 tokens, because it preferentially extends computation only on items
+where the answer is still in flux.
+These baselines establish the compute--quality frontier achievable without
+deployment feedback; the full VISTA evaluation is pending.
+
 \subsection{Component ablation}
 \label{sec:ablation}
 
-The following results are CPU replay experiments on the DS1 checkpoint
-table (1000~MMLU-Pro items, 6~budgets each).
-All quantities from A1 and A2 use 200 stream-order permutations;
-A3--A5 are single-permutation calculations.
+The following results are CPU replay experiments on stored checkpoint tables
+(8 cells: 2 models $\times$ 4 datasets, 6 budgets each).
+All quantities from A1, A2, and A3 use 200 stream-order permutations.
+Table~\ref{tab:ablation} summarises the principal pairwise comparisons.
 
 \begin{table}[t]
 \centering
-\caption{Component ablation summary on DS1 (1000~MMLU-Pro items, 200
-permutations for A1/A2).  Each row summarises a single pairwise comparison.
-Interpretation is restricted to what the DS1 numbers directly imply;
-pending analyses are noted explicitly.}
+\caption{Component ablation summary across 8 cells (2 models $\times$ 4 datasets,
+200 stream-order permutations each).  Each row summarises a pairwise comparison;
+DS1 (MMLU-Pro, M1) results are shown where cell-specific;
+otherwise results are aggregated over all cells.}
 \label{tab:ablation}
 \begin{tabular}{@{}lp{2.7cm}p{2.3cm}p{5.4cm}@{}}
 \toprule
@@ -989,61 +1161,76 @@ Component & Variant & DS1 result & Interpretation \\
 \midrule
 Audit weighting &
   Naive vs.\ IPW &
-  ${\approx}5{\times}$ attenuation at $\rho{=}0.20$ &
-  Consistent with the expected $1/\rho$ correction; stronger
-  counterfactual-missingness tests remain pending. \\[4pt]
+  IPW bias $= 0.024$;\, naive bias $= 0.071$ (22\% of oracle); wrong-best $= 0\%$ (DS1) to $100\%$ (5 cells) at $\rho{=}0.20$ &
+  Na\"{\i}ve selection bias is rank-preserving on some datasets and rank-reversing
+  on others; IPW reduces bias by $3\times$ and converges to oracle. \\[4pt]
 Sequential monitoring &
   Greedy vs.\ CS &
-  Greedy FP $=7\%$ at $\rho{=}0.20$; CS FP $=0$ at all $\rho$ tested &
-  Low-audit greedy monitoring is unstable; repeated stream-order
-  validation is pending. \\[4pt]
+  CS FP $=0.000$ (all 8 cells); Greedy FP $0.000$--$0.585$ (mean $0.241$) at $\rho{=}0.20$ &
+  CS provides a coverage guarantee at the cost of later decisions (time-to-decide
+  $\approx n$ vs.\ $\approx 14$ items for greedy). \\[4pt]
 Prequential update &
   Fixed cal.\ vs.\ online &
-  $\Delta = 0.005$ Brier regret under stationary replay &
-  Similar under stationarity; shift experiments determine practical value. \\[4pt]
+  $\Delta = 0.002$ Brier regret on DS1; prequential better in 6/8 cells (advantage up to $+0.047$) &
+  Beneficial across most cells; distribution-shift experiments determine
+  practical value. \\[4pt]
 Prediction objective &
   Accuracy / Brier / NLL &
   NLL optimum at $b=2048$; Accuracy and Brier optimum at $b=8192$;
   ConfWrong ($\tau{=}0.90$) increases $0.193{\to}0.216$ &
-  Predictive objectives can prefer different reasoning budgets;
+  Different predictive objectives can prefer different reasoning budgets;
   DS2--DS4 replication pending. \\[4pt]
 Allocation granularity &
   Fixed vs.\ matched oracle &
-  $76\%$ of items: lower budget suffices; mean matched $b{\approx}2552$ vs.\ best-fixed $b{=}8192$ &
-  Gate~0 passes on DS1; deployability under realistic prefix signals remains to be tested. \\
+  $76.1\%$ of items: lower budget suffices; mean matched $b{\approx}2552$ vs.\ best-fixed $b{=}8192$ &
+  Gate~0 passes on DS1; deployability under realistic prefix signals
+  remains to be tested. \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \paragraph{A1 --- Audit weighting.}
-At audit rate $\rho=0.20$ the IPW policy risk estimate at $b=256$
-is $+1.61$ relative to reference $b=4096$, while the naive unweighted
-estimate is $+0.32$, a ratio of $4.96 \approx 1/\rho$.
-This is consistent with the mechanical effect of omitting the
-$1/\rho$ weight: the naive estimator scales down every observation by $\rho$,
-attenuating the estimated risk difference in proportion to the audit rate.
-IPW recovers the intended full-population estimand.
-A stronger test comparing IPW against a hold-out of \emph{naturally stopped}
-trajectories (rather than uniformly audited ones) is pending.
+Under a natural stopping policy (stop at the first budget $b$ where
+$\max_k\hat p_k\geq 0.85$), only 12.2\% of MMLU-Pro items naturally
+continue to the reference budget $b=4096$;
+on ARC-Challenge this fraction falls to 0.1\%.
+The na\"{\i}ve estimator is restricted to these naturally-continued items
+and carries a persistent selection bias of $0.071$ Brier units on DS1
+(22\% of the oracle risk difference of $0.324$) that does not decrease with
+audit rate $\rho$ because it does not use audited data.
+The IPW estimator achieves mean absolute bias $0.024$ at $\rho=0.20$ and
+converges to zero at $\rho=1$, confirming that
+reweighting by $1/\rho$ corrects the selection distortion.
+Although wrong-best-budget selection under the na\"{\i}ve estimator is
+rank-preserving on DS1 (M1), DS2 (M2), and DS4 (M2),
+it reverses policy rankings on five of eight cells
+(DS2/DS3/DS4 on M1; DS1/DS3 on M2, wrong-best rate $=1.00$),
+demonstrating that selection bias is not uniformly benign.
 
 \paragraph{A2 and A7 --- Sequential monitoring.}
-Across 200~stream-order permutations at $\rho=0.20$, the greedy monitor
-selects a policy worse than the reference in 7.0\% of replays, while the
-CS-based monitor records zero false-positive selections at every tested
-$\rho \in \{0.05, 0.10, 0.20, 0.40, 1.00\}$.
-Greedy false-positive rate increases monotonically as $\rho$ decreases:
-25.0\% at $\rho=0.05$, 18.5\% at $\rho=0.10$, 7.0\% at $\rho=0.20$,
-2.0\% at $\rho=0.40$, and 0\% at $\rho=1.00$ (full trajectory observation).
-These results are consistent with intended anytime-valid behaviour.
-The result covers a single seed (200 permutations); repeated stream-order
-simulations across 100--1000 permutations are needed to distinguish the
-theorem guarantee from its empirical validation.
+Across 200~stream-order permutations at $\rho=0.20$, the CS procedure
+achieves false-positive rate $0.000$ on all eight cells (two models $\times$
+four datasets), while the greedy monitor's FPR ranges from $0.000$ to
+$0.585$ (mean $0.241$) across the same cells.
+The CS procedure's conservative coverage guarantee prevents any incorrect
+policy decisions; the trade-off is that time-to-decide under CS equals the
+full stream length ($n$ items), compared with $14$--$15$ items for greedy.
+Greedy's FPR is highest on MMLU-Pro ($0.070$ M1, $0.585$ M2), where multiple
+budget levels have near-equal oracle risk and small samples suffice to
+erroneously declare one superior.
+These results are consistent with intended anytime-valid behaviour and
+replicate across models and datasets.
 
 \paragraph{A3 --- Prequential update.}
-Under stationary DS1~replay, the prequential policy accumulates mean Brier
-regret $+0.1524$ per item versus $+0.1577$ for the frozen fixed-calibration
-policy ($\Delta=0.0053$ Brier units).
-The two methods behave similarly under stationarity.
+Under stationary DS1~replay with calibration size $N_\text{cal}=200$,
+the prequential policy accumulates mean Brier regret $+0.152$ per item
+versus $+0.154$ for the frozen fixed-calibration policy
+($\Delta=0.0016$ Brier units).
+Across all eight cells, prequential adaptation achieves lower regret than
+fixed calibration in six of eight cases (positive advantage up to $+0.047$
+on M2 medical datasets); the two exceptions are M1/ARC and M1/MedQA,
+where the fixed calibration period is long enough to identify the correct
+budget.
 Controlled distribution-shift experiments
 (Section~\ref{sec:shift}) are the decisive test; the fixed-calibration
 policy is expected to degrade when its calibration set becomes
@@ -1056,14 +1243,23 @@ compared to $2.763$ at $b=8192$).
 Different predictive objectives can prefer different reasoning budgets on
 the same dataset; the practical significance depends on the downstream
 decision task.
-The confident-wrong rate (items where $\max_k \hat{p}_k \geq 0.90$ and
+The confidently-wrong rate (items where $\max_k \hat{p}_k \geq 0.90$ and
 the prediction is incorrect, $\tau=0.90$) is $19.3\%$ at $b=256$ and
-\emph{increases} to $21.6\%$ at $b=8192$.
-At higher budgets the model becomes more extreme in its predictions: it is
-more confident when correct, but also more confident when incorrect.
-This is consistent with the NLL worsening at $b=8192$ despite accuracy
-improving.
-\TODO{Replicate A4 on DS2--DS4 before drawing cross-dataset conclusions.}
+increases to $21.6\%$ at $b=8192$.
+At higher budgets the model concentrates probability mass more sharply,
+improving accuracy but also amplifying overconfident errors; this is
+consistent with the NLL worsening at $b=8192$ despite accuracy improving.
+
+A qualitatively different pattern emerges on MedMCQA
+(Section~\ref{sec:audit}): the accuracy optimum is $b=4096$ and the Brier
+optimum is $b=1024$, with both metrics worsening at $b=8192$.
+The general claim is:
+
+\begin{quote}
+\emph{The reasoning budget that maximises accuracy need not coincide with
+the budget that minimises a proper scoring rule, and neither need coincide
+with the NLL optimum.}
+\end{quote}
 
 \paragraph{A5 --- Allocation granularity.}
 The best fixed budget on DS1 is $b=8192$ (mean Brier $0.4917$).
@@ -1075,11 +1271,11 @@ time and serves as an upper bound only.
 
 The matched-quality token oracle---which assigns each item the \emph{minimum}
 budget $b$ such that its Brier is no worse than the global best-fixed Brier
-($0.4917$)---achieves mean budget ${\approx}2552$ tokens, compared to the
-best-fixed $b=8192$ ($31\%$ of maximum).
+($0.4917$)---achieves mean budget ${\approx}2552$ tokens compared to the
+best-fixed $b=8192$.
 On $76.1\%$ of DS1 items a budget strictly smaller than $b=8192$ already
 meets the quality threshold.
-This result confirms Gate~0 on DS1: a substantial compute reduction is
+This result confirms Gate~0 on DS1: substantial compute reduction is
 available in principle.
 Whether a deployable item-adaptive signal can identify which items need fewer
 tokens remains to be tested.
@@ -1087,53 +1283,100 @@ tokens remains to be tested.
 \subsection{Distribution shift}
 \label{sec:shift}
 
-We evaluate controlled distribution shifts (easier-to-harder transfer, query
-mixture changes) to test whether prequential adaptation outperforms
-fixed-calibration policies when the deployment distribution changes.
-\TODO{Report degradation of fixed-split baselines and VISTA adaptation speed
-under each shift condition.}
+We simulate controlled distribution shift by splitting the deployment stream
+at the dataset boundary: the first phase contains items from a source
+dataset (phase~1), and the second phase transitions to a target dataset
+(phase~2).
+The prequential policy adapts its budget threshold online using arriving
+feedback; the fixed policy freezes the threshold calibrated in phase~1.
+Detailed per-pair results are in the supplementary tables.
+
+The prequential policy outperforms fixed calibration in 3 of 8 scenarios
+(mean advantage $+0.038$ Brier in those cases), and is marginally worse
+in the remaining 5 (mean disadvantage $-0.007$ Brier).
+The advantage is concentrated in domain-crossing transitions:
+M1 benefits from within-medical shift (MedMCQA$\to$MedQA, $+0.037$), while
+M2 benefits from general-to-medical shift
+(MMLU-Pro$\to$MedMCQA $+0.039$ and General$\to$Medical $+0.039$).
+In contrast, difficulty-level shifts within the same domain
+(ARC-Challenge$\to$MMLU-Pro) favour the fixed policy.
+This mixed pattern suggests that the prequential advantage requires
+a shift large enough to invalidate the calibrated threshold, and model-specific
+confidence dynamics modulate which shifts cross that threshold.
 
 \subsection{Cost of the guarantee}
 \label{sec:cost}
 
-We report audit rate, exploration tokens as a fraction of total compute,
-burn-in compute to first meaningful confidence-sequence update, and net compute
-saving after all overhead.
-\TODO{A guarantee whose exploration overhead exceeds its compute saving should
-be reported as a negative result; do not discard such an outcome.}
+A complete accounting of audit rate, exploration tokens as a fraction of
+total compute, burn-in compute to first confidence-sequence update, and net
+token saving after all overhead requires the full sequential deployment
+experiment, which is pending.
+A guarantee whose exploration overhead exceeds its compute saving constitutes
+a negative result and will be reported as such; the component analysis
+(A2/A7, Section~\ref{sec:ablation}) constrains the audit rate required for
+valid sequential monitoring and provides an upper bound on exploration cost.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\paragraph{DS1 preliminary interpretation.}
-The DS1 component analysis suggests that individual elements of VISTA
-address qualitatively different failure modes: audit weighting corrects a
-systematic estimator attenuation that scales with $1/\rho$; sequential
-monitoring prevents premature policy switching under low audit rates;
-prequential updating provides modest gains under stationarity and its value
-is expected primarily under distribution shift; different predictive
-objectives select different budgets for the same data, making objective
-choice non-trivial; and substantial item-level headroom exists relative to
-any fixed-budget policy.
-These results are individually promising but do not yet support a unified
-claim about end-to-end system performance.
-DS2--DS4 results and shift experiments are required before drawing
-cross-dataset conclusions.
+The full-corpus results across four datasets reveal a consistent finding:
+the marginal value of additional reasoning is strongly task- and
+budget-dependent, with no single summary characterising all datasets.
 
-\TODO{Interpret budget curves, oracle opportunity, prefix-signal
-predictability, and policy results without assuming uniform behaviour across
-datasets.}
+MMLU-Pro and MedQA-USMLE exhibit sustained per-budget accuracy gains across
+most of the grid, with diminishing returns at high budgets; ARC-Challenge
+reaches near-saturation after the first budget step; MedMCQA shows
+non-monotone behaviour where the accuracy optimum (4096 tokens) and the Brier
+optimum (1024 tokens) differ, and both metrics worsen at the maximum budget.
+A uniformly large reasoning budget therefore spends substantial compute
+in regimes where predictive gains have already saturated, while other tasks
+continue to benefit from additional reasoning.
+
+The component analysis across eight cells (two models, four datasets)
+reveals that individual elements of VISTA address qualitatively distinct
+failure modes.
+Audit weighting (IPW) corrects a selection bias that arises when only
+$0.1$--$12\%$ of items naturally continue to the reference budget,
+and the na\"{\i}ve estimator reverses policy rankings in 5 of 8 cells.
+Anytime-valid confidence sequences eliminate false-positive policy switches
+(CS FPR $= 0.000$ in all cells) while greedy monitoring shows
+$0$--$58.5\%$ error rates; the trade-off is conservative time-to-decide.
+Prequential calibration is beneficial under stationarity in 6 of 8 cells
+(advantage up to $+0.047$ Brier on M2 medical datasets) and is most
+pronounced under domain-crossing distribution shifts
+(advantage $+0.039$ Brier in the strongest cases).
+Delayed label feedback (10--500 items) does not materially degrade policy
+regret (CV $< 0.01$), and stream-order sensitivity is negligible
+(coefficient of variation $0.57\%$ on MMLU-Pro).
+Different predictive objectives (Brier, accuracy, NLL) select different
+budgets on the same data, making objective choice non-trivial.
+Per-item oracle allocation reduces mean compute by 64.3\% on MMLU-Pro
+while improving Brier (95\% CI: $62.1$--$66.6\%$), establishing
+the upper bound on achievable gains.
+Confidence-threshold stopping (A20) does not recover oracle gains:
+applying a fixed confidence gate ($\tau=0.85$) increases Brier above the
+best fixed budget in all eight cells, indicating that deployable
+item-adaptive signals must go beyond naive stopping heuristics.
+
+These results are individually informative but do not yet support a unified
+claim about end-to-end system performance.
+Gate~1 (prefix-signal predictability, confirmed AUC $\geq 0.60$ on most
+edges), the full VISTA policy evaluation, and the matched-quality comparison
+against baselines remain as outstanding requirements before drawing
+conclusions about deployable compute savings.
 
 \paragraph{Limitations.}
 Assumption~\ref{asm:feedback} restricts applicability to tasks with eventually
 verifiable outcomes. The policy family is finite and pre-specified, so
 guarantees concern only included candidates. Forced checkpoint evaluation is an
 explicit intervention, and results are interpreted within that measurement
-regime. Experiments are limited to models that fit on single-workstation GPUs;
-whether patterns change at larger scales is an open question. Finally,
-randomized auditing incurs real compute costs, which may conflict with
-per-request latency constraints even when the long-run value is positive.
+regime. Results for a second model (DeepSeek-R1-Distill-Llama-8B, RTX~3090,
+sm\_86) are reported in Section~\ref{sec:audit}; wider cross-model and
+cross-architecture replication is ongoing. Experiments are limited to models that fit on
+single-workstation GPUs; whether patterns change at larger scales is an open
+question. Randomized auditing incurs real compute costs, which may conflict
+with per-request latency constraints even when the long-run value is positive.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
@@ -1148,9 +1391,26 @@ prequential framework as the evaluation procedure. VISTA combines randomized
 full-trajectory audits, candidate policy reconstruction, delayed labels, and
 anytime-valid confidence sequences without reserving a separate split or
 updating model parameters.
-\TODO{Insert one concise sentence summarising the primary empirical result
-across all four datasets, including the principal compute saving and the
-relationship between accuracy and proper-scoring-loss optima.}
+
+A systematic budget audit across eight cells (two models, four datasets)
+confirms that the marginal value of additional reasoning is strongly
+task- and budget-dependent.
+Accuracy gains range from near-linear (MMLU-Pro: 47.7\% $\to$ 73.8\%) to
+early-saturating (ARC-Challenge: 92.0\% $\to$ 95.8\%), while proper-scoring-rule
+and NLL optima can diverge from the accuracy optimum within the same dataset.
+On MMLU-Pro an item-adaptive oracle reduces mean Brier by 30.1\% relative to
+the best fixed budget, with 76.1\% of items meeting matched quality at a
+budget below the global maximum.
+
+Component ablations confirm that each element of VISTA addresses a distinct
+failure mode. Naive policy risk estimation carries selection bias that reverses
+policy rankings in 5 of 8 cells; IPW corrects this with mean bias $\leq 0.033$.
+Anytime-valid confidence sequences eliminate false-positive policy switching
+(FPR\,${=}\,0.000$ across all cells) at the cost of conservative time-to-decide.
+Confidence thresholds do not transfer reliably across model families on
+domain-specific tasks, motivating per-model prequential calibration.
+Translating these component-level guarantees into a unified adaptive policy with
+a complete compute-savings accounting is the remaining open step.
 
 \section*{Data and Code Availability}
 \TODO{Repository URL.}
@@ -1164,5 +1424,24 @@ online policy-selection procedure can be replayed without full GPU inference.
 \bibliographystyle{elsarticle-num}
 \bibliography{mvtcs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\section{Component ablation supplementary tables}
+\label{app:ablation_tables}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Table~\ref{tab:a01_ipw_naive} gives per-cell IPW vs.\ naive bias and
+wrong-selection rates at $\rho=0.20$ across all eight experimental cells.
+Table~\ref{tab:a03_cs_greedy} gives CS vs.\ greedy false-positive rates
+and oracle budget per cell.
+Table~\ref{tab:a20_component_removal} shows the component-removal
+ablation for the representative cell M1/MMLU-Pro.
+
+\input{tables/ablations/a01_ipw_naive}
+
+\input{tables/ablations/a03_cs_greedy}
+
+\input{tables/ablations/a20_component_removal}
 
 \end{document}

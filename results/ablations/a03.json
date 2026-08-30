@@ -1,0 +1,210 @@
+{
+  "m1_ds1": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 8192,
+    "oracle_risks": {
+      "256": 0.3240311104797843,
+      "512": 0.2534086731582338,
+      "1024": 0.1281866674994048,
+      "2048": 0.019799202272560615,
+      "4096": 0.0,
+      "8192": -0.016654081638776685
+    },
+    "greedy_false_positive_rate": 0.07,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 14.545,
+    "cs_mean_time_to_decide": 1000,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T22:23:39.482558+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 8192,
+    "oracle_risks": {
+      "256": 0.05259415565499867,
+      "512": 0.011809654185362234,
+      "1024": 0.002469086602004714,
+      "2048": 0.00207760439412694,
+      "4096": 0.0,
+      "8192": -0.0022353620442646304
+    },
+    "greedy_false_positive_rate": 0.48,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 14.305,
+    "cs_mean_time_to_decide": 979,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T22:24:41.312182+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 1024,
+    "oracle_risks": {
+      "256": 0.02634022002002725,
+      "512": 0.021196214532237224,
+      "1024": -0.018245394102592436,
+      "2048": 0.0001788982745717271,
+      "4096": 0.0,
+      "8192": 0.016671549665205416
+    },
+    "greedy_false_positive_rate": 0.4,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 15.305,
+    "cs_mean_time_to_decide": 500,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T22:25:03.231517+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 8192,
+    "oracle_risks": {
+      "256": 0.19844695176174768,
+      "512": 0.15436088495207376,
+      "1024": 0.07714301347131931,
+      "2048": 0.03187358812716176,
+      "4096": 0.0,
+      "8192": -0.0016650257206339081
+    },
+    "greedy_false_positive_rate": 0.14,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 15.305,
+    "cs_mean_time_to_decide": 500,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T22:25:26.638281+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 4096,
+    "oracle_risks": {
+      "256": 0.07004506795952925,
+      "512": 0.05910402542865033,
+      "1024": 0.028868713185158518,
+      "2048": 0.007479926455542457,
+      "4096": 0.0,
+      "8192": 0.009278702907983381
+    },
+    "greedy_false_positive_rate": 0.585,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 14.545,
+    "cs_mean_time_to_decide": 990.25,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T22:26:17.263757+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 2048,
+    "oracle_risks": {
+      "256": 0.1301885101938028,
+      "512": 0.01638457264807521,
+      "1024": -0.0010726277216881214,
+      "2048": -0.004270950289113539,
+      "4096": 0.0,
+      "8192": 0.000621339516447094
+    },
+    "greedy_false_positive_rate": 0.255,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 14.545,
+    "cs_mean_time_to_decide": 990.425,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T22:27:11.138981+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 256,
+    "oracle_risks": {
+      "256": -0.12765259802173465,
+      "512": -0.07889394531419072,
+      "1024": -0.030386102851096043,
+      "2048": -0.00025333644907449656,
+      "4096": 0.0,
+      "8192": -0.00032521289108085685
+    },
+    "greedy_false_positive_rate": 0.0,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 15.305,
+    "cs_mean_time_to_decide": 459.34,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T22:27:27.802313+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "rho": 0.2,
+    "alpha": 0.05,
+    "n_perm": 200,
+    "reference_b": 4096,
+    "oracle_best": 256,
+    "oracle_risks": {
+      "256": -0.09537365794783902,
+      "512": -0.08264038821882129,
+      "1024": -0.04692112227637684,
+      "2048": -0.01728417919477424,
+      "4096": 0.0,
+      "8192": 0.005112621746510409
+    },
+    "greedy_false_positive_rate": 0.0,
+    "cs_false_positive_rate": 0.0,
+    "greedy_mean_time_to_decide": 15.305,
+    "cs_mean_time_to_decide": 460.135,
+    "_meta": {
+      "ablation": "03",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T22:27:44.502721+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

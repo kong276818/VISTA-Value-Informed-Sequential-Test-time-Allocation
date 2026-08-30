@@ -1,0 +1,22 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Edge & Confidence AUC & Entropy AUC & Margin AUC & Stability AUC \\
+\midrule
+M1 256→512 & 0.780 & 0.782 & 0.780 & — \\
+M1 512→1024 & 0.823 & 0.822 & 0.824 & 0.556 \\
+M1 1024→2048 & 0.820 & 0.821 & 0.821 & 0.571 \\
+M1 2048→4096 & 0.839 & 0.839 & 0.840 & 0.561 \\
+M1 4096→8192 & 0.768 & 0.768 & 0.768 & 0.555 \\
+M2 256→512 & 0.538 & 0.540 & 0.539 & — \\
+M2 512→1024 & 0.637 & 0.637 & 0.638 & 0.530 \\
+M2 1024→2048 & 0.644 & 0.644 & 0.645 & 0.533 \\
+M2 2048→4096 & 0.612 & 0.612 & 0.612 & 0.511 \\
+M2 4096→8192 & 0.627 & 0.627 & 0.626 & 0.502 \\
+\bottomrule
+\end{tabular}
+\caption{Gate-1 prefix signal AUC (mean over datasets) for each budget edge. AUC$>0.60$ indicates useful stopping signal.}
+\label{tab:a06_signal_heatmap}
+\end{table}

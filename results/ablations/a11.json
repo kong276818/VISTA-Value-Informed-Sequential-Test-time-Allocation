@@ -1,0 +1,266 @@
+{
+  "m1_ds1": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.15235393781285164,
+        "fixed_cal_mean_regret": 0.1618024307306803,
+        "advantage_of_preq": 0.00944849291782865,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.1520648316859545,
+        "fixed_cal_mean_regret": 0.15869681320436613,
+        "advantage_of_preq": 0.006631981518411628,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.15241859822912623,
+        "fixed_cal_mean_regret": 0.15402082099769168,
+        "advantage_of_preq": 0.0016022227685654478,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:11:01.276722+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.038786049639447616,
+        "fixed_cal_mean_regret": 0.04110654215562067,
+        "advantage_of_preq": 0.002320492516173056,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.03873762839144178,
+        "fixed_cal_mean_regret": 0.03807718012123565,
+        "advantage_of_preq": -0.0006604482702061293,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.03906002210948654,
+        "fixed_cal_mean_regret": 0.03782988603916761,
+        "advantage_of_preq": -0.001230136070318931,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 979,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:11:03.166514+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.20701819418961329,
+        "fixed_cal_mean_regret": 0.2158446053900534,
+        "advantage_of_preq": 0.008826411200440115,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.20721506206132354,
+        "fixed_cal_mean_regret": 0.21993588228303976,
+        "advantage_of_preq": 0.012720820221716223,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.20719394371529312,
+        "fixed_cal_mean_regret": 0.2170159096688731,
+        "advantage_of_preq": 0.00982196595357998,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-30T00:11:04.103004+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.14605355692205238,
+        "fixed_cal_mean_regret": 0.14802148997758657,
+        "advantage_of_preq": 0.0019679330555341934,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.14509091416801706,
+        "fixed_cal_mean_regret": 0.14273987462437224,
+        "advantage_of_preq": -0.002351039543644823,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.14591219225832613,
+        "fixed_cal_mean_regret": 0.13746300977692338,
+        "advantage_of_preq": -0.00844918248140275,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-30T00:11:05.069267+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.33525538496782425,
+        "fixed_cal_mean_regret": 0.34994837736920664,
+        "advantage_of_preq": 0.014692992401382388,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.3357719652821512,
+        "fixed_cal_mean_regret": 0.34983102634017577,
+        "advantage_of_preq": 0.014059061058024569,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.3355614565515713,
+        "fixed_cal_mean_regret": 0.34107251053069065,
+        "advantage_of_preq": 0.005511053979119329,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:11:07.094717+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.09871411084836726,
+        "fixed_cal_mean_regret": 0.10165893154534393,
+        "advantage_of_preq": 0.0029448206969766716,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.09802222837839421,
+        "fixed_cal_mean_regret": 0.09957877324156984,
+        "advantage_of_preq": 0.0015565448631756351,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.09817235923360595,
+        "fixed_cal_mean_regret": 0.09880310688263469,
+        "advantage_of_preq": 0.0006307476490287345,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:11:09.136563+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.2357554049637629,
+        "fixed_cal_mean_regret": 0.26566997065826053,
+        "advantage_of_preq": 0.02991456569449763,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.23571115892071426,
+        "fixed_cal_mean_regret": 0.26449759948918766,
+        "advantage_of_preq": 0.028786440568473404,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.23538369758606334,
+        "fixed_cal_mean_regret": 0.2824514082115064,
+        "advantage_of_preq": 0.04706771062544304,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-30T00:11:10.105185+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "n_cal_sweep": [
+      {
+        "n_cal": 50,
+        "prequential_mean_regret": 0.3385120782803482,
+        "fixed_cal_mean_regret": 0.352246594456037,
+        "advantage_of_preq": 0.013734516175688827,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 100,
+        "prequential_mean_regret": 0.33712607816794526,
+        "fixed_cal_mean_regret": 0.3550591955547514,
+        "advantage_of_preq": 0.01793311738680614,
+        "n_perm": 200
+      },
+      {
+        "n_cal": 200,
+        "prequential_mean_regret": 0.3379222499335343,
+        "fixed_cal_mean_regret": 0.37179653618354075,
+        "advantage_of_preq": 0.033874286250006436,
+        "n_perm": 200
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "11",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-30T00:11:11.047972+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

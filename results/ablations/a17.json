@@ -1,0 +1,204 @@
+{
+  "m1_ds1": {
+    "k_results": [
+      {
+        "k": 2,
+        "chosen_budgets": [
+          256,
+          8192
+        ],
+        "mean_cs_width": 0.8770210543832405,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 3,
+        "chosen_budgets": [
+          256,
+          1024,
+          8192
+        ],
+        "mean_cs_width": 1.060286138748755,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 4,
+        "chosen_budgets": [
+          256,
+          1024,
+          2048,
+          8192
+        ],
+        "mean_cs_width": 1.082133593606304,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 6,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 1.1449761004258179,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 10,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 1.198585530692181,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 25,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 1.28248593548639,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 50,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 1.3423955559615603,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "17",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:11:36.259595+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "k_results": [
+      {
+        "k": 2,
+        "chosen_budgets": [
+          256,
+          8192
+        ],
+        "mean_cs_width": 0.4425362113103793,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 3,
+        "chosen_budgets": [
+          256,
+          1024,
+          8192
+        ],
+        "mean_cs_width": 0.4989402954609576,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 4,
+        "chosen_budgets": [
+          256,
+          1024,
+          2048,
+          8192
+        ],
+        "mean_cs_width": 0.5093741627827721,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 6,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 0.5094622775150207,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 10,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 0.5218893359947919,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 25,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 0.5699904783455637,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      },
+      {
+        "k": 50,
+        "chosen_budgets": [
+          256,
+          512,
+          1024,
+          2048,
+          4096,
+          8192
+        ],
+        "mean_cs_width": 0.5907089687686796,
+        "wrong_selection_rate": 0.0,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 979,
+    "_meta": {
+      "ablation": "17",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:11:37.933740+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  }
+}

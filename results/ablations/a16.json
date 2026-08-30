@@ -1,0 +1,338 @@
+{
+  "m1_ds1": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.15237650555889126,
+        "std_regret": 0.0027146600995591255,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.1525552648115397,
+        "std_regret": 0.0035921995951848427,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.15244285727200352,
+        "std_regret": 0.004222881945008014,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.15242076344276742,
+        "std_regret": 0.00536248377410642,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.1519541627202877,
+        "std_regret": 0.005792380704873669,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:11:15.175749+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.03858167717088455,
+        "std_regret": 0.002757961613277928,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.03905414316803185,
+        "std_regret": 0.003084266780001991,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.03897903059806047,
+        "std_regret": 0.0036468274208438134,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.03874585815643332,
+        "std_regret": 0.0035162340544183193,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.036388908606215166,
+        "std_regret": 0.004776616148196791,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 979,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:11:19.216961+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.20652781098898773,
+        "std_regret": 0.008372431050719796,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.2076110053400288,
+        "std_regret": 0.009487641483078763,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.21226301321095944,
+        "std_regret": 0.011087659358000022,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.214373764503157,
+        "std_regret": 0.013164822970378786,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.22664427327550887,
+        "std_regret": 3.8332333930254345e-16,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-30T00:11:20.921693+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.14545771956247444,
+        "std_regret": 0.005315690314465242,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.14603753911917433,
+        "std_regret": 0.006698439389128459,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.14401339805265562,
+        "std_regret": 0.009273843856228545,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.14168217995918056,
+        "std_regret": 0.00934297152771331,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.13361713515209195,
+        "std_regret": 2.108957044400069e-16,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-30T00:11:22.576610+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.3351619386935697,
+        "std_regret": 0.004807521667970133,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.33512331794096817,
+        "std_regret": 0.005206142772246635,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.3370130686523618,
+        "std_regret": 0.007034633078320724,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.33642422115162024,
+        "std_regret": 0.00784077950101714,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.3377416934602203,
+        "std_regret": 0.009162879878093519,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-30T00:11:26.878638+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.09862725389216224,
+        "std_regret": 0.0029788708950421712,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.09827664195581447,
+        "std_regret": 0.0035003004990602107,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.09795848876479843,
+        "std_regret": 0.00405140218761076,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.09808391503060834,
+        "std_regret": 0.0046920804817372295,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.09918858741131352,
+        "std_regret": 0.005895039291792921,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-30T00:11:31.214035+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.2353015587364325,
+        "std_regret": 0.0059652419542687,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.2376174850915985,
+        "std_regret": 0.007217121722521765,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.24898442080535596,
+        "std_regret": 0.011125136192644866,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.25986302388434546,
+        "std_regret": 0.012613972263804955,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.35363492496860516,
+        "std_regret": 4.135039769510969e-16,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-30T00:11:32.858585+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "delay_results": [
+      {
+        "delay": 0,
+        "mean_regret": 0.34060989711513096,
+        "std_regret": 0.009361508658474883,
+        "n_perm": 100
+      },
+      {
+        "delay": 10,
+        "mean_regret": 0.3406035089115,
+        "std_regret": 0.010968189717284664,
+        "n_perm": 100
+      },
+      {
+        "delay": 50,
+        "mean_regret": 0.3483009237047494,
+        "std_regret": 0.012562514940152822,
+        "n_perm": 100
+      },
+      {
+        "delay": 100,
+        "mean_regret": 0.35278475311082674,
+        "std_regret": 0.014211527406849596,
+        "n_perm": 100
+      },
+      {
+        "delay": 500,
+        "mean_regret": 0.420726926008692,
+        "std_regret": 4.057322847789643e-16,
+        "n_perm": 100
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "16",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-30T00:11:34.473923+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

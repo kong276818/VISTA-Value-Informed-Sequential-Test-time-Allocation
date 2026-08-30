@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Cell & Dataset & $b^\star_{\text{acc}}$ & $b^\star_{\text{Brier}}$ & $b^\star_{\text{NLL}}$ & $b^\star_{\text{acc}}\neq b^\star_{\text{Brier}}$ \\
+\midrule
+m1\_ds1 & MMLU-Pro & 8192 & 8192 & 2048 & NO \\
+m1\_ds2 & ARC-Challenge & 8192 & 8192 & 512 & NO \\
+m1\_ds3 & MedMCQA & 4096 & 1024 & 256 & YES \\
+m1\_ds4 & MedQA-USMLE & 8192 & 8192 & 2048 & NO \\
+m2\_ds1 & MMLU-Pro & 4096 & 4096 & 256 & NO \\
+m2\_ds2 & ARC-Challenge & 2048 & 2048 & 512 & NO \\
+m2\_ds3 & MedMCQA & 4096 & 256 & 256 & YES \\
+m2\_ds4 & MedQA-USMLE & 2048 & 256 & 256 & YES \\
+\bottomrule
+\end{tabular}
+\caption{Objective divergence: optimal reasoning budget differs by metric across model/dataset pairs.}
+\label{tab:a05_objective}
+\end{table}

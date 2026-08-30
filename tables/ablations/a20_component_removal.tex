@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Variant & Brier $\downarrow$ & Saving $\uparrow$ & $\Delta$Brier(oracle) & Seq.\ regret \\
+\midrule
+\textbf{VISTA (Full)} & 0.6831 & 0.845 & 0.3393 & 0.3393 \\
+$-$ Audit & 0.6831 & 0.845 & 0.3393 & 0.3393 \\
+$-$ IPW & 0.6831 & 0.845 & 0.3393 & 0.3393 \\
+$-$ CS & 0.6831 & 0.845 & 0.3393 & — \\
+$-$ Item-Adapt & 0.4917 & 0.000 & 0.1480 & 0.1624 \\
+$-$ Prequential & 0.4917 & 0.000 & 0.1480 & — \\
+$-$ Feedback & 0.4917 & 0.000 & 0.1480 & — \\
+Fixed best-$b$ & 0.4917 & 0.000 & 0.1480 & — \\
+Fixed $b_{\max}$ & 0.4917 & 0.000 & 0.1480 & — \\
+\bottomrule
+\end{tabular}
+\caption{Component-removal ablation: VISTA vs.\ each component removed (M1/MMLU-Pro).}
+\label{tab:a20_component_removal}
+\end{table}

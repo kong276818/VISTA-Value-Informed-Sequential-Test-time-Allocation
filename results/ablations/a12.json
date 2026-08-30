@@ -1,0 +1,120 @@
+{
+  "m1": {
+    "shift_results": [
+      {
+        "label": "ARC\u2192MMLU-Pro",
+        "phase1": "ds2",
+        "phase2": "ds1",
+        "fixed_policy_budget": 8192,
+        "fixed_mean_loss": 0.30273627628541105,
+        "preq_mean_loss": 0.30812639144984827,
+        "oracle_mean_loss": 0.2212488862653222,
+        "preq_advantage_over_fixed": -0.005390115164437215,
+        "n_stream": 978,
+        "n_perm": 100
+      },
+      {
+        "label": "MMLU-Pro\u2192MedMCQA",
+        "phase1": "ds1",
+        "phase2": "ds3",
+        "fixed_policy_budget": 8192,
+        "fixed_mean_loss": 0.5344625049110832,
+        "preq_mean_loss": 0.543127031789178,
+        "oracle_mean_loss": 0.35982151465787976,
+        "preq_advantage_over_fixed": -0.008664526878094825,
+        "n_stream": 500,
+        "n_perm": 100
+      },
+      {
+        "label": "MedMCQA\u2192MedQA",
+        "phase1": "ds3",
+        "phase2": "ds4",
+        "fixed_policy_budget": 1024,
+        "fixed_mean_loss": 0.5211527181134412,
+        "preq_mean_loss": 0.484502169683224,
+        "oracle_mean_loss": 0.31175483878411714,
+        "preq_advantage_over_fixed": 0.0366505484302172,
+        "n_stream": 500,
+        "n_perm": 100
+      },
+      {
+        "label": "General\u2192Medical",
+        "phase1": "ds1",
+        "phase2": "ds3",
+        "fixed_policy_budget": 8192,
+        "fixed_mean_loss": 0.534462504911083,
+        "preq_mean_loss": 0.5428944952258179,
+        "oracle_mean_loss": 0.35982151465787976,
+        "preq_advantage_over_fixed": -0.00843199031473485,
+        "n_stream": 500,
+        "n_perm": 100
+      }
+    ],
+    "_meta": {
+      "ablation": "12",
+      "model_tag": "m1",
+      "ds_tag": "all",
+      "timestamp": "2026-08-29T22:27:30.390993+00:00",
+      "note": "M1 distribution shift"
+    }
+  },
+  "m2": {
+    "shift_results": [
+      {
+        "label": "ARC\u2192MMLU-Pro",
+        "phase1": "ds2",
+        "phase2": "ds1",
+        "fixed_policy_budget": 2048,
+        "fixed_mean_loss": 0.5707280532249065,
+        "preq_mean_loss": 0.5734057978630762,
+        "oracle_mean_loss": 0.3553474049581695,
+        "preq_advantage_over_fixed": -0.002677744638169721,
+        "n_stream": 1000,
+        "n_perm": 100
+      },
+      {
+        "label": "MMLU-Pro\u2192MedMCQA",
+        "phase1": "ds1",
+        "phase2": "ds3",
+        "fixed_policy_budget": 4096,
+        "fixed_mean_loss": 0.8849731247637773,
+        "preq_mean_loss": 0.8460060630896331,
+        "oracle_mean_loss": 0.5386000734352191,
+        "preq_advantage_over_fixed": 0.03896706167414421,
+        "n_stream": 500,
+        "n_perm": 100
+      },
+      {
+        "label": "MedMCQA\u2192MedQA",
+        "phase1": "ds3",
+        "phase2": "ds4",
+        "fixed_policy_budget": 256,
+        "fixed_mean_loss": 0.7284663117508959,
+        "preq_mean_loss": 0.7379131889558075,
+        "oracle_mean_loss": 0.4874708300123593,
+        "preq_advantage_over_fixed": -0.009446877204911552,
+        "n_stream": 500,
+        "n_perm": 100
+      },
+      {
+        "label": "General\u2192Medical",
+        "phase1": "ds1",
+        "phase2": "ds3",
+        "fixed_policy_budget": 4096,
+        "fixed_mean_loss": 0.8849731247637772,
+        "preq_mean_loss": 0.8461593276072011,
+        "oracle_mean_loss": 0.5386000734352191,
+        "preq_advantage_over_fixed": 0.03881379715657607,
+        "n_stream": 500,
+        "n_perm": 100
+      }
+    ],
+    "_meta": {
+      "ablation": "12",
+      "model_tag": "m2",
+      "ds_tag": "all",
+      "timestamp": "2026-08-29T22:32:07.218431+00:00",
+      "note": "M2 distribution shift"
+    }
+  }
+}

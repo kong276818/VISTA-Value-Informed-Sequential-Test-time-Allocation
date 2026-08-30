@@ -1,0 +1,626 @@
+{
+  "m1_ds1": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.07292333920734065,
+        "naive_mean_bias": 0.07079133950415595,
+        "wrong_best_ipw_rate": 0.575,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.3,
+        "cs_mean_time_to_decide": 995.62
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.05108735047893992,
+        "naive_mean_bias": 0.07079133950415595,
+        "wrong_best_ipw_rate": 0.465,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.25,
+        "cs_mean_time_to_decide": 995.455
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.034495904456359396,
+        "naive_mean_bias": 0.07079133950415595,
+        "wrong_best_ipw_rate": 0.365,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.185,
+        "cs_mean_time_to_decide": 1000
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.022967852689995204,
+        "naive_mean_bias": 0.07079133950415595,
+        "wrong_best_ipw_rate": 0.185,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.07,
+        "cs_mean_time_to_decide": 1000
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.014106722225250145,
+        "naive_mean_bias": 0.07079133950415595,
+        "wrong_best_ipw_rate": 0.07,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.02,
+        "cs_mean_time_to_decide": 999.52
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 8.032637055510605e-17,
+        "naive_mean_bias": 0.07079133950415595,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 1000
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T22:46:33.308986+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.027584663722228477,
+        "naive_mean_bias": 0.2353492233531578,
+        "wrong_best_ipw_rate": 0.7,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.51,
+        "cs_mean_time_to_decide": 979
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.022243467046034453,
+        "naive_mean_bias": 0.2353492233531578,
+        "wrong_best_ipw_rate": 0.715,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.53,
+        "cs_mean_time_to_decide": 974.47
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.014650429375130765,
+        "naive_mean_bias": 0.2353492233531578,
+        "wrong_best_ipw_rate": 0.68,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.525,
+        "cs_mean_time_to_decide": 966.485
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.010460996284896808,
+        "naive_mean_bias": 0.2353492233531578,
+        "wrong_best_ipw_rate": 0.63,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.48,
+        "cs_mean_time_to_decide": 979
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.006725500449303154,
+        "naive_mean_bias": 0.2353492233531578,
+        "wrong_best_ipw_rate": 0.55,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.405,
+        "cs_mean_time_to_decide": 979
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 8.436899905558033e-18,
+        "naive_mean_bias": 0.2353492233531578,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 979
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T23:03:38.895089+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.07624927917020033,
+        "naive_mean_bias": 0.34440590717324965,
+        "wrong_best_ipw_rate": 0.795,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.705,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.05689066558431177,
+        "naive_mean_bias": 0.34440590717324965,
+        "wrong_best_ipw_rate": 0.71,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.585,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.04082514383246857,
+        "naive_mean_bias": 0.34440590717324965,
+        "wrong_best_ipw_rate": 0.655,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.49,
+        "cs_mean_time_to_decide": 499.415
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.026210055854277846,
+        "naive_mean_bias": 0.34440590717324965,
+        "wrong_best_ipw_rate": 0.575,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.4,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.016314652053655426,
+        "naive_mean_bias": 0.34440590717324965,
+        "wrong_best_ipw_rate": 0.345,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.205,
+        "cs_mean_time_to_decide": 497.22
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 9.443016934079321e-18,
+        "naive_mean_bias": 0.34440590717324965,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 496.39
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T23:09:32.693658+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.09074061495612662,
+        "naive_mean_bias": 0.2871468715015446,
+        "wrong_best_ipw_rate": 0.71,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.46,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.06429314690121013,
+        "naive_mean_bias": 0.2871468715015446,
+        "wrong_best_ipw_rate": 0.68,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.39,
+        "cs_mean_time_to_decide": 498.265
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.048312057596481134,
+        "naive_mean_bias": 0.2871468715015446,
+        "wrong_best_ipw_rate": 0.61,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.26,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.03249960028746405,
+        "naive_mean_bias": 0.2871468715015446,
+        "wrong_best_ipw_rate": 0.505,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.14,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.019839976654513054,
+        "naive_mean_bias": 0.2871468715015446,
+        "wrong_best_ipw_rate": 0.44,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.05,
+        "cs_mean_time_to_decide": 500
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 3.6508520454466474e-17,
+        "naive_mean_bias": 0.2871468715015446,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 500
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T23:15:45.759675+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.0655807642164336,
+        "naive_mean_bias": 0.04562364029343228,
+        "wrong_best_ipw_rate": 0.8,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.8,
+        "cs_mean_time_to_decide": 984.715
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.04586726361550609,
+        "naive_mean_bias": 0.04562364029343228,
+        "wrong_best_ipw_rate": 0.735,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.735,
+        "cs_mean_time_to_decide": 963.72
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.03199776266517,
+        "naive_mean_bias": 0.04562364029343228,
+        "wrong_best_ipw_rate": 0.715,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.715,
+        "cs_mean_time_to_decide": 990.875
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.02169150633536644,
+        "naive_mean_bias": 0.04562364029343228,
+        "wrong_best_ipw_rate": 0.585,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.585,
+        "cs_mean_time_to_decide": 990.25
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.013115316582623368,
+        "naive_mean_bias": 0.04562364029343228,
+        "wrong_best_ipw_rate": 0.375,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.375,
+        "cs_mean_time_to_decide": 972.52
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 2.2265898615610644e-17,
+        "naive_mean_bias": 0.04562364029343228,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 995.175
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T23:31:07.182137+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.032933803122417,
+        "naive_mean_bias": 0.1368220877461072,
+        "wrong_best_ipw_rate": 0.825,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.455,
+        "cs_mean_time_to_decide": 982.885
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.024485030977564718,
+        "naive_mean_bias": 0.1368220877461072,
+        "wrong_best_ipw_rate": 0.77,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.415,
+        "cs_mean_time_to_decide": 1000
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.017545437694299507,
+        "naive_mean_bias": 0.1368220877461072,
+        "wrong_best_ipw_rate": 0.705,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.34,
+        "cs_mean_time_to_decide": 986.875
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.011461707671219203,
+        "naive_mean_bias": 0.1368220877461072,
+        "wrong_best_ipw_rate": 0.555,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.255,
+        "cs_mean_time_to_decide": 990.425
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.007476426711489551,
+        "naive_mean_bias": 0.1368220877461072,
+        "wrong_best_ipw_rate": 0.44,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.13,
+        "cs_mean_time_to_decide": 995.115
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 1.9026302524223957e-17,
+        "naive_mean_bias": 0.1368220877461072,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 1000
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T23:46:54.977854+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.058800469618217645,
+        "naive_mean_bias": 0.23481500341617595,
+        "wrong_best_ipw_rate": 0.45,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 497.55
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.042237980566592996,
+        "naive_mean_bias": 0.23481500341617595,
+        "wrong_best_ipw_rate": 0.38,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 489.715
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.03058521979486711,
+        "naive_mean_bias": 0.23481500341617595,
+        "wrong_best_ipw_rate": 0.315,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 475.245
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.022188540939203694,
+        "naive_mean_bias": 0.23481500341617595,
+        "wrong_best_ipw_rate": 0.22,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 459.34
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.013011039185092646,
+        "naive_mean_bias": 0.23481500341617595,
+        "wrong_best_ipw_rate": 0.1,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 415.505
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 1.7401625568754427e-17,
+        "naive_mean_bias": 0.23481500341617595,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 1.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 273.465
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T23:49:37.061079+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "rho_rows": [
+      {
+        "rho": 0.025,
+        "audit_overhead_tokens_fraction": 0.025,
+        "ipw_mean_bias": 0.08867942165327698,
+        "naive_mean_bias": 0.10917320397880292,
+        "wrong_best_ipw_rate": 0.65,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.075,
+        "cs_mean_time_to_decide": 496.28
+      },
+      {
+        "rho": 0.05,
+        "audit_overhead_tokens_fraction": 0.05,
+        "ipw_mean_bias": 0.06311346764320125,
+        "naive_mean_bias": 0.10917320397880292,
+        "wrong_best_ipw_rate": 0.59,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.035,
+        "cs_mean_time_to_decide": 484.255
+      },
+      {
+        "rho": 0.1,
+        "audit_overhead_tokens_fraction": 0.1,
+        "ipw_mean_bias": 0.043602083690460154,
+        "naive_mean_bias": 0.10917320397880292,
+        "wrong_best_ipw_rate": 0.545,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.01,
+        "cs_mean_time_to_decide": 473.385
+      },
+      {
+        "rho": 0.2,
+        "audit_overhead_tokens_fraction": 0.2,
+        "ipw_mean_bias": 0.030113108251979312,
+        "naive_mean_bias": 0.10917320397880292,
+        "wrong_best_ipw_rate": 0.49,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 460.135
+      },
+      {
+        "rho": 0.4,
+        "audit_overhead_tokens_fraction": 0.4,
+        "ipw_mean_bias": 0.018158645753047185,
+        "naive_mean_bias": 0.10917320397880292,
+        "wrong_best_ipw_rate": 0.345,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 451.65
+      },
+      {
+        "rho": 1.0,
+        "audit_overhead_tokens_fraction": 1.0,
+        "ipw_mean_bias": 2.2822455730819868e-17,
+        "naive_mean_bias": 0.10917320397880292,
+        "wrong_best_ipw_rate": 0.0,
+        "wrong_best_naive_rate": 0.0,
+        "cs_false_positive_rate": 0.0,
+        "greedy_false_positive_rate": 0.0,
+        "cs_mean_time_to_decide": 411.115
+      }
+    ],
+    "n_perm": 200,
+    "_meta": {
+      "ablation": "04",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T23:53:43.977875+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

@@ -1,0 +1,482 @@
+{
+  "m1_ds1": {
+    "best_budget_accuracy": 8192,
+    "best_budget_brier": 8192,
+    "best_budget_nll": 2048,
+    "objectives_agree": false,
+    "acc_brier_diverge": false,
+    "brier_nll_diverge": true,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 1000,
+        "accuracy": 0.477,
+        "mean_brier": 0.8324129875612044,
+        "mean_nll": 3.1863992401196644
+      },
+      {
+        "budget": 512,
+        "n": 1000,
+        "accuracy": 0.526,
+        "mean_brier": 0.7617905502396539,
+        "mean_nll": 2.884817974526595
+      },
+      {
+        "budget": 1024,
+        "n": 1000,
+        "accuracy": 0.612,
+        "mean_brier": 0.6365685445808249,
+        "mean_nll": 2.6092473925473176
+      },
+      {
+        "budget": 2048,
+        "n": 1000,
+        "accuracy": 0.696,
+        "mean_brier": 0.5281810793539807,
+        "mean_nll": 2.458348887993229
+      },
+      {
+        "budget": 4096,
+        "n": 1000,
+        "accuracy": 0.718,
+        "mean_brier": 0.5083818770814201,
+        "mean_nll": 2.686130697053313
+      },
+      {
+        "budget": 8192,
+        "n": 1000,
+        "accuracy": 0.738,
+        "mean_brier": 0.49172779544264344,
+        "mean_nll": 2.7634344358290557
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m1",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T23:53:43.997810+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m1_ds2": {
+    "best_budget_accuracy": 8192,
+    "best_budget_brier": 8192,
+    "best_budget_nll": 512,
+    "objectives_agree": false,
+    "acc_brier_diverge": false,
+    "brier_nll_diverge": true,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 979,
+        "accuracy": 0.9203268641470889,
+        "mean_brier": 0.1385761755045822,
+        "mean_nll": 0.46594328913292976
+      },
+      {
+        "budget": 512,
+        "n": 979,
+        "accuracy": 0.9458631256384066,
+        "mean_brier": 0.09779167403494576,
+        "mean_nll": 0.3548597327170633
+      },
+      {
+        "budget": 1024,
+        "n": 979,
+        "accuracy": 0.95097037793667,
+        "mean_brier": 0.08845110645158824,
+        "mean_nll": 0.37057754132312076
+      },
+      {
+        "budget": 2048,
+        "n": 979,
+        "accuracy": 0.9550561797752809,
+        "mean_brier": 0.08805962424371047,
+        "mean_nll": 0.41447860392665015
+      },
+      {
+        "budget": 4096,
+        "n": 979,
+        "accuracy": 0.9560776302349336,
+        "mean_brier": 0.08598201984958354,
+        "mean_nll": 0.46166495824730264
+      },
+      {
+        "budget": 8192,
+        "n": 979,
+        "accuracy": 0.958120531154239,
+        "mean_brier": 0.0837466578053189,
+        "mean_nll": 0.4572358226498973
+      }
+    ],
+    "n_items": 979,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m1",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T23:53:44.015566+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m1_ds3": {
+    "best_budget_accuracy": 4096,
+    "best_budget_brier": 1024,
+    "best_budget_nll": 256,
+    "objectives_agree": false,
+    "acc_brier_diverge": true,
+    "brier_nll_diverge": true,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 500,
+        "accuracy": 0.614,
+        "mean_brier": 0.6720782366654928,
+        "mean_nll": 2.2970027093640257
+      },
+      {
+        "budget": 512,
+        "n": 500,
+        "accuracy": 0.624,
+        "mean_brier": 0.6669342311777028,
+        "mean_nll": 2.520073976109902
+      },
+      {
+        "budget": 1024,
+        "n": 500,
+        "accuracy": 0.66,
+        "mean_brier": 0.6274926225428731,
+        "mean_nll": 2.855843993550979
+      },
+      {
+        "budget": 2048,
+        "n": 500,
+        "accuracy": 0.662,
+        "mean_brier": 0.6459169149200372,
+        "mean_nll": 3.2879354950113577
+      },
+      {
+        "budget": 4096,
+        "n": 500,
+        "accuracy": 0.672,
+        "mean_brier": 0.6457380166454656,
+        "mean_nll": 3.649377781146552
+      },
+      {
+        "budget": 8192,
+        "n": 500,
+        "accuracy": 0.666,
+        "mean_brier": 0.6624095663106709,
+        "mean_nll": 3.7613937034161604
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m1",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T23:53:44.025335+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m1_ds4": {
+    "best_budget_accuracy": 8192,
+    "best_budget_brier": 8192,
+    "best_budget_nll": 2048,
+    "objectives_agree": false,
+    "acc_brier_diverge": false,
+    "brier_nll_diverge": true,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 500,
+        "accuracy": 0.648,
+        "mean_brier": 0.6286525146052176,
+        "mean_nll": 2.3608443680009543
+      },
+      {
+        "budget": 512,
+        "n": 500,
+        "accuracy": 0.672,
+        "mean_brier": 0.5845664477955437,
+        "mean_nll": 2.1195269737848177
+      },
+      {
+        "budget": 1024,
+        "n": 500,
+        "accuracy": 0.718,
+        "mean_brier": 0.5073485763147892,
+        "mean_nll": 1.9338438853965139
+      },
+      {
+        "budget": 2048,
+        "n": 500,
+        "accuracy": 0.744,
+        "mean_brier": 0.46207915097063174,
+        "mean_nll": 1.815611857360868
+      },
+      {
+        "budget": 4096,
+        "n": 500,
+        "accuracy": 0.776,
+        "mean_brier": 0.43020556284346995,
+        "mean_nll": 2.0526254989211807
+      },
+      {
+        "budget": 8192,
+        "n": 500,
+        "accuracy": 0.782,
+        "mean_brier": 0.4285405371228361,
+        "mean_nll": 2.2654057751474954
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m1",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T23:53:44.035434+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  },
+  "m2_ds1": {
+    "best_budget_accuracy": 4096,
+    "best_budget_brier": 4096,
+    "best_budget_nll": 256,
+    "objectives_agree": false,
+    "acc_brier_diverge": false,
+    "brier_nll_diverge": true,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 1000,
+        "accuracy": 0.32,
+        "mean_brier": 0.9482872188378141,
+        "mean_nll": 2.7791114320206476
+      },
+      {
+        "budget": 512,
+        "n": 1000,
+        "accuracy": 0.382,
+        "mean_brier": 0.9373461763069352,
+        "mean_nll": 3.027495193584685
+      },
+      {
+        "budget": 1024,
+        "n": 1000,
+        "accuracy": 0.444,
+        "mean_brier": 0.9071108640634433,
+        "mean_nll": 3.5173588551357433
+      },
+      {
+        "budget": 2048,
+        "n": 1000,
+        "accuracy": 0.496,
+        "mean_brier": 0.8857220773338272,
+        "mean_nll": 3.8062598396466436
+      },
+      {
+        "budget": 4096,
+        "n": 1000,
+        "accuracy": 0.508,
+        "mean_brier": 0.8782421508782848,
+        "mean_nll": 3.7551434024497414
+      },
+      {
+        "budget": 8192,
+        "n": 1000,
+        "accuracy": 0.502,
+        "mean_brier": 0.8875208537862682,
+        "mean_nll": 3.6744399239613057
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m2",
+      "ds_tag": "ds1",
+      "timestamp": "2026-08-29T23:53:44.053549+00:00",
+      "ds_name": "MMLU-Pro"
+    }
+  },
+  "m2_ds2": {
+    "best_budget_accuracy": 2048,
+    "best_budget_brier": 2048,
+    "best_budget_nll": 512,
+    "objectives_agree": false,
+    "acc_brier_diverge": false,
+    "brier_nll_diverge": true,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 1000,
+        "accuracy": 0.773,
+        "mean_brier": 0.3633384053032526,
+        "mean_nll": 0.8642104620418742
+      },
+      {
+        "budget": 512,
+        "n": 1000,
+        "accuracy": 0.85,
+        "mean_brier": 0.24953446775752502,
+        "mean_nll": 0.7600867239744454
+      },
+      {
+        "budget": 1024,
+        "n": 1000,
+        "accuracy": 0.876,
+        "mean_brier": 0.23207726738776172,
+        "mean_nll": 0.8758755983012642
+      },
+      {
+        "budget": 2048,
+        "n": 1000,
+        "accuracy": 0.88,
+        "mean_brier": 0.22887894482033627,
+        "mean_nll": 0.8922559638124727
+      },
+      {
+        "budget": 4096,
+        "n": 1000,
+        "accuracy": 0.875,
+        "mean_brier": 0.23314989510944983,
+        "mean_nll": 0.8491751376339761
+      },
+      {
+        "budget": 8192,
+        "n": 1000,
+        "accuracy": 0.875,
+        "mean_brier": 0.2337712346258969,
+        "mean_nll": 0.8066742899108779
+      }
+    ],
+    "n_items": 1000,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m2",
+      "ds_tag": "ds2",
+      "timestamp": "2026-08-29T23:53:44.071079+00:00",
+      "ds_name": "ARC-Challenge"
+    }
+  },
+  "m2_ds3": {
+    "best_budget_accuracy": 4096,
+    "best_budget_brier": 256,
+    "best_budget_nll": 256,
+    "objectives_agree": false,
+    "acc_brier_diverge": true,
+    "brier_nll_diverge": false,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 500,
+        "accuracy": 0.486,
+        "mean_brier": 0.8018814153738533,
+        "mean_nll": 2.0462637191163795
+      },
+      {
+        "budget": 512,
+        "n": 500,
+        "accuracy": 0.518,
+        "mean_brier": 0.8506400680813971,
+        "mean_nll": 2.871872645411333
+      },
+      {
+        "budget": 1024,
+        "n": 500,
+        "accuracy": 0.524,
+        "mean_brier": 0.8991479105444918,
+        "mean_nll": 3.8596799028434003
+      },
+      {
+        "budget": 2048,
+        "n": 500,
+        "accuracy": 0.518,
+        "mean_brier": 0.9292806769465134,
+        "mean_nll": 4.084228873840197
+      },
+      {
+        "budget": 4096,
+        "n": 500,
+        "accuracy": 0.526,
+        "mean_brier": 0.9295340133955878,
+        "mean_nll": 3.8924766506376978
+      },
+      {
+        "budget": 8192,
+        "n": 500,
+        "accuracy": 0.526,
+        "mean_brier": 0.929208800504507,
+        "mean_nll": 3.6855323842899286
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m2",
+      "ds_tag": "ds3",
+      "timestamp": "2026-08-29T23:53:44.080363+00:00",
+      "ds_name": "MedMCQA"
+    }
+  },
+  "m2_ds4": {
+    "best_budget_accuracy": 2048,
+    "best_budget_brier": 256,
+    "best_budget_nll": 256,
+    "objectives_agree": false,
+    "acc_brier_diverge": true,
+    "brier_nll_diverge": false,
+    "budget_rows": [
+      {
+        "budget": 256,
+        "n": 500,
+        "accuracy": 0.488,
+        "mean_brier": 0.7268204624430344,
+        "mean_nll": 1.5476890136370767
+      },
+      {
+        "budget": 512,
+        "n": 500,
+        "accuracy": 0.506,
+        "mean_brier": 0.7395537321720522,
+        "mean_nll": 1.8451561683374356
+      },
+      {
+        "budget": 1024,
+        "n": 500,
+        "accuracy": 0.556,
+        "mean_brier": 0.7752729981144967,
+        "mean_nll": 2.6774628415420945
+      },
+      {
+        "budget": 2048,
+        "n": 500,
+        "accuracy": 0.57,
+        "mean_brier": 0.8049099411960993,
+        "mean_nll": 3.132013387489929
+      },
+      {
+        "budget": 4096,
+        "n": 500,
+        "accuracy": 0.562,
+        "mean_brier": 0.8221941203908735,
+        "mean_nll": 3.189364152731347
+      },
+      {
+        "budget": 8192,
+        "n": 500,
+        "accuracy": 0.568,
+        "mean_brier": 0.8273067421373839,
+        "mean_nll": 3.106778630429212
+      }
+    ],
+    "n_items": 500,
+    "_meta": {
+      "ablation": "05",
+      "model_tag": "m2",
+      "ds_tag": "ds4",
+      "timestamp": "2026-08-29T23:53:44.090044+00:00",
+      "ds_name": "MedQA-USMLE"
+    }
+  }
+}

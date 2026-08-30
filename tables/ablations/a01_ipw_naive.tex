@@ -1,0 +1,20 @@
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+Cell & $f_{\text{nat}}$ & Naive bias & IPW bias & $\epsilon_{\text{naive}}$ & $\epsilon_{\text{IPW}}$ \\
+\midrule
+m1\_ds1 & 0.122 & 0.07079 & 0.02447 & 0.000 & 0.230 \\
+m1\_ds2 & 0.001 & 0.23535 & 0.01031 & 1.000 & 0.630 \\
+m1\_ds3 & 0.018 & 0.34441 & 0.02634 & 1.000 & 0.555 \\
+m1\_ds4 & 0.028 & 0.28715 & 0.03207 & 1.000 & 0.455 \\
+m2\_ds1 & 0.180 & 0.04562 & 0.02092 & 1.000 & 0.525 \\
+m2\_ds2 & 0.007 & 0.13682 & 0.01217 & 0.000 & 0.600 \\
+m2\_ds3 & 0.022 & 0.23482 & 0.02035 & 1.000 & 0.185 \\
+m2\_ds4 & 0.052 & 0.10917 & 0.02986 & 0.000 & 0.525 \\
+\bottomrule
+\end{tabular}
+\caption{IPW vs.\ naive risk estimation at $\rho=0.20$ across all cells. $f_{\text{nat}}$ = fraction of items that naturally continue to reference budget (4096 tokens). $\epsilon$ = wrong-best-budget selection rate ($n=200$ permutations).}
+\label{tab:a01_ipw_naive}
+\end{table}
