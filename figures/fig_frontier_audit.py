@@ -137,75 +137,65 @@ ell = Ellipse(
 )
 ax_a.add_patch(ell)
 
-# Annotation for threshold cluster — text kept below y=0.73
+# --- horizontal dashed line — registered in legend instead of inline text ---
+best_brier = 0.492
+best_line = ax_a.axhline(
+    best_brier, color='#3a7fd5', linewidth=0.8, linestyle='--',
+    zorder=2, label='Best fixed (b=8192)',
+)
+
+# --- all text labels as explicit annotate+arrowprops ---
+# Threshold stopping cluster
 ax_a.annotate(
     'Threshold stopping',
-    xy=(cx, max(ty) + 0.010),
-    xytext=(600, 0.718),
-    xycoords='data',
-    textcoords='data',
-    fontsize=6.5,
-    color='#555555',
-    arrowprops=dict(
-        arrowstyle='->',
-        color='#888888',
-        lw=0.8,
-    ),
-    ha='center',
+    xy=(1550, 0.64), xytext=(600, 0.735),
+    xycoords='data', textcoords='data',
+    arrowprops=dict(arrowstyle='->', lw=0.8, color='0.4'),
+    fontsize=8, ha='left', va='center',
 )
 
-# --- horizontal dashed line at best-fixed Brier ---
-best_brier = 0.492
-ax_a.axhline(best_brier, color='#3a7fd5', linewidth=0.8, linestyle='--', zorder=2)
-ax_a.text(
-    420, best_brier - 0.013,
-    'best-fixed Brier',
-    fontsize=6, color='#3a7fd5', ha='left', va='top',
+# VISTA (λ=0.01) — right-side, above
+ax_a.annotate(
+    r'VISTA ($\lambda$=0.01)',
+    xy=(7931, 0.498), xytext=(9200, 0.545),
+    xycoords='data', textcoords='data',
+    arrowprops=dict(arrowstyle='->', lw=0.8, color='0.4'),
+    fontsize=8, ha='left',
 )
 
-# --- individual labels (all in data coordinates to avoid crowding) ---
-# Right-side cluster (x≈8000) stacked vertically at x≈4800;
-# Oracle C annotated close to its point.
-label_specs = [
-    # (xy_data, xytext_data, label_text, ha, va)
-    ((8192, 0.492),  (4800, 0.476),  'Best fixed\n(b=8192)',   'center', 'top'),
-    ((8191, 0.492),  (4800, 0.520),  r'VISTA ($\lambda$=0)',    'center', 'center'),
-    ((7931, 0.498),  (4800, 0.498),  r'VISTA ($\lambda$=0.01)', 'center', 'center'),
-    ((461,  0.4911), (700,  0.507),  'Oracle C',                'left',   'center'),
-]
-for (xy_d, xytext_d, lbl, ha2, va2) in label_specs:
-    ax_a.annotate(
-        lbl,
-        xy=xy_d,
-        xytext=xytext_d,
-        xycoords='data',
-        textcoords='data',
-        fontsize=6.5,
-        ha=ha2, va=va2,
-        color='#333333',
-        arrowprops=dict(
-            arrowstyle='-',
-            color='#aaaaaa',
-            lw=0.6,
-            shrinkA=2, shrinkB=3,
-        ),
-    )
+# VISTA (λ=0) — right-side, below λ=0.01 label
+ax_a.annotate(
+    r'VISTA ($\lambda$=0)',
+    xy=(8191, 0.492), xytext=(9200, 0.503),
+    xycoords='data', textcoords='data',
+    arrowprops=dict(arrowstyle='->', lw=0.8, color='0.4'),
+    fontsize=8, ha='left',
+)
+
+# Oracle C — close annotation below-right
+ax_a.annotate(
+    'Oracle C',
+    xy=(461, 0.4911), xytext=(540, 0.467),
+    xycoords='data', textcoords='data',
+    arrowprops=dict(arrowstyle='->', lw=0.8, color='0.4'),
+    fontsize=8, ha='left',
+)
+
+# Legend: axhline entry only (scatter points identified by annotations above)
+ax_a.legend(
+    [best_line], ['Best fixed (b=8192)'],
+    loc='upper left', fontsize=7, frameon=False,
+)
 
 # --- axes ---
 ax_a.set_xlabel('Mean tokens (log)')
 ax_a.set_ylabel('Brier ↓')
 ax_a.set_title('(a) Quality–Compute Frontier\n(M1 / MMLU-Pro)', fontsize=8)
 
-# y range: show all points with margin
-all_brier_vals = [p['brier'] for p in points]
-y_lo = min(all_brier_vals) - 0.04
-y_hi = max(all_brier_vals) + 0.12
-ax_a.set_ylim(y_lo, y_hi)
-
 style_ax(ax_a)
-# Keep log scale x with explicit ticks to avoid crowded auto-labels
 ax_a.set_xscale('log')
-ax_a.set_xlim(380, 12000)
+ax_a.set_ylim(0.45, 0.78)
+ax_a.set_xlim(380, 14000)
 ax_a.set_xticks([500, 1000, 2000, 4000, 8000])
 ax_a.set_xticklabels(['500', '1k', '2k', '4k', '8k'])
 ax_a.tick_params(axis='x', which='minor', length=2, width=0.4, colors='#aaaaaa')
@@ -310,7 +300,7 @@ out_dir = os.path.dirname(__file__)
 pdf_path = os.path.join(out_dir, 'fig_frontier_audit.pdf')
 png_path = os.path.join(out_dir, 'fig_frontier_audit.png')
 
-fig.savefig(pdf_path, dpi=300)
-fig.savefig(png_path, dpi=300)
+fig.savefig(pdf_path, bbox_inches='tight', dpi=300)
+fig.savefig(png_path, bbox_inches='tight', dpi=300)
 print(f"Saved: {pdf_path}")
 print(f"Saved: {png_path}")
