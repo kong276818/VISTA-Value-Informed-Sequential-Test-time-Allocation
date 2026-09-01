@@ -169,14 +169,15 @@ labels_cfg = [
     ('Oracle C', 461, 0.4911, 'left', +0.022, +0.5),
 ]
 
-# Use annotate with offset_points
-offsets = {
-    'Best fixed (b=8192)':      (8192, 0.492,  'Best fixed\n(b=8192)',      'right',  (-6, -16)),
-    r'VISTA ($\lambda$=0)':     (8191, 0.492,  r'VISTA ($\lambda$=0)',       'left',   (+6, +10)),
-    r'VISTA ($\lambda$=0.01)':  (7931, 0.498,  r'VISTA ($\lambda$=0.01)',    'left',   (+6, -14)),
-    'Oracle C':                  (461,  0.4911, 'Oracle C',                  'left',   (+8, +6)),
-}
-for key, (tx2, ty2, lbl, ha2, xytext) in offsets.items():
+# Labels with arrows to avoid crowding near (7931-8192, 0.492-0.498)
+label_specs = [
+    # (x_data, y_data, label_text, xytext_offset, ha)
+    (8192, 0.492,  'Best fixed\n(b=8192)',   (-52, -22), 'right'),
+    (8191, 0.492,  r'VISTA ($\lambda$=0)',    (+8,  +18), 'left'),
+    (7931, 0.498,  r'VISTA ($\lambda$=0.01)', (+8,  -22), 'left'),
+    (461,  0.4911, 'Oracle C',               (+8,   +8), 'left'),
+]
+for (tx2, ty2, lbl, xytext, ha2) in label_specs:
     ax_a.annotate(
         lbl,
         xy=(tx2, ty2),
@@ -185,6 +186,12 @@ for key, (tx2, ty2, lbl, ha2, xytext) in offsets.items():
         fontsize=6.5,
         ha=ha2, va='center',
         color='#333333',
+        arrowprops=dict(
+            arrowstyle='-',
+            color='#aaaaaa',
+            lw=0.6,
+            shrinkA=2, shrinkB=2,
+        ) if abs(xytext[0]) > 20 or abs(xytext[1]) > 15 else None,
     )
 
 # --- axes ---

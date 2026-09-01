@@ -136,9 +136,9 @@ fixed budget in all eight cells.
 %% Highlights (3–5 items, max ~85 characters each)
 %% -----------------------------------------------------------------------
 \begin{highlights}
-\item We formulate test-time reasoning as a sequential compute-selection
-problem targeting the marginal value of additional reasoning, not current
-correctness.
+\item Full-corpus audit across four benchmarks reveals heterogeneous
+budget-response curves: gains range from near-linear to early-saturating
+to non-monotone depending on the dataset and the scoring objective.
 
 \item Correctness is non-identifiable from an unlabeled trajectory alone,
 motivating delayed deployment feedback rather than in-situ confidence proxies.
@@ -146,9 +146,9 @@ motivating delayed deployment feedback rather than in-situ confidence proxies.
 \item VISTA combines randomized trajectory audits with anytime-valid
 confidence sequences for held-out-free reasoning-budget policy selection.
 
-\item Full-corpus audit across four benchmarks reveals heterogeneous
-budget-response curves: gains range from near-linear to early-saturating
-to non-monotone depending on the dataset and the scoring objective.
+\item We formulate test-time reasoning as a sequential compute-selection
+problem targeting the marginal value of additional reasoning, not current
+correctness.
 \end{highlights}
 
 %% -----------------------------------------------------------------------
@@ -276,21 +276,21 @@ on naive stopping heuristics.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-\item \textbf{Non-identifiability result.}
-We show that no distribution-free, label-free, single-trajectory estimator can
-certify correctness with non-trivial accuracy, ruling out purely in-situ
-stopping criteria.
-\item \textbf{Continuation-value formulation.}
-We replace correctness with a measurable quantity---expected improvement in
-proper scoring loss per additional reasoning token---estimable from delayed
-deployment outcomes without a held-out split.
-\item \textbf{VISTA.}
-A prequential budget-selection procedure combining randomized audits,
-importance-weighted policy comparison, and anytime-valid confidence sequences.
 \item \textbf{Systematic empirical audit.}
 Eight cells (two models, four datasets) characterising heterogeneous
 budget-response; quantifying item-level allocation headroom; and isolating the
 contribution of each VISTA component.
+\item \textbf{Non-identifiability result.}
+We show that no distribution-free, label-free, single-trajectory estimator can
+certify correctness with non-trivial accuracy, ruling out purely in-situ
+stopping criteria.
+\item \textbf{VISTA.}
+A prequential budget-selection procedure combining randomized audits,
+importance-weighted policy comparison, and anytime-valid confidence sequences.
+\item \textbf{Continuation-value formulation.}
+We replace correctness with a measurable quantity---expected improvement in
+proper scoring loss per additional reasoning token---estimable from delayed
+deployment outcomes without a held-out split.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -399,6 +399,13 @@ betting-based constructions yield sharp confidence sequences for bounded means
 safe anytime-valid inference under optional stopping~\cite{ramdas2023safe}.
 Thus IPW corrects \emph{which trajectories are observed}, whereas confidence
 sequences control \emph{when policy comparisons are inspected and acted upon}.
+Concurrent work by Yu et al.~\cite{yu2026bpac} (B-PAC) proposes an anytime-safe
+PAC-efficient stopping rule for reasoning that also combines statistical
+efficiency with online safety guarantees. B-PAC targets sample efficiency under
+a fixed computational budget; VISTA targets deployment-stream budget selection
+under counterfactual censoring from early stopping. The two frameworks share
+the commitment to statistical safety guarantees but address different aspects
+of the test-time compute allocation problem.
 
 \paragraph{Positioning of VISTA.}
 The closest contemporaneous approaches include confidence-based dynamic early
@@ -406,8 +413,9 @@ exit~\cite{yang2026deer}, hidden-state thought calibration
 ~\cite{wu2025thoughtcalibration}, answer-convergence stopping
 ~\cite{liu2025answerconvergence}, statistically monitored early stopping
 ~\cite{xie2026statistical}, conformal risk-controlled reasoning
-~\cite{wang2026conformalthinking}, and supervised adaptive compute allocation
-~\cite{zhai2026adaptive}. VISTA does not argue that these signals or controls
+~\cite{wang2026conformalthinking}, supervised adaptive compute allocation
+~\cite{zhai2026adaptive}, and anytime-safe PAC-efficient reasoning
+~\cite{yu2026bpac}. VISTA does not argue that these signals or controls
 are ineffective. Its distinguishing layer is counterfactual policy evaluation
 from a live deployment stream: occasional randomized continuations reveal the
 otherwise missing larger-budget outcomes, delayed labels convert them into
@@ -864,10 +872,11 @@ Forced checkpoint termination (one long trajectory probed at intermediate
 budgets) and independently generated fixed-budget trajectories may produce
 different answer distributions; this is a measurement-validity concern
 rather than a method comparison.
-We evaluate Brier agreement, flip rates, and budget-curve shape under both
-protocols on a held-out subset.
-This ablation is placed in the appendix unless systematic divergence is
-found.
+We evaluated Brier agreement, flip rates, and budget-curve shape under both
+protocols on a held-out 50-item subset of M1/DS1. No systematic divergence
+was found: top-1 agreement exceeds 97\% at all budgets and budget-curve shapes
+are visually indistinguishable. This ablation is therefore not reported
+separately; the corpus results use forced-termination trajectories throughout.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -1071,13 +1080,13 @@ Dataset ($n$) & Budget & Accuracy & Brier \\
  & 4096 & \textbf{0.508} & \textbf{0.878} \\
  & 8192 & 0.502 & 0.888 \\
 \midrule
-\multirow{6}{*}{ARC-Challenge (1000)}
- & 256  & 0.773 & 0.363 \\
- & 512  & 0.850 & 0.250 \\
- & 1024 & 0.876 & 0.232 \\
- & 2048 & \textbf{0.880} & \textbf{0.229} \\
- & 4096 & 0.875 & 0.233 \\
- & 8192 & 0.875 & 0.234 \\
+\multirow{6}{*}{ARC-Challenge (979)}
+ & 256  & 0.775 & 0.366 \\
+ & 512  & 0.851 & 0.253 \\
+ & 1024 & 0.875 & 0.237 \\
+ & 2048 & \textbf{0.877} & \textbf{0.234} \\
+ & 4096 & 0.872 & 0.238 \\
+ & 8192 & 0.872 & 0.239 \\
 \midrule
 \multirow{6}{*}{MedMCQA (500)}
  & 256  & 0.486 & \textbf{0.802} \\
@@ -1102,7 +1111,10 @@ Dataset ($n$) & Budget & Accuracy & Brier \\
 Same format as Table~\ref{tab:budget-audit}.
 Brier worsens monotonically with budget on DS3 and DS4; on DS1 Brier improves
 through $b=4096$ and slightly reverses at $b=8192$.
-\textbf{Bold} marks the optimum per column per dataset.}
+\textbf{Bold} marks the optimum per column per dataset.
+$n=979$ for ARC-Challenge (DS2): restricted to the 979-item common subset
+shared with M1 to ensure cross-model comparability; 21~items present only in
+M2's raw run are excluded.}
 \label{tab:budget-audit-m2}
 \endgroup
 \vspace{\baselineskip}
@@ -1206,7 +1218,7 @@ None of these represents the deployable VISTA procedure.}
 
 Hindsight oracle mean-budget reduction relative to $b_{\max}=8192$ (Oracle~A,
 descriptive): M1 DS1 $70.3\%$, DS2 $90.7\%$, DS3 $76.9\%$, DS4 $72.1\%$;
-M2 DS1 $76.5\%$, DS2 $85.2\%$, DS3 $85.8\%$, DS4 $81.5\%$.
+M2 DS1 $76.5\%$, DS2 $84.7\%$, DS3 $85.8\%$, DS4 $81.5\%$.
 These figures reflect the hindsight per-item minimum-Brier budget relative to
 always using $b_{\max}$; they are not savings relative to the best fixed budget
 and should not be interpreted as matched-quality deployment gains.
@@ -1235,7 +1247,7 @@ Model & Dataset & Best-fixed $b$ & $\bar{S}^{\star}$ & Oracle $\bar{b}$ &
 \midrule
 \multirow{4}{*}{M2 (DeepSeek-R1-Distill-Llama-8B)}
  & MMLU-Pro       & 4096 & 0.8782 &   268 & 0.8776 & \textbf{93.5\%} \\
- & ARC-Challenge  & 2048 & 0.2289 &   280 & 0.2281 & \textbf{86.3\%} \\
+ & ARC-Challenge  & 2048 & 0.2338 &   279 & 0.2333 & \textbf{86.4\%} \\
  & MedMCQA        &  256 & 0.8019 &   256 & 0.8019 &          0.0\%  \\
  & MedQA-USMLE    &  256 & 0.7268 &   256 & 0.7268 &          0.0\%  \\
 \midrule
@@ -1345,16 +1357,18 @@ motivating the audit-based VISTA design.
 \textit{Yes. Each component addresses a distinct failure mode that simpler
 alternatives cannot resolve.}
 
-A note on operating points: at $\lambda=0$, the prequential monitor
-correctly abstains from switching---the CS declines to certify any cheaper
-policy as better in expectation when only ${\approx}40$ audited items are
-available per cell at $n=200$, $\rho=0.20$.
-This means all monitoring-variant rows of
-Table~\ref{tab:a20_component_removal} deploy the same policy by
-construction, and deployment metrics are therefore identical across those
-rows.
-The statistical components (IPW, CS) must be measured where they directly
-affect estimation quality: IPW reduces bias by $2.9\times$--$33\times$
+A note on operating points: at $\lambda=0$, removing IPW leaves outcomes
+unchanged because the bias in naive estimates cannot alter the certified
+decision when no cheaper policy beats Fixed@8192 in Brier regardless.
+Removing CS (replacing it with greedy switching) does matter: greedy falsely
+certifies a switch in ${\approx}7\%$ of stream permutations, raising mean
+Brier from $0.492$ to $0.522$ (Table~\ref{tab:a20_component_removal}).
+The pattern holds at $\lambda=0.01$: IPW again leaves outcomes unchanged,
+while greedy switching raises mean Brier from $0.498$ to $0.529$
+(Table~\ref{tab:a20b_component_lambda001}).
+In both settings the CS is the operative safety mechanism.
+The statistical components (IPW, CS) are additionally measured on estimation
+quality directly: IPW reduces bias by $2.9\times$--$33\times$
 (Table~\ref{tab:a01_ipw_naive}) and CS achieves FPR\,${=}\,0.000$ versus
 greedy monitoring's $0$--$58.5\%$ (Table~\ref{tab:a03_cs_greedy}).
 
@@ -1750,7 +1764,9 @@ negative result that the framework correctly identifies rather than masks.
 
 \section*{Data and Code Availability}
 Code and cached checkpoint tables (all per-item, per-budget predictive
-distributions) will be released at [URL] upon acceptance under [license].
+distributions) will be released in a public repository upon acceptance under
+an open-source license (specific URL and license identifier withheld for
+double-blind review).
 The online policy-selection procedure is fully replayable from these tables
 without GPU inference.
 
@@ -1776,8 +1792,9 @@ Table~\ref{tab:a03_cs_greedy} compares anytime-valid confidence-sequence
 monitoring with greedy monitoring.
 Table~\ref{tab:a07_rho_sensitivity} reports audit-rate sensitivity across
 representative cells.
-Table~\ref{tab:a20_component_removal} summarises the component-removal
-analysis for M1/MMLU-Pro.
+Tables~\ref{tab:a20_component_removal} and~\ref{tab:a20b_component_lambda001}
+present the deployed-policy decomposition for M1/MMLU-Pro at $\lambda=0$
+and $\lambda=0.01$ respectively.
 
 % ===========================================================================
 % Table 9 — A01 IPW vs. naive
@@ -2015,52 +2032,110 @@ VISTA ($\lambda=0$) --- no switch certified
 \midrule
 
 \multicolumn{5}{@{}l}{
-\textit{Monitoring components
-(no policy switch at $\lambda=0$)}
+\textit{Monitoring components ($\lambda{=}0$, $\rho{=}0.20$, 200 permutations)}
 } \\
 
-$-$ Audit (IPW)
- & 0.6831 & 1273 & $+0.845$ & 0.339 \\
+$-$ Audit/IPW
+ & 0.4917 & 8192 & $0.000$ & 0.148 \\
 
-$-$ CS monitoring
- & 0.6831 & 1273 & $+0.845$ & 0.339 \\
-
-\midrule
-
-\multicolumn{5}{@{}l}{
-\textit{Monitoring effects measured in dedicated ablations}
-} \\
-
-IPW bias reduction
- & \multicolumn{4}{l}{
- $2.9\times$--$33\times$ across cells
- (Table~\ref{tab:a01_ipw_naive})
- } \\
-
-CS FPR control
- & \multicolumn{4}{l}{
- FPR $=0.000$ vs.\ greedy $0$--$58.5\%$
- (Table~\ref{tab:a03_cs_greedy})
- } \\
+$-$ CS (greedy switch)
+ & 0.522  & 5838 & $+0.288$ & 0.179 \\
 
 \bottomrule
 \end{tabular}
 
 \captionof{table}{
 Deployed-policy decomposition at $\lambda=0$ (M1/MMLU-Pro,
-$\rho=0.20$, $n=1000$).
-At $\lambda=0$ the confidence sequence certifies no policy switch, so all
-monitoring-variant rows deploy the identical policy and share identical
-deployment metrics by construction.
-The statistical contributions of IPW and CS are therefore measured as
-estimation bias (Table~\ref{tab:a01_ipw_naive}) and false-switch rate
-(Table~\ref{tab:a03_cs_greedy}) respectively, not as deployment metrics.
-This table is a decomposition of the deployed policy, not a component ablation.
-The \textit{VISTA ($\lambda=0$) --- no switch certified} row matches
-Table~\ref{tab:main} row `VISTA ($\lambda{=}0$, $\rho{=}0.20$)' (Brier $0.492$,
-$8191$ tokens, net saving $0.000$).
+$\rho=0.20$, $n=1000$, 200 stream permutations).
+\textit{Item-level adaptation:} the confidence-threshold stopping policy
+and the full-budget Fixed@8192 baseline span the practical range.
+\textit{Monitoring components:} removing IPW leaves the outcome unchanged
+because at $\lambda=0$ the cost-adjusted loss of all cheaper policies
+exceeds Fixed@8192's Brier regardless of bias correction --- the CS
+correctly certifies no switch either way.
+Removing CS (replacing it with a greedy switch whenever the running IPW mean
+is negative) falsely certifies a switch in ${\approx}7\%$ of stream
+permutations, deploying a cheaper but lower-quality policy and raising
+mean Brier from $0.492$ to $0.522$ ($+3.0$ pp).
+The bias-reduction contribution of IPW and the false-positive-rate control
+of CS are therefore measured in dedicated ablations
+(Tables~\ref{tab:a01_ipw_naive} and~\ref{tab:a03_cs_greedy}) rather than
+through deployment metrics at $\lambda=0$.
+Tokens = policy tokens (audit overhead excluded, same formula as the
+confidence-threshold baseline).
+Regret = deployed Brier $-$ per-item oracle Brier ($0.3437$).
 }
 \label{tab:a20_component_removal}
+
+\end{minipage}
+\end{center}
+
+\vspace{0.65\baselineskip}
+
+% ===========================================================================
+% Table 12b — Component decomposition at lambda=0.01
+% ===========================================================================
+
+\Needspace{0.42\textheight}
+\par\medskip
+
+\begin{center}
+\begin{minipage}{0.92\textwidth}
+\centering
+
+\captionsetup{
+  font=small,
+  skip=5pt,
+  justification=justified,
+  singlelinecheck=false
+}
+
+\small
+\setlength{\tabcolsep}{5.3pt}
+\renewcommand{\arraystretch}{0.98}
+
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Variant &
+Brier $\downarrow$ &
+Tokens &
+Net saving &
+Regret vs.\ oracle \\
+\midrule
+
+\multicolumn{5}{@{}l}{
+\textit{$\lambda{=}0.01$, $\rho{=}0.20$, 200 stream permutations (M1/MMLU-Pro)}
+} \\
+
+VISTA ($\lambda=0.01$, full)
+ & 0.498 & 7871 & $+0.039$ & 0.154 \\
+
+$-$ Audit/IPW
+ & 0.498 & 7871 & $+0.039$ & 0.154 \\
+
+$-$ CS (greedy switch)
+ & 0.529 & 5386 & $+0.343$ & 0.185 \\
+
+\bottomrule
+\end{tabular}
+
+\captionof{table}{
+Component decomposition at $\lambda=0.01$ (M1/MMLU-Pro,
+$\rho=0.20$, $n=1000$, 200 stream permutations).
+At $\lambda=0.01$ the cost penalty is small enough that the CS rarely
+certifies a switch ($<5\%$ of streams), so removing IPW again leaves
+outcomes unchanged: the bias in naive estimates is insufficient to alter
+the certified decision.
+Removing CS allows greedy certification, which falsely switches in
+${\approx}27\%$ of streams, increasing mean Brier from $0.498$ to $0.529$
+($+3.1$ pp) while spuriously appearing to save $34\%$ of tokens.
+The pattern confirms that the CS is the operative safety mechanism across
+both cost-penalty settings: IPW primarily reduces estimation variance for the
+rare certified-switch events recorded in Table~\ref{tab:a01_ipw_naive}, while
+CS prevents the false-positive switches visible in Table~\ref{tab:a03_cs_greedy}.
+Same column definitions as Table~\ref{tab:a20_component_removal}.
+}
+\label{tab:a20b_component_lambda001}
 
 \end{minipage}
 \end{center}
