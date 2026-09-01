@@ -414,7 +414,7 @@ def cmd_gen_prefixes(args):
         "max_tokens":     B_MAX,
         "min_tokens":     B_MAX,
         "temperature":    0.0,
-        "stop_token_ids": [THINK_END_ID],
+        "stop_token_ids": [args.think_end_id],
     }, sort_keys=True)
     config_hash = hashlib.sha256(cfg_key.encode()).hexdigest()[:16]
     print(f"[gen-prefixes] config_hash={config_hash}")
@@ -501,7 +501,7 @@ def cmd_gen_prefixes(args):
         traj_params = SamplingParams(
             max_tokens=B_MAX,
             min_tokens=B_MAX,               # force full budget so all 3 checkpoints exist
-            stop_token_ids=[THINK_END_ID],  # stop after thinking block, not mid-answer
+            stop_token_ids=[args.think_end_id],  # stop after thinking block, not mid-answer
             temperature=0.0,                # deterministic reference trace
         )
 
@@ -558,7 +558,7 @@ def cmd_gen_prefixes(args):
             batch_recs = []
             for item, p_ids, out in zip(b_items, b_ids, batch_out):
                 thinking = list(out.outputs[0].token_ids)
-                if thinking and thinking[-1] == THINK_END_ID:
+                if thinking and thinking[-1] == args.think_end_id:
                     thinking = thinking[:-1]
                 budgets_d: dict[str, list[int] | None] = {}
                 for b in budgets:
@@ -949,6 +949,8 @@ def main():
     gp.add_argument("--util",    type=float, default=0.85)
     gp.add_argument("--budgets", default="256,2048,8192",
                     help="comma-separated budget checkpoints (default: D5 original 3)")
+    gp.add_argument("--think-end-id", type=int, default=151668,
+                    help="token ID of </think> (default: 151668 = Qwen3)")
 
     # ---- run-d5 (GPU) ------------------------------------------------------
     rdp = sub.add_parser("run-d5")

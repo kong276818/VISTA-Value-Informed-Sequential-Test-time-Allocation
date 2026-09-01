@@ -37,12 +37,12 @@ CELLS = [
     (0, "0", "4090",  M1_MODEL, "m1", M1_THINK_END, "ds2", "data/items_ds2.json"),
     (0, "0", "4090",  M1_MODEL, "m1", M1_THINK_END, "ds3", "data/items_ds3.json"),
     (0, "0", "4090",  M1_MODEL, "m1", M1_THINK_END, "ds4", "data/items_ds4.json"),
-    # Track 1 — 3090a: M2 DS1+DS2  [DEFERRED — DeepSeek THINK_END_ID not yet validated]
-    # (1, "1", "3090a", M2_MODEL, "m2", M2_THINK_END, "ds1", "data/items_ds1.json"),
-    # (1, "1", "3090a", M2_MODEL, "m2", M2_THINK_END, "ds2", "data/items_ds2.json"),
-    # Track 2 — 3090b: M2 DS3+DS4  [DEFERRED — DeepSeek THINK_END_ID not yet validated]
-    # (2, "2", "3090b", M2_MODEL, "m2", M2_THINK_END, "ds3", "data/items_ds3.json"),
-    # (2, "2", "3090b", M2_MODEL, "m2", M2_THINK_END, "ds4", "data/items_ds4.json"),
+    # Track 1 — 3090a: M2 DS1+DS2
+    (1, "1", "3090a", M2_MODEL, "m2", M2_THINK_END, "ds1", "data/items_ds1.json"),
+    (1, "1", "3090a", M2_MODEL, "m2", M2_THINK_END, "ds2", "data/items_ds2.json"),
+    # Track 2 — 3090b: M2 DS3+DS4
+    (2, "2", "3090b", M2_MODEL, "m2", M2_THINK_END, "ds3", "data/items_ds3.json"),
+    (2, "2", "3090b", M2_MODEL, "m2", M2_THINK_END, "ds4", "data/items_ds4.json"),
 ]
 
 ENV_BASE = {
@@ -68,12 +68,13 @@ def run_cell(gpu_id, cuda_visible, gpu_tag, model, model_tag, think_end_id, ds_t
 
     for step, (cmd_name, extra_args, out_file) in enumerate([
         ("gen-prefixes", [
-            "--model",    model,
-            "--gpu-tag",  gpu_tag,
-            "--items",    items_file,
-            "--out",      prefix_out,
-            "--util",     UTIL,
-            "--budgets",  BUDGETS,
+            "--model",        model,
+            "--gpu-tag",      gpu_tag,
+            "--items",        items_file,
+            "--out",          prefix_out,
+            "--util",         UTIL,
+            "--budgets",      BUDGETS,
+            "--think-end-id", think_end_id,
         ], prefix_out),
         ("run-d5", [
             "--model",    model,

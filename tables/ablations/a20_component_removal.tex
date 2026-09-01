@@ -1,21 +1,30 @@
-\begin{table}[ht]
+\needspace{10\baselineskip}
+\begingroup
 \centering
 \small
 \begin{tabular}{lrrrr}
 \toprule
-Variant & Brier $\downarrow$ & Saving $\uparrow$ & $\Delta$Brier(oracle) & Seq.\ regret \\
+Variant & Brier $\downarrow$ & Tokens & Net saving & Regret vs oracle \\
 \midrule
-\textbf{VISTA (Full)} & 0.6831 & 0.845 & 0.3393 & 0.3393 \\
-$-$ Audit & 0.6831 & 0.845 & 0.3393 & 0.3393 \\
-$-$ IPW & 0.6831 & 0.845 & 0.3393 & 0.3393 \\
-$-$ CS & 0.6831 & 0.845 & 0.3393 & — \\
-$-$ Item-Adapt & 0.4917 & 0.000 & 0.1480 & 0.1624 \\
-$-$ Prequential & 0.4917 & 0.000 & 0.1480 & — \\
-$-$ Feedback & 0.4917 & 0.000 & 0.1480 & — \\
-Fixed best-$b$ & 0.4917 & 0.000 & 0.1480 & — \\
-Fixed $b_{\max}$ & 0.4917 & 0.000 & 0.1480 & — \\
+\multicolumn{5}{@{}l}{\textit{Item-level adaptation (meaningfully different)}} \\
+\textbf{VISTA Full} ($\tau_c{=}0.85$) & 0.6831 & 1273 & +0.845 & 0.339 \\
+$-$ Item adaptation (fixed $b_{\max}$)  & 0.4917 & 8192 & 0.000  & 0.148 \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Monitoring components: no change at $\lambda{=}0$}} \\
+$-$ Audit/IPW & 0.6831 & 1273 & +0.845 & 0.339 \\
+$-$ CS monitoring & 0.6831 & 1273 & +0.845 & 0.339 \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Monitoring effects: see Tables~\ref{tab:a01_ipw_naive} and \ref{tab:a03_cs_greedy}}} \\
 \bottomrule
 \end{tabular}
-\caption{Component-removal ablation: VISTA vs.\ each component removed (M1/MMLU-Pro).}
+\par\medskip
+\captionof{table}{Component ablation on M1/MMLU-Pro ($\lambda{=}0$, $\rho{=}0.20$, $n{=}1000$).
+Item-level adaptation changes deployed policy outcomes.
+Monitoring components (Audit/IPW/CS) have no effect on deployed policy at $\lambda{=}0$:
+the prequential monitor never triggers at ${\approx}40$ audits.
+Monitoring necessity is established via Tables~\ref{tab:a01_ipw_naive}
+and~\ref{tab:a03_cs_greedy}.}
 \label{tab:a20_component_removal}
-\end{table}
+\par
+\endgroup
+\vspace{\baselineskip}
