@@ -137,11 +137,13 @@ ell = Ellipse(
 )
 ax_a.add_patch(ell)
 
-# Annotation for threshold cluster
+# Annotation for threshold cluster — text kept below y=0.73
 ax_a.annotate(
     'Threshold stopping',
-    xy=(cx, max(ty) + 0.015),
-    xytext=(400, max(ty) + 0.09),
+    xy=(cx, max(ty) + 0.010),
+    xytext=(600, 0.718),
+    xycoords='data',
+    textcoords='data',
     fontsize=6.5,
     color='#555555',
     arrowprops=dict(
@@ -161,37 +163,32 @@ ax_a.text(
     fontsize=6, color='#3a7fd5', ha='left', va='top',
 )
 
-# --- individual labels ---
-labels_cfg = [
-    ('Best fixed (b=8192)', 8192, 0.492,  'right', -0.012, -0.5),
-    (r'VISTA ($\lambda$=0)', 8191, 0.492, 'right', +0.025, +0.5),
-    (r'VISTA ($\lambda$=0.01)', 7931, 0.498, 'right', +0.018, -0.5),
-    ('Oracle C', 461, 0.4911, 'left', +0.022, +0.5),
-]
-
-# Labels with arrows to avoid crowding near (7931-8192, 0.492-0.498)
+# --- individual labels (all in data coordinates to avoid crowding) ---
+# Right-side cluster (x≈8000) stacked vertically at x≈4800;
+# Oracle C annotated close to its point.
 label_specs = [
-    # (x_data, y_data, label_text, xytext_offset, ha)
-    (8192, 0.492,  'Best fixed\n(b=8192)',   (-52, -22), 'right'),
-    (8191, 0.492,  r'VISTA ($\lambda$=0)',    (+8,  +18), 'left'),
-    (7931, 0.498,  r'VISTA ($\lambda$=0.01)', (+8,  -22), 'left'),
-    (461,  0.4911, 'Oracle C',               (+8,   +8), 'left'),
+    # (xy_data, xytext_data, label_text, ha, va)
+    ((8192, 0.492),  (4800, 0.476),  'Best fixed\n(b=8192)',   'center', 'top'),
+    ((8191, 0.492),  (4800, 0.520),  r'VISTA ($\lambda$=0)',    'center', 'center'),
+    ((7931, 0.498),  (4800, 0.498),  r'VISTA ($\lambda$=0.01)', 'center', 'center'),
+    ((461,  0.4911), (700,  0.507),  'Oracle C',                'left',   'center'),
 ]
-for (tx2, ty2, lbl, xytext, ha2) in label_specs:
+for (xy_d, xytext_d, lbl, ha2, va2) in label_specs:
     ax_a.annotate(
         lbl,
-        xy=(tx2, ty2),
-        xytext=xytext,
-        textcoords='offset points',
+        xy=xy_d,
+        xytext=xytext_d,
+        xycoords='data',
+        textcoords='data',
         fontsize=6.5,
-        ha=ha2, va='center',
+        ha=ha2, va=va2,
         color='#333333',
         arrowprops=dict(
             arrowstyle='-',
             color='#aaaaaa',
             lw=0.6,
-            shrinkA=2, shrinkB=2,
-        ) if abs(xytext[0]) > 20 or abs(xytext[1]) > 15 else None,
+            shrinkA=2, shrinkB=3,
+        ),
     )
 
 # --- axes ---

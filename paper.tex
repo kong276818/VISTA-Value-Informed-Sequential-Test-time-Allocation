@@ -143,12 +143,12 @@ to non-monotone depending on the dataset and the scoring objective.
 \item Correctness is non-identifiable from an unlabeled trajectory alone,
 motivating delayed deployment feedback rather than in-situ confidence proxies.
 
-\item VISTA combines randomized trajectory audits with anytime-valid
-confidence sequences for held-out-free reasoning-budget policy selection.
-
 \item We formulate test-time reasoning as a sequential compute-selection
 problem targeting the marginal value of additional reasoning, not current
 correctness.
+
+\item VISTA combines randomized trajectory audits with anytime-valid
+confidence sequences for held-out-free reasoning-budget policy selection.
 \end{highlights}
 
 %% -----------------------------------------------------------------------
@@ -284,13 +284,13 @@ contribution of each VISTA component.
 We show that no distribution-free, label-free, single-trajectory estimator can
 certify correctness with non-trivial accuracy, ruling out purely in-situ
 stopping criteria.
-\item \textbf{VISTA.}
-A prequential budget-selection procedure combining randomized audits,
-importance-weighted policy comparison, and anytime-valid confidence sequences.
 \item \textbf{Continuation-value formulation.}
 We replace correctness with a measurable quantity---expected improvement in
 proper scoring loss per additional reasoning token---estimable from delayed
 deployment outcomes without a held-out split.
+\item \textbf{VISTA.}
+A prequential budget-selection procedure combining randomized audits,
+importance-weighted policy comparison, and anytime-valid confidence sequences.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1419,7 +1419,7 @@ Na\"{\i}ve estimation is rank-preserving on three cells (M1/DS1, M2/DS2, M2/DS4)
 in these cells the naturally-continued items happen to identify the correct best budget,
 so naive wrong-best rate is 0\%.
 IPW, by correcting a bias that does not need correction in these cells, introduces
-additional variance and raises the wrong-best rate (M1/DS1: 23\%; M2/DS2: 60\%;
+additional variance and raises the wrong-best rate (M1/DS1: 23\%; M2/DS2: 62\%;
 M2/DS4: 53\%).
 On the five cells where naive ranking fails (wrong-best rate 1.00), IPW reduces the
 wrong-best rate to 18.5\%--63.0\% --- a large improvement, but not elimination at
@@ -1832,7 +1832,7 @@ m1\_ds2 & 0.001 & 0.23535 & 0.01031 & 1.000 & 0.630 \\
 m1\_ds3 & 0.018 & 0.34441 & 0.02634 & 1.000 & 0.555 \\
 m1\_ds4 & 0.028 & 0.28715 & 0.03207 & 1.000 & 0.455 \\
 m2\_ds1 & 0.180 & 0.04562 & 0.02092 & 1.000 & 0.525 \\
-m2\_ds2 & 0.007 & 0.13682 & 0.01217 & 0.000 & 0.600 \\
+m2\_ds2 & 0.007 & 0.13616 & 0.01176 & 0.000 & 0.615 \\
 m2\_ds3 & 0.022 & 0.23482 & 0.02035 & 1.000 & 0.185 \\
 m2\_ds4 & 0.052 & 0.10917 & 0.02986 & 0.000 & 0.525 \\
 \bottomrule
@@ -1887,7 +1887,7 @@ m1\_ds2 & ARC-Challenge  & 0.0000 & 0.4800 & 8192 \\
 m1\_ds3 & MedMCQA        & 0.0000 & 0.4000 & 1024 \\
 m1\_ds4 & MedQA-USMLE    & 0.0000 & 0.1400 & 8192 \\
 m2\_ds1 & MMLU-Pro       & 0.0000 & 0.5850 & 4096 \\
-m2\_ds2 & ARC-Challenge  & 0.0000 & 0.2550 & 2048 \\
+m2\_ds2 & ARC-Challenge  & 0.0000 & 0.2500 & 2048 \\
 m2\_ds3 & MedMCQA        & 0.0000 & 0.0000 & 256 \\
 m2\_ds4 & MedQA-USMLE    & 0.0000 & 0.0000 & 256 \\
 \bottomrule
@@ -2134,6 +2134,7 @@ both cost-penalty settings: IPW primarily reduces estimation variance for the
 rare certified-switch events recorded in Table~\ref{tab:a01_ipw_naive}, while
 CS prevents the false-positive switches visible in Table~\ref{tab:a03_cs_greedy}.
 Same column definitions as Table~\ref{tab:a20_component_removal}.
+Table~\ref{tab:main} reports 7931 tokens for the same policy including the $\rho{=}0.20$ audit overhead; tokens here exclude it, following Table~\ref{tab:a20_component_removal}.
 }
 \label{tab:a20b_component_lambda001}
 
