@@ -1,0 +1,1314 @@
+{
+  "m1/ds1": {
+    "Fixed@8192": {
+      "n": 1000,
+      "mean_brier": 0.4917277954426434,
+      "accuracy": 0.738,
+      "mean_nll": 2.763449006924414,
+      "mean_tokens": 8192.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@256": {
+      "n": 1000,
+      "mean_brier": 0.8324129875612044,
+      "accuracy": 0.477,
+      "mean_nll": 3.1864138708814984,
+      "mean_tokens": 256.0,
+      "net_saving": 0.96875,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 1000,
+      "mean_brier": 0.7617905502396538,
+      "accuracy": 0.526,
+      "mean_nll": 2.884851926044407,
+      "mean_tokens": 512.0,
+      "net_saving": 0.9375,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 1000,
+      "mean_brier": 0.6365685445808249,
+      "accuracy": 0.612,
+      "mean_nll": 2.6093116096396933,
+      "mean_tokens": 1024.0,
+      "net_saving": 0.875,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 1000,
+      "mean_brier": 0.5281810793539807,
+      "accuracy": 0.696,
+      "mean_nll": 2.4583677321149846,
+      "mean_tokens": 2048.0,
+      "net_saving": 0.75,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 1000,
+      "mean_brier": 0.5083818770814201,
+      "accuracy": 0.718,
+      "mean_nll": 2.686148185181646,
+      "mean_tokens": 4096.0,
+      "net_saving": 0.5,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 1000,
+      "mean_brier": 0.7481879134271868,
+      "accuracy": 0.574,
+      "mean_nll": 2.985194836789529,
+      "mean_tokens": 910.848,
+      "net_saving": 0.8888125,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 1000,
+      "mean_brier": 0.7089237603075067,
+      "accuracy": 0.61,
+      "mean_nll": 2.939078052881386,
+      "mean_tokens": 1135.872,
+      "net_saving": 0.86134375,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 1000,
+      "mean_brier": 0.6830819186408872,
+      "accuracy": 0.631,
+      "mean_nll": 2.9292458215338035,
+      "mean_tokens": 1273.088,
+      "net_saving": 0.84459375,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 1000,
+      "mean_brier": 0.6644507244611679,
+      "accuracy": 0.645,
+      "mean_nll": 2.952121577810298,
+      "mean_tokens": 1453.056,
+      "net_saving": 0.8226249999999999,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 1000,
+      "mean_brier": 0.6274950702517917,
+      "accuracy": 0.669,
+      "mean_nll": 2.932174282430577,
+      "mean_tokens": 1708.544,
+      "net_saving": 0.7914375,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 1000,
+      "mean_brier": 0.5999037179290125,
+      "accuracy": 0.684,
+      "mean_nll": 2.9141120679249313,
+      "mean_tokens": 1962.496,
+      "net_saving": 0.7604375,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 1000,
+      "mean_brier": 0.6162572782423498,
+      "accuracy": 0.675,
+      "mean_nll": 2.9099254890457296,
+      "mean_tokens": 1751.296,
+      "net_saving": 0.78621875,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 1000,
+      "mean_brier": 0.6431464094698781,
+      "accuracy": 0.659,
+      "mean_nll": 2.9380379522708293,
+      "mean_tokens": 1623.552,
+      "net_saving": 0.8018125,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 1000,
+      "mean_brier": 0.681317963008503,
+      "accuracy": 0.631,
+      "mean_nll": 2.9449620699394248,
+      "mean_tokens": 1342.976,
+      "net_saving": 0.8360624999999999,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 1000,
+      "mean_brier": 0.7871095416752052,
+      "accuracy": 0.532,
+      "mean_nll": 3.04030168898527,
+      "mean_tokens": 651.264,
+      "net_saving": 0.9205,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 1000,
+      "mean_brier": 0.7558151537177747,
+      "accuracy": 0.57,
+      "mean_nll": 3.0266234152570752,
+      "mean_tokens": 896.256,
+      "net_saving": 0.89059375,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 1000,
+      "mean_brier": 0.6939817718425809,
+      "accuracy": 0.621,
+      "mean_nll": 2.9069679907217227,
+      "mean_tokens": 1186.304,
+      "net_saving": 0.8551875,
+      "policy_type": "threshold"
+    }
+  },
+  "m1/ds2": {
+    "Fixed@8192": {
+      "n": 979,
+      "mean_brier": 0.0837466578053189,
+      "accuracy": 0.958120531154239,
+      "mean_nll": 0.4572361008392231,
+      "mean_tokens": 8192.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@256": {
+      "n": 979,
+      "mean_brier": 0.1385761755045822,
+      "accuracy": 0.9203268641470889,
+      "mean_nll": 0.46594329536128126,
+      "mean_tokens": 256.0,
+      "net_saving": 0.96875,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 979,
+      "mean_brier": 0.09779167403494576,
+      "accuracy": 0.9458631256384066,
+      "mean_nll": 0.35485974671408127,
+      "mean_tokens": 512.0,
+      "net_saving": 0.9375,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 979,
+      "mean_brier": 0.08845110645158824,
+      "accuracy": 0.95097037793667,
+      "mean_nll": 0.3705776706679765,
+      "mean_tokens": 1024.0,
+      "net_saving": 0.875,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 979,
+      "mean_brier": 0.08805962424371047,
+      "accuracy": 0.9550561797752809,
+      "mean_nll": 0.4144787799912678,
+      "mean_tokens": 2048.0,
+      "net_saving": 0.75,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 979,
+      "mean_brier": 0.08598201984958354,
+      "accuracy": 0.9560776302349336,
+      "mean_nll": 0.4616654429040788,
+      "mean_tokens": 4096.0,
+      "net_saving": 0.5,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 979,
+      "mean_brier": 0.13090513801997425,
+      "accuracy": 0.9295199182839632,
+      "mean_nll": 0.4511309568109456,
+      "mean_tokens": 267.244126659857,
+      "net_saving": 0.9673774259448417,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 979,
+      "mean_brier": 0.13138971232448016,
+      "accuracy": 0.9305413687436159,
+      "mean_nll": 0.4553453523259209,
+      "mean_tokens": 274.82737487231867,
+      "net_saving": 0.9664517364657814,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 979,
+      "mean_brier": 0.1306217493522853,
+      "accuracy": 0.9315628192032687,
+      "mean_nll": 0.4638802630320396,
+      "mean_tokens": 283.1950970377937,
+      "net_saving": 0.9654302860061287,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 979,
+      "mean_brier": 0.12320848129087278,
+      "accuracy": 0.9366700715015321,
+      "mean_nll": 0.4573948602890756,
+      "mean_tokens": 288.9479060265577,
+      "net_saving": 0.9647280388151175,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 979,
+      "mean_brier": 0.11489644231683865,
+      "accuracy": 0.9417773237997957,
+      "mean_nll": 0.45653163688629034,
+      "mean_tokens": 327.38712972420836,
+      "net_saving": 0.9600357507660878,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 979,
+      "mean_brier": 0.10782541425026092,
+      "accuracy": 0.9458631256384066,
+      "mean_nll": 0.4668159353662384,
+      "mean_tokens": 367.65679264555666,
+      "net_saving": 0.9551200204290092,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 979,
+      "mean_brier": 0.11489644231683865,
+      "accuracy": 0.9417773237997957,
+      "mean_nll": 0.45653163688629034,
+      "mean_tokens": 327.38712972420836,
+      "net_saving": 0.9600357507660878,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 979,
+      "mean_brier": 0.12330618766460129,
+      "accuracy": 0.9366700715015321,
+      "mean_nll": 0.4591589296672194,
+      "mean_tokens": 298.6230847803881,
+      "net_saving": 0.963546986721144,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 979,
+      "mean_brier": 0.13038984218124686,
+      "accuracy": 0.9315628192032687,
+      "mean_nll": 0.4581884005405328,
+      "mean_tokens": 277.7037793667007,
+      "net_saving": 0.9661006128702758,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 979,
+      "mean_brier": 0.13442891619399414,
+      "accuracy": 0.9254341164453525,
+      "mean_nll": 0.45743392125267135,
+      "mean_tokens": 262.01430030643513,
+      "net_saving": 0.9680158324821246,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 979,
+      "mean_brier": 0.13406637466710397,
+      "accuracy": 0.9284984678243106,
+      "mean_nll": 0.45995859909589903,
+      "mean_tokens": 271.68947906026557,
+      "net_saving": 0.9668347803881512,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 979,
+      "mean_brier": 0.13235826612510265,
+      "accuracy": 0.9305413687436159,
+      "mean_nll": 0.4674124462407617,
+      "mean_tokens": 280.8416751787538,
+      "net_saving": 0.9657175689479061,
+      "policy_type": "threshold"
+    }
+  },
+  "m1/ds3": {
+    "Fixed@1024": {
+      "n": 500,
+      "mean_brier": 0.6274926225428732,
+      "accuracy": 0.66,
+      "mean_nll": 2.8558445059772835,
+      "mean_tokens": 1024.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@256": {
+      "n": 500,
+      "mean_brier": 0.6720782366654928,
+      "accuracy": 0.614,
+      "mean_nll": 2.2970027959180714,
+      "mean_tokens": 256.0,
+      "net_saving": 0.75,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 500,
+      "mean_brier": 0.6669342311777027,
+      "accuracy": 0.624,
+      "mean_nll": 2.5200741678880516,
+      "mean_tokens": 512.0,
+      "net_saving": 0.5,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 500,
+      "mean_brier": 0.6459169149200372,
+      "accuracy": 0.662,
+      "mean_nll": 3.2879360946845213,
+      "mean_tokens": 2048.0,
+      "net_saving": -1.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 500,
+      "mean_brier": 0.6457380166454656,
+      "accuracy": 0.672,
+      "mean_nll": 3.649379073736535,
+      "mean_tokens": 4096.0,
+      "net_saving": -3.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@8192": {
+      "n": 500,
+      "mean_brier": 0.6624095663106709,
+      "accuracy": 0.666,
+      "mean_nll": 3.761394756086969,
+      "mean_tokens": 8192.0,
+      "net_saving": -7.0,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.7063472639907036,
+      "accuracy": 0.616,
+      "mean_nll": 2.4920327215675897,
+      "mean_tokens": 364.032,
+      "net_saving": 0.6445000000000001,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 500,
+      "mean_brier": 0.7197688947016395,
+      "accuracy": 0.62,
+      "mean_nll": 2.6253991511160444,
+      "mean_tokens": 465.408,
+      "net_saving": 0.5455,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 500,
+      "mean_brier": 0.7153218821570437,
+      "accuracy": 0.626,
+      "mean_nll": 2.672599867838404,
+      "mean_tokens": 513.536,
+      "net_saving": 0.49850000000000005,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 500,
+      "mean_brier": 0.7060776411495414,
+      "accuracy": 0.636,
+      "mean_nll": 2.7293405824134034,
+      "mean_tokens": 584.704,
+      "net_saving": 0.42900000000000005,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 500,
+      "mean_brier": 0.7056468280135312,
+      "accuracy": 0.642,
+      "mean_nll": 2.867953448658606,
+      "mean_tokens": 738.304,
+      "net_saving": 0.279,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 500,
+      "mean_brier": 0.6964196964440682,
+      "accuracy": 0.65,
+      "mean_nll": 3.0887186315586566,
+      "mean_tokens": 898.048,
+      "net_saving": 0.123,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 500,
+      "mean_brier": 0.7104656910874103,
+      "accuracy": 0.64,
+      "mean_nll": 2.91095000404034,
+      "mean_tokens": 769.536,
+      "net_saving": 0.24850000000000005,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 500,
+      "mean_brier": 0.7050221034910665,
+      "accuracy": 0.64,
+      "mean_nll": 2.7881845417369555,
+      "mean_tokens": 645.12,
+      "net_saving": 0.37,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 500,
+      "mean_brier": 0.713080153928694,
+      "accuracy": 0.626,
+      "mean_nll": 2.6548179092948083,
+      "mean_tokens": 496.128,
+      "net_saving": 0.5155000000000001,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 500,
+      "mean_brier": 0.7088351714448642,
+      "accuracy": 0.606,
+      "mean_nll": 2.447808991279046,
+      "mean_tokens": 310.272,
+      "net_saving": 0.6970000000000001,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 500,
+      "mean_brier": 0.7066777539478437,
+      "accuracy": 0.618,
+      "mean_nll": 2.4941343173822985,
+      "mean_tokens": 355.328,
+      "net_saving": 0.653,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.7203346070709669,
+      "accuracy": 0.622,
+      "mean_nll": 2.6720225089245675,
+      "mean_tokens": 505.856,
+      "net_saving": 0.506,
+      "policy_type": "threshold"
+    }
+  },
+  "m1/ds4": {
+    "Fixed@8192": {
+      "n": 500,
+      "mean_brier": 0.428540537122836,
+      "accuracy": 0.782,
+      "mean_nll": 2.2654063725151268,
+      "mean_tokens": 8192.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@256": {
+      "n": 500,
+      "mean_brier": 0.6286525146052176,
+      "accuracy": 0.648,
+      "mean_nll": 2.360844905941132,
+      "mean_tokens": 256.0,
+      "net_saving": 0.96875,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 500,
+      "mean_brier": 0.5845664477955437,
+      "accuracy": 0.672,
+      "mean_nll": 2.1195270136510946,
+      "mean_tokens": 512.0,
+      "net_saving": 0.9375,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 500,
+      "mean_brier": 0.5073485763147892,
+      "accuracy": 0.718,
+      "mean_nll": 1.9338439404561534,
+      "mean_tokens": 1024.0,
+      "net_saving": 0.875,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 500,
+      "mean_brier": 0.4620791509706317,
+      "accuracy": 0.744,
+      "mean_nll": 1.8156123942625422,
+      "mean_tokens": 2048.0,
+      "net_saving": 0.75,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 500,
+      "mean_brier": 0.43020556284347,
+      "accuracy": 0.776,
+      "mean_nll": 2.052626271970262,
+      "mean_tokens": 4096.0,
+      "net_saving": 0.5,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.6434709740510832,
+      "accuracy": 0.652,
+      "mean_nll": 2.426271418304662,
+      "mean_tokens": 336.896,
+      "net_saving": 0.958875,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 500,
+      "mean_brier": 0.6436082219835804,
+      "accuracy": 0.658,
+      "mean_nll": 2.4347101355903966,
+      "mean_tokens": 426.496,
+      "net_saving": 0.9479375,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 500,
+      "mean_brier": 0.646080705131677,
+      "accuracy": 0.66,
+      "mean_nll": 2.4719715550989974,
+      "mean_tokens": 488.448,
+      "net_saving": 0.940375,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 500,
+      "mean_brier": 0.6177844649024236,
+      "accuracy": 0.68,
+      "mean_nll": 2.4350745475143354,
+      "mean_tokens": 582.144,
+      "net_saving": 0.9289375,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 500,
+      "mean_brier": 0.6005113305584653,
+      "accuracy": 0.694,
+      "mean_nll": 2.468377643132774,
+      "mean_tokens": 780.288,
+      "net_saving": 0.9047499999999999,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 500,
+      "mean_brier": 0.5888994022794143,
+      "accuracy": 0.702,
+      "mean_nll": 2.547354447974496,
+      "mean_tokens": 979.968,
+      "net_saving": 0.880375,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 500,
+      "mean_brier": 0.5929095479096448,
+      "accuracy": 0.698,
+      "mean_nll": 2.4466891857386486,
+      "mean_tokens": 795.648,
+      "net_saving": 0.902875,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 500,
+      "mean_brier": 0.6035540990165434,
+      "accuracy": 0.69,
+      "mean_nll": 2.4270019619418726,
+      "mean_tokens": 649.216,
+      "net_saving": 0.92075,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 500,
+      "mean_brier": 0.6475846773325586,
+      "accuracy": 0.658,
+      "mean_nll": 2.4730979511006552,
+      "mean_tokens": 472.576,
+      "net_saving": 0.9423125,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 500,
+      "mean_brier": 0.6351925170711821,
+      "accuracy": 0.65,
+      "mean_nll": 2.36920022022122,
+      "mean_tokens": 292.864,
+      "net_saving": 0.96425,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 500,
+      "mean_brier": 0.6396977495614521,
+      "accuracy": 0.654,
+      "mean_nll": 2.381882884352422,
+      "mean_tokens": 343.552,
+      "net_saving": 0.9580625,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.6472112549024837,
+      "accuracy": 0.658,
+      "mean_nll": 2.463790542673327,
+      "mean_tokens": 469.504,
+      "net_saving": 0.9426875,
+      "policy_type": "threshold"
+    }
+  },
+  "m2/ds1": {
+    "Fixed@4096": {
+      "n": 1000,
+      "mean_brier": 0.8782421508782848,
+      "accuracy": 0.508,
+      "mean_nll": 3.7551434695890684,
+      "mean_tokens": 4096.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@256": {
+      "n": 1000,
+      "mean_brier": 0.9482872188378141,
+      "accuracy": 0.32,
+      "mean_nll": 2.779111438274929,
+      "mean_tokens": 256.0,
+      "net_saving": 0.9375,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 1000,
+      "mean_brier": 0.9373461763069352,
+      "accuracy": 0.382,
+      "mean_nll": 3.027495209674062,
+      "mean_tokens": 512.0,
+      "net_saving": 0.875,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 1000,
+      "mean_brier": 0.9071108640634434,
+      "accuracy": 0.444,
+      "mean_nll": 3.517358942012616,
+      "mean_tokens": 1024.0,
+      "net_saving": 0.75,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 1000,
+      "mean_brier": 0.8857220773338274,
+      "accuracy": 0.496,
+      "mean_nll": 3.8062599218532878,
+      "mean_tokens": 2048.0,
+      "net_saving": 0.5,
+      "policy_type": "fixed"
+    },
+    "Fixed@8192": {
+      "n": 1000,
+      "mean_brier": 0.8875208537862682,
+      "accuracy": 0.502,
+      "mean_nll": 3.6744399806178074,
+      "mean_tokens": 8192.0,
+      "net_saving": -1.0,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 1000,
+      "mean_brier": 0.9590681978027876,
+      "accuracy": 0.437,
+      "mean_nll": 3.226006486084243,
+      "mean_tokens": 1462.528,
+      "net_saving": 0.6429374999999999,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 1000,
+      "mean_brier": 0.9517298781593686,
+      "accuracy": 0.458,
+      "mean_nll": 3.342446275499963,
+      "mean_tokens": 1696.768,
+      "net_saving": 0.58575,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 1000,
+      "mean_brier": 0.9603856241021852,
+      "accuracy": 0.46,
+      "mean_nll": 3.5129699257405553,
+      "mean_tokens": 1906.176,
+      "net_saving": 0.534625,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 1000,
+      "mean_brier": 0.930194132461062,
+      "accuracy": 0.483,
+      "mean_nll": 3.5491859068280607,
+      "mean_tokens": 2163.968,
+      "net_saving": 0.47168750000000004,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 1000,
+      "mean_brier": 0.9146512528147168,
+      "accuracy": 0.493,
+      "mean_nll": 3.677699780309491,
+      "mean_tokens": 2481.152,
+      "net_saving": 0.39425,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 1000,
+      "mean_brier": 0.9052574248601134,
+      "accuracy": 0.499,
+      "mean_nll": 3.8929849836443156,
+      "mean_tokens": 3001.856,
+      "net_saving": 0.26712499999999995,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 1000,
+      "mean_brier": 0.9110705154892228,
+      "accuracy": 0.495,
+      "mean_nll": 3.741727595174139,
+      "mean_tokens": 2607.104,
+      "net_saving": 0.36350000000000005,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 1000,
+      "mean_brier": 0.9204843272092713,
+      "accuracy": 0.489,
+      "mean_nll": 3.6573581386336547,
+      "mean_tokens": 2388.992,
+      "net_saving": 0.41674999999999995,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 1000,
+      "mean_brier": 0.9398290845291304,
+      "accuracy": 0.474,
+      "mean_nll": 3.5186380699258915,
+      "mean_tokens": 2056.192,
+      "net_saving": 0.498,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 1000,
+      "mean_brier": 0.950002965718136,
+      "accuracy": 0.405,
+      "mean_nll": 3.019756401078712,
+      "mean_tokens": 973.312,
+      "net_saving": 0.762375,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 1000,
+      "mean_brier": 0.9514308314175531,
+      "accuracy": 0.437,
+      "mean_nll": 3.174846792637352,
+      "mean_tokens": 1386.752,
+      "net_saving": 0.6614375,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 1000,
+      "mean_brier": 0.9571992356501227,
+      "accuracy": 0.456,
+      "mean_nll": 3.3687256355532678,
+      "mean_tokens": 1713.664,
+      "net_saving": 0.5816250000000001,
+      "policy_type": "threshold"
+    }
+  },
+  "m2/ds2": {
+    "Fixed@2048": {
+      "n": 1000,
+      "mean_brier": 0.22887894482033627,
+      "accuracy": 0.88,
+      "mean_nll": 0.8922559656205792,
+      "mean_tokens": 2048.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@256": {
+      "n": 1000,
+      "mean_brier": 0.3633384053032526,
+      "accuracy": 0.773,
+      "mean_nll": 0.8642104624553111,
+      "mean_tokens": 256.0,
+      "net_saving": 0.875,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 1000,
+      "mean_brier": 0.24953446775752502,
+      "accuracy": 0.85,
+      "mean_nll": 0.7600867269346764,
+      "mean_tokens": 512.0,
+      "net_saving": 0.75,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 1000,
+      "mean_brier": 0.23207726738776172,
+      "accuracy": 0.876,
+      "mean_nll": 0.8758756011499063,
+      "mean_tokens": 1024.0,
+      "net_saving": 0.5,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 1000,
+      "mean_brier": 0.23314989510944983,
+      "accuracy": 0.875,
+      "mean_nll": 0.8491751392849843,
+      "mean_tokens": 4096.0,
+      "net_saving": -1.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@8192": {
+      "n": 1000,
+      "mean_brier": 0.2337712346258969,
+      "accuracy": 0.875,
+      "mean_nll": 0.806674290777048,
+      "mean_tokens": 8192.0,
+      "net_saving": -3.0,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 1000,
+      "mean_brier": 0.3476561289497227,
+      "accuracy": 0.802,
+      "mean_nll": 0.9051040737594519,
+      "mean_tokens": 307.712,
+      "net_saving": 0.84975,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 1000,
+      "mean_brier": 0.3232955372578582,
+      "accuracy": 0.823,
+      "mean_nll": 0.8884516770612497,
+      "mean_tokens": 347.136,
+      "net_saving": 0.8305,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 1000,
+      "mean_brier": 0.3083408422628116,
+      "accuracy": 0.835,
+      "mean_nll": 0.89638163576457,
+      "mean_tokens": 389.12,
+      "net_saving": 0.81,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 1000,
+      "mean_brier": 0.29400810429915086,
+      "accuracy": 0.845,
+      "mean_nll": 0.8925593817848925,
+      "mean_tokens": 447.744,
+      "net_saving": 0.7813749999999999,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 1000,
+      "mean_brier": 0.27938771302072807,
+      "accuracy": 0.855,
+      "mean_nll": 0.9113247707366383,
+      "mean_tokens": 546.56,
+      "net_saving": 0.733125,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 1000,
+      "mean_brier": 0.261860697449012,
+      "accuracy": 0.864,
+      "mean_nll": 0.9361580072614646,
+      "mean_tokens": 825.6,
+      "net_saving": 0.596875,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 1000,
+      "mean_brier": 0.2700707144215966,
+      "accuracy": 0.86,
+      "mean_nll": 0.8902149963002688,
+      "mean_tokens": 568.064,
+      "net_saving": 0.7226250000000001,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 1000,
+      "mean_brier": 0.2858525326526759,
+      "accuracy": 0.851,
+      "mean_nll": 0.9005551901603855,
+      "mean_tokens": 500.992,
+      "net_saving": 0.755375,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 1000,
+      "mean_brier": 0.31180504711516893,
+      "accuracy": 0.832,
+      "mean_nll": 0.8975050161740458,
+      "mean_tokens": 389.888,
+      "net_saving": 0.809625,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 1000,
+      "mean_brier": 0.35732992043667594,
+      "accuracy": 0.791,
+      "mean_nll": 0.904685181956427,
+      "mean_tokens": 282.88,
+      "net_saving": 0.861875,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 1000,
+      "mean_brier": 0.3495474883969003,
+      "accuracy": 0.801,
+      "mean_nll": 0.9115076125572487,
+      "mean_tokens": 310.272,
+      "net_saving": 0.8485,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 1000,
+      "mean_brier": 0.312414828757124,
+      "accuracy": 0.832,
+      "mean_nll": 0.8873215159783374,
+      "mean_tokens": 366.08,
+      "net_saving": 0.82125,
+      "policy_type": "threshold"
+    }
+  },
+  "m2/ds3": {
+    "Fixed@256": {
+      "n": 500,
+      "mean_brier": 0.8018814153738532,
+      "accuracy": 0.486,
+      "mean_nll": 2.0462637203305296,
+      "mean_tokens": 256.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 500,
+      "mean_brier": 0.8506400680813972,
+      "accuracy": 0.518,
+      "mean_nll": 2.8718726714100273,
+      "mean_tokens": 512.0,
+      "net_saving": -1.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 500,
+      "mean_brier": 0.8991479105444918,
+      "accuracy": 0.524,
+      "mean_nll": 3.859679933312849,
+      "mean_tokens": 1024.0,
+      "net_saving": -3.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 500,
+      "mean_brier": 0.9292806769465134,
+      "accuracy": 0.518,
+      "mean_nll": 4.08422890654429,
+      "mean_tokens": 2048.0,
+      "net_saving": -7.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 500,
+      "mean_brier": 0.9295340133955878,
+      "accuracy": 0.526,
+      "mean_nll": 3.892476674260888,
+      "mean_tokens": 4096.0,
+      "net_saving": -15.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@8192": {
+      "n": 500,
+      "mean_brier": 0.929208800504507,
+      "accuracy": 0.526,
+      "mean_nll": 3.68553241092536,
+      "mean_tokens": 8192.0,
+      "net_saving": -31.0,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.8748070623350036,
+      "accuracy": 0.514,
+      "mean_nll": 2.606764960188234,
+      "mean_tokens": 454.144,
+      "net_saving": -0.774,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 500,
+      "mean_brier": 0.9124209190201824,
+      "accuracy": 0.512,
+      "mean_nll": 2.904070359544015,
+      "mean_tokens": 564.736,
+      "net_saving": -1.206,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 500,
+      "mean_brier": 0.9437424079750287,
+      "accuracy": 0.504,
+      "mean_nll": 3.1321688601808044,
+      "mean_tokens": 648.704,
+      "net_saving": -1.5339999999999998,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 500,
+      "mean_brier": 0.9718226717044033,
+      "accuracy": 0.496,
+      "mean_nll": 3.3876455906947984,
+      "mean_tokens": 749.056,
+      "net_saving": -1.9260000000000002,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 500,
+      "mean_brier": 0.9480540205805075,
+      "accuracy": 0.516,
+      "mean_nll": 3.530161976778702,
+      "mean_tokens": 942.08,
+      "net_saving": -2.68,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 500,
+      "mean_brier": 0.9380032321390201,
+      "accuracy": 0.524,
+      "mean_nll": 3.8258588900379746,
+      "mean_tokens": 1351.168,
+      "net_saving": -4.278,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 500,
+      "mean_brier": 0.9464748255663702,
+      "accuracy": 0.518,
+      "mean_nll": 3.5618693316666623,
+      "mean_tokens": 1001.472,
+      "net_saving": -2.912,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 500,
+      "mean_brier": 0.9677563481927743,
+      "accuracy": 0.502,
+      "mean_nll": 3.4742719057734663,
+      "mean_tokens": 797.696,
+      "net_saving": -2.116,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 500,
+      "mean_brier": 0.9322688182544276,
+      "accuracy": 0.508,
+      "mean_nll": 3.0694429325008494,
+      "mean_tokens": 657.408,
+      "net_saving": -1.568,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 500,
+      "mean_brier": 0.8464376666459316,
+      "accuracy": 0.504,
+      "mean_nll": 2.317300156202907,
+      "mean_tokens": 335.872,
+      "net_saving": -0.31200000000000006,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 500,
+      "mean_brier": 0.8808109436888594,
+      "accuracy": 0.512,
+      "mean_nll": 2.6525914384959046,
+      "mean_tokens": 466.432,
+      "net_saving": -0.8220000000000001,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.9298114090596216,
+      "accuracy": 0.506,
+      "mean_nll": 3.010080069805145,
+      "mean_tokens": 591.36,
+      "net_saving": -1.31,
+      "policy_type": "threshold"
+    }
+  },
+  "m2/ds4": {
+    "Fixed@256": {
+      "n": 500,
+      "mean_brier": 0.7268204624430344,
+      "accuracy": 0.488,
+      "mean_nll": 1.5476890136903527,
+      "mean_tokens": 256.0,
+      "net_saving": 0.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@512": {
+      "n": 500,
+      "mean_brier": 0.7395537321720521,
+      "accuracy": 0.506,
+      "mean_nll": 1.8451561738465008,
+      "mean_tokens": 512.0,
+      "net_saving": -1.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@1024": {
+      "n": 500,
+      "mean_brier": 0.7752729981144967,
+      "accuracy": 0.556,
+      "mean_nll": 2.677462855585996,
+      "mean_tokens": 1024.0,
+      "net_saving": -3.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@2048": {
+      "n": 500,
+      "mean_brier": 0.8049099411960993,
+      "accuracy": 0.57,
+      "mean_nll": 3.1320134011398895,
+      "mean_tokens": 2048.0,
+      "net_saving": -7.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@4096": {
+      "n": 500,
+      "mean_brier": 0.8221941203908735,
+      "accuracy": 0.562,
+      "mean_nll": 3.1893641609676977,
+      "mean_tokens": 4096.0,
+      "net_saving": -15.0,
+      "policy_type": "fixed"
+    },
+    "Fixed@8192": {
+      "n": 500,
+      "mean_brier": 0.8273067421373839,
+      "accuracy": 0.568,
+      "mean_nll": 3.1067786377977233,
+      "mean_tokens": 8192.0,
+      "net_saving": -31.0,
+      "policy_type": "fixed"
+    },
+    "conf\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.7855144488307415,
+      "accuracy": 0.536,
+      "mean_nll": 1.9619239198879947,
+      "mean_tokens": 577.536,
+      "net_saving": -1.2559999999999998,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.8": {
+      "n": 500,
+      "mean_brier": 0.8041961079291831,
+      "accuracy": 0.556,
+      "mean_nll": 2.2450680009546216,
+      "mean_tokens": 848.384,
+      "net_saving": -2.314,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.85": {
+      "n": 500,
+      "mean_brier": 0.8124481064842549,
+      "accuracy": 0.564,
+      "mean_nll": 2.4357895133508327,
+      "mean_tokens": 1045.504,
+      "net_saving": -3.0839999999999996,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.9": {
+      "n": 500,
+      "mean_brier": 0.8283723228458256,
+      "accuracy": 0.562,
+      "mean_nll": 2.672509154098443,
+      "mean_tokens": 1247.744,
+      "net_saving": -3.8739999999999997,
+      "policy_type": "threshold"
+    },
+    "conf\u22650.95": {
+      "n": 500,
+      "mean_brier": 0.8317808064697639,
+      "accuracy": 0.568,
+      "mean_nll": 2.936193283968043,
+      "mean_tokens": 1548.288,
+      "net_saving": -5.048,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.1": {
+      "n": 500,
+      "mean_brier": 0.8296789593760834,
+      "accuracy": 0.568,
+      "mean_nll": 3.1663638551073494,
+      "mean_tokens": 2055.168,
+      "net_saving": -7.0280000000000005,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.2": {
+      "n": 500,
+      "mean_brier": 0.83718317646605,
+      "accuracy": 0.566,
+      "mean_nll": 3.0144421430237776,
+      "mean_tokens": 1607.68,
+      "net_saving": -5.28,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.3": {
+      "n": 500,
+      "mean_brier": 0.8277461109820059,
+      "accuracy": 0.568,
+      "mean_nll": 2.8373858275496904,
+      "mean_tokens": 1398.272,
+      "net_saving": -4.462,
+      "policy_type": "threshold"
+    },
+    "entr\u22640.5": {
+      "n": 500,
+      "mean_brier": 0.8290133376944187,
+      "accuracy": 0.558,
+      "mean_nll": 2.547906446206677,
+      "mean_tokens": 1086.976,
+      "net_saving": -3.2460000000000004,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.3": {
+      "n": 500,
+      "mean_brier": 0.7586098929334311,
+      "accuracy": 0.518,
+      "mean_nll": 1.7748629282016928,
+      "mean_tokens": 429.568,
+      "net_saving": -0.6779999999999999,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.5": {
+      "n": 500,
+      "mean_brier": 0.7974159155086145,
+      "accuracy": 0.532,
+      "mean_nll": 1.9953776474777838,
+      "mean_tokens": 616.96,
+      "net_saving": -1.4100000000000001,
+      "policy_type": "threshold"
+    },
+    "marg\u22650.7": {
+      "n": 500,
+      "mean_brier": 0.8237727306174756,
+      "accuracy": 0.552,
+      "mean_nll": 2.3751657528896737,
+      "mean_tokens": 968.704,
+      "net_saving": -2.784,
+      "policy_type": "threshold"
+    }
+  }
+}

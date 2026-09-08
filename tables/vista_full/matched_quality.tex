@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{%
+  Headroom recovery: fraction of Oracle~C mean-budget headroom
+  recovered by Global VISTA ($\rho=0.20$, $\lambda=0$).
+  Oracle~C saving is relative to best-fixed-budget baseline.
+  Headroom recovery = VISTA net saving / Oracle~C saving.
+  Only Gate-0-\textsc{Pass} cells are shown.
+}
+\label{tab:vista-headroom}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Cell & Dataset & Oracle~C saving & VISTA net saving & Headroom rec. \\
+\midrule
+M1/DS1 & MMLU-Pro & 94.4% & 0.0% & 0.0% \\
+M1/DS2 & ARC-Challenge & 96.7% & 0.1% & 0.1% \\
+M1/DS3 & MedMCQA & 74.4% & -141.8% & -190.7% \\
+M1/DS4 & MedQA-USMLE & 95.6% & 0.0% & 0.0% \\
+M2/DS1 & MMLU-Pro & 93.5% & -19.9% & -21.3% \\
+M2/DS2 & ARC-Challenge & 86.3% & -60.0% & -69.5% \\
+\bottomrule
+\end{tabular}
+\end{table}

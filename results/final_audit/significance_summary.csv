@@ -1,0 +1,17 @@
+cell,metric,comparison,estimate,ci95_lo,ci95_hi,significant,paper_wording
+m1/ds1,net_saving,lambda=0 vs reference,0.0001,-0.0000,0.0002,No,~0% net saving (CI includes 0)
+m1/ds1,net_saving,lambda=0.01 vs reference,0.0319,0.0267,0.0371,Yes,3.2% [2.7%,3.7%]
+m1/ds2,net_saving,lambda=0 vs reference,0.0007,0.0002,0.0012,Yes,<1% net saving
+m1/ds2,net_saving,lambda=0.01 vs reference,0.3448,0.3214,0.3681,Yes,34.5% [32.1%,36.8%]
+m1/ds3,net_saving,lambda=0 vs reference,-1.4182,-1.4340,-1.4024,Yes,-142% net saving (audit overhead)
+m1/ds4,net_saving,lambda=0 vs reference,0.0002,-0.0000,0.0004,No,~0% (CI borderline)
+m1/ds4,net_saving,lambda=0.01 vs reference,0.0699,0.0597,0.0802,Yes,7.0% [6.0%,8.0%]
+m2/ds1,net_saving,lambda=0 vs reference,-0.1991,-0.2010,-0.1972,Yes,-20% (audit overhead)
+m2/ds2,net_saving,lambda=0 vs reference,-0.6002,-0.6056,-0.5948,Yes,-60% (audit overhead)
+m2/ds3,net_saving,lambda=0 vs reference,-6.2806,-6.3506,-6.2106,Yes,-628% (best_fixed=256 audit)
+m2/ds4,net_saving,lambda=0 vs reference,-6.2806,-6.3506,-6.2106,Yes,-628% (best_fixed=256 audit)
+m1/ds1,brier_diff,lambda=0.01 vs best_fixed,0.0063,,,"Not tested","qualitative: +0.6 pp"
+m1/ds2,brier_diff,lambda=0.01 vs best_fixed,0.0081,,,Not tested,qualitative: +0.8 pp
+m1/ds1,ipw_bias,rho=0.2 vs naive,0.02447,,,Yes (deterministic given data),3.0x reduction
+m1/ds2,ipw_bias,rho=0.2 vs naive,0.01031,,,Yes,22.8x reduction
+m1/ds1,cs_fpr,CS vs greedy,0.0,,,Yes by construction,FPR=0.000 (anytime-valid guarantee)

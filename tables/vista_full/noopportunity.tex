@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{%
+  Gate-0-\textsc{Fail} cells (no adaptive opportunity).
+  Best-fixed budget is already $b=256$ (the minimum grid point),
+  so no adaptive reduction is possible while maintaining mean quality.
+  VISTA is not run for these cells.
+}
+\label{tab:vista-noopportunity}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Cell & Dataset & Best-fixed $b$ & Mean Brier & Accuracy \\
+\midrule
+M2/DS3 & MedMCQA & 256 & 0.8019 & 0.486 \\
+M2/DS4 & MedQA-USMLE & 256 & 0.7268 & 0.488 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,142 @@
+{
+  "C1": {
+    "claim": "VISTA achieves positive net saving in all Gate-0-PASS cells",
+    "pass": false,
+    "values": {
+      "m1/ds1": 0.00010609374999999977,
+      "m1/ds2": 0.0006909154749744639,
+      "m1/ds3": -1.41816,
+      "m1/ds4": 0.0001678124999999997,
+      "m2/ds1": -0.199103125,
+      "m2/ds2": -0.600219375
+    }
+  },
+  "C2": {
+    "claim": "VISTA mean Brier within 0.01 of best-fixed in all PASS cells",
+    "pass": true,
+    "brier_diffs": {
+      "m1/ds1": 3.841077729371811e-05,
+      "m1/ds2": 4.812682596727624e-05,
+      "m1/ds3": 1.140143215516698e-05,
+      "m1/ds4": 3.196062425608881e-05,
+      "m2/ds1": 5.661708405257926e-05,
+      "m2/ds2": -2.292183829188943e-06
+    }
+  },
+  "C3": {
+    "claim": "CS false-switch rate < 5% in PASS cells",
+    "pass": false,
+    "wrong_switch_rates": [
+      0.5,
+      0.5384615384615384,
+      0.5,
+      0.5454545454545454,
+      0.5142857142857143,
+      0.5
+    ]
+  },
+  "C4": {
+    "claim": "Net saving is non-decreasing in rho for \u226550% of PASS cells",
+    "pass": false,
+    "data": {
+      "m1/ds1": [
+        0.0009539062499999995,
+        0.0005007812499999997,
+        0.00010609374999999977,
+        8.765624999999888e-05
+      ],
+      "m1/ds2": [
+        0.003330726506639427,
+        0.001416145301327884,
+        0.0006909154749744639,
+        0.00018114785495403519
+      ],
+      "m1/ds3": [
+        -0.350875,
+        -0.6870175000000001,
+        -1.41816,
+        -2.7861425000000004
+      ],
+      "m1/ds4": [
+        0.0012796875000000002,
+        0.0003921874999999997,
+        0.0001678124999999997,
+        2.9062500000000547e-05
+      ],
+      "m2/ds1": [
+        -0.04466593749999999,
+        -0.09848562500000003,
+        -0.199103125,
+        -0.39805468749999995
+      ],
+      "m2/ds2": [
+        -0.14861624999999998,
+        -0.29789625000000003,
+        -0.600219375,
+        -1.194984375
+      ]
+    }
+  },
+  "C5": {
+    "claim": "Gate-0-FAIL cells have Oracle C saving < 10%",
+    "pass": true,
+    "fail_cell_savings": {
+      "m2/ds3": 0.0,
+      "m2/ds4": 0.0
+    }
+  },
+  "C6": {
+    "claim": "Oracle C saving >= 10% in all Gate-0-PASS cells",
+    "pass": true,
+    "oracle_savings": {
+      "m1/ds1": 0.94371875,
+      "m1/ds2": 0.9673135852911133,
+      "m1/ds3": 0.7435,
+      "m1/ds4": 0.955625,
+      "m2/ds1": 0.9345,
+      "m2/ds2": 0.863375
+    }
+  },
+  "C7": {
+    "claim": "VISTA recovers >=10% of Oracle C headroom in PASS cells",
+    "pass": false,
+    "headroom_recovery": {
+      "m1/ds1": 0.00011242094109076434,
+      "m1/ds2": 0.0007142621436114047,
+      "m1/ds3": -1.907410894418292,
+      "m1/ds4": 0.00017560497056899903,
+      "m2/ds1": -0.21305845371856608,
+      "m2/ds2": -0.6952012451136528
+    }
+  },
+  "C8": {
+    "claim": "Audit overhead fraction \u2264 60% of actual tokens at rho=0.20",
+    "pass": true,
+    "audit_fracs": [
+      4.406717525187328e-05,
+      0.00013176238498541242,
+      0.5864913818771298,
+      5.532178368682482e-05,
+      0.1670782590112923,
+      0.3751946510458917
+    ]
+  },
+  "C9": {
+    "claim": "Lambda sweep traces Pareto quality-compute tradeoff (descriptive)",
+    "pass": true,
+    "data_collected": {
+      "m1/ds1": true,
+      "m1/ds2": true,
+      "m1/ds3": true,
+      "m1/ds4": true,
+      "m2/ds1": true,
+      "m2/ds2": true
+    }
+  },
+  "C10": {
+    "claim": "Exactly 6/8 cells pass Gate 0",
+    "pass": true,
+    "n_pass": 6,
+    "n_total": 8
+  }
+}

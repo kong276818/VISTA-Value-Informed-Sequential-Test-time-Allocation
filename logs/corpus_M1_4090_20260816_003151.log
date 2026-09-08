@@ -5,3 +5,16 @@ Starting 1 parallel GPU tracks
 [m1_ds1_4090] START run-d5 → data/results_m1_ds1_4090.json
 [m1_ds1_4090] DONE run-d5 in 1061s
 [m1_ds2_4090] START gen-prefixes → data/prefixes_m1_ds2_4090.json
+[m1_ds2_4090] DONE gen-prefixes in 54487s
+[m1_ds2_4090] START run-d5 → data/results_m1_ds2_4090.json
+[m1_ds2_4090] DONE run-d5 in 1012s
+[m1_ds3_4090] START gen-prefixes → data/prefixes_m1_ds3_4090.json
+[m1_ds3_4090] DONE gen-prefixes in 27250s
+[m1_ds3_4090] START run-d5 → data/results_m1_ds3_4090.json
+[m1_ds3_4090] DONE run-d5 in 530s
+[m1_ds4_4090] START gen-prefixes → data/prefixes_m1_ds4_4090.json
+[m1_ds4_4090] DONE gen-prefixes in 27390s
+[m1_ds4_4090] START run-d5 → data/results_m1_ds4_4090.json
+[m1_ds4_4090] DONE run-d5 in 544s
+
+All tracks finished in 46.38 h (166970s)

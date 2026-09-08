@@ -1,0 +1,49 @@
+\needspace{10\baselineskip}
+\begingroup
+\centering
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Cell & $\rho$ & Audit tokens & Net saving & 95\% CI & Brier \\
+\midrule
+\multirow{4}{*}{M1/MMLU-Pro}
+ & 0.05 &    0.4 & $+0.001$ & $[+0.000,+0.002]$ & 0.4919 \\
+ & 0.10 &    0.6 & $+0.001$ & $[+0.000,+0.001]$ & 0.4918 \\
+ & 0.20 &    0.4 & $+0.000$ & $[-0.000,+0.000]$ & 0.4918 \\
+ & 0.40 &    0.5 & $+0.000$ & $[+0.000,+0.000]$ & 0.4918 \\
+\midrule
+\multirow{4}{*}{M1/ARC-Challenge}
+ & 0.05 &    1.0 & $+0.003$ & $[+0.001,+0.005]$ & 0.0839 \\
+ & 0.10 &    1.1 & $+0.001$ & $[+0.001,+0.002]$ & 0.0838 \\
+ & 0.20 &    1.1 & $+0.001$ & $[+0.000,+0.001]$ & 0.0838 \\
+ & 0.40 &    1.1 & $+0.000$ & $[+0.000,+0.000]$ & 0.0837 \\
+\midrule
+\multirow{4}{*}{M1/MedMCQA}
+ & 0.05 &  360.1 & $-0.351$ & $[-0.361,-0.341]$ & 0.6276 \\
+ & 0.10 &  704.0 & $-0.687$ & $[-0.700,-0.674]$ & 0.6275 \\
+ & 0.20 & 1452.3 & $-1.418$ & $[-1.434,-1.402]$ & 0.6275 \\
+ & 0.40 & 2853.1 & $-2.786$ & $[-2.807,-2.766]$ & 0.6275 \\
+\midrule
+\multirow{4}{*}{M2/MMLU-Pro}
+ & 0.05 &  205.1 & $-0.045$ & $[-0.048,-0.041]$ & 0.8788 \\
+ & 0.10 &  407.8 & $-0.099$ & $[-0.100,-0.097]$ & 0.8783 \\
+ & 0.20 &  820.6 & $-0.199$ & $[-0.201,-0.197]$ & 0.8783 \\
+ & 0.40 & 1632.5 & $-0.398$ & $[-0.400,-0.396]$ & 0.8783 \\
+\bottomrule
+\end{tabular}
+\par\medskip
+\captionof{table}{Audit-rate sensitivity ($\lambda{=}0$): net saving and Brier as a function of $\rho$
+across representative cells ($n{=}1000$, 200 stream-order permutations each).
+When $b_{\mathrm{ref}}{=}b_{\max}{=}8192$ (M1/MMLU-Pro, M1/ARC), audit overhead is
+negligible and net saving is ${\approx}0$ at all $\rho$.
+When $b_{\mathrm{ref}} < b_{\max}$ (M1/MedMCQA: $b_{\mathrm{ref}}{=}1024$; M2/MMLU-Pro:
+$b_{\mathrm{ref}}{=}4096$), audited items run to $b_{\max}{=}8192$, so audit overhead
+grows linearly with $\rho$ and net saving turns increasingly negative.
+This is the fundamental cost of exploration: guarantees require observations, and
+observations require compute.
+At $\lambda{>}0$, the quality--compute tradeoff allows VISTA to select a lower
+$b_{\mathrm{policy}}<b_{\mathrm{ref}}$, partially or fully offsetting audit overhead.}
+\label{tab:a07_rho_sensitivity}
+\par
+\endgroup
+\vspace{\baselineskip}

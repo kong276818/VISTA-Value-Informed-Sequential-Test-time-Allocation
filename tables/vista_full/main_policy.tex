@@ -1,0 +1,51 @@
+\begin{table*}[t]
+\centering
+\caption{%
+  Policy comparison across all eight experimental cells.
+  \textbf{Global VISTA} uses $\rho=0.20$ audit rate with empirical Bernstein
+  confidence sequences (Bonferroni-corrected, $\alpha=0.05$).
+  Net saving is relative to the best-fixed-budget baseline for each cell.
+  Gate-0-\textsc{Fail} cells (M2/DS3, M2/DS4) have no adaptive opportunity;
+  VISTA is not reported for those cells (\textemdash).
+  All VISTA results aggregated over 200 stream permutations; 95\% CI over permutations shown.
+}
+\label{tab:vista-main-policy}
+\small
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Cell & Policy & Brier$\downarrow$ & Acc$\uparrow$ & Mean tok & Net saving & Gate~0 \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M1/DS1\\MMLU-Pro}} & Fixed@8192 & 0.4917 & 0.738 & 8192 & 0.0\% & \textsc{Pass} \\
+ & Fixed@8192 & 0.4917 & 0.738 & 8192 & --- & \\
+ & VISTA ($\rho=0.20$) & 0.4918 [0.4917,0.4918] & 0.738 & 8191 & 0.0% [-0.0%,0.0%] & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M1/DS2\\ARC-Challenge}} & Fixed@8192 & 0.0837 & 0.958 & 8192 & 0.0\% & \textsc{Pass} \\
+ & Fixed@8192 & 0.0837 & 0.958 & 8192 & --- & \\
+ & VISTA ($\rho=0.20$) & 0.0838 [0.0838,0.0838] & 0.958 & 8186 & 0.1% [0.0%,0.1%] & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M1/DS3\\MedMCQA}} & Fixed@1024 & 0.6275 & 0.660 & 1024 & 0.0\% & \textsc{Pass} \\
+ & Fixed@8192 & 0.6624 & 0.666 & 8192 & -700.0% & \\
+ & VISTA ($\rho=0.20$) & 0.6275 [0.6275,0.6275] & 0.660 & 2476 & -141.8% [-143.4%,-140.2%] & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M1/DS4\\MedQA-USMLE}} & Fixed@8192 & 0.4285 & 0.782 & 8192 & 0.0\% & \textsc{Pass} \\
+ & Fixed@8192 & 0.4285 & 0.782 & 8192 & --- & \\
+ & VISTA ($\rho=0.20$) & 0.4286 [0.4285,0.4286] & 0.782 & 8191 & 0.0% [-0.0%,0.0%] & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M2/DS1\\MMLU-Pro}} & Fixed@4096 & 0.8782 & 0.508 & 4096 & 0.0\% & \textsc{Pass} \\
+ & Fixed@8192 & 0.8875 & 0.502 & 8192 & -100.0% & \\
+ & VISTA ($\rho=0.20$) & 0.8783 [0.8782,0.8784] & 0.508 & 4912 & -19.9% [-20.1%,-19.7%] & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M2/DS2\\ARC-Challenge}} & Fixed@2048 & 0.2289 & 0.880 & 2048 & 0.0\% & \textsc{Pass} \\
+ & Fixed@8192 & 0.2338 & 0.875 & 8192 & -300.0% & \\
+ & VISTA ($\rho=0.20$) & 0.2289 [0.2289,0.2289] & 0.880 & 3277 & -60.0% [-60.6%,-59.5%] & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M2/DS3\\MedMCQA}} & Fixed@256 & 0.8019 & 0.486 & 256 & 0.0\% & \textsc{Fail} \\
+ & Fixed@8192 & 0.9292 & 0.526 & 8192 & -3100.0% & \\
+ & VISTA & \textemdash & \textemdash & \textemdash & \textemdash & \\
+\midrule
+\multirow{3}{*}{\makecell[l]{M2/DS4\\MedQA-USMLE}} & Fixed@256 & 0.7268 & 0.488 & 256 & 0.0\% & \textsc{Fail} \\
+ & Fixed@8192 & 0.8273 & 0.568 & 8192 & -3100.0% & \\
+ & VISTA & \textemdash & \textemdash & \textemdash & \textemdash & \\
+\bottomrule
+\end{tabular}
+\end{table*}

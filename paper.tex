@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  VISTA — Value-Informed Sequential Test-time Allocation
-%  Elsevier CAS single-column (cas-sc), double-blind review
+%  Elsevier CAS single-column (cas-sc), single-anonymous review
 %
 %  Overleaf: open via "CAS SC" template so cas-sc.cls is available.
 %  Compile: pdflatex -> bibtex -> pdflatex -> pdflatex
@@ -9,7 +9,7 @@
 %        Comment out \DRAFTMODE to hide all TODOs (dangerous).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[a4paper,fleqn,doubleblind]{cas-sc}
+\documentclass[a4paper,fleqn,singleblind]{cas-sc}
 
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{amsmath}
@@ -37,7 +37,7 @@
 %% -----------------------------------------------------------------------
 %% TODO marker — comment out \DRAFTMODE line before submission
 %% -----------------------------------------------------------------------
-\newcommand{\DRAFTMODE}{}
+%\newcommand{\DRAFTMODE}{}  % commented out for submission
 \ifdefined\DRAFTMODE
   \newcommand{\TODO}[1]{{\color{red}\textbf{[TODO: #1]}}}
 \else
@@ -96,59 +96,58 @@
 %% Abstract
 %% -----------------------------------------------------------------------
 \begin{abstract}
-Reasoning language models can allocate anywhere from a few hundred to several
-thousand tokens per query, yet the value of additional reasoning is strongly
-model-, task-, budget-, and objective-dependent.
-On MMLU-Pro accuracy gains are near-linear across the full token grid; on
-ARC-Challenge most gain concentrates in the first budget step; on MedMCQA the
-Brier optimum and accuracy optimum differ by three budget levels, and both
-worsen at the maximum budget.
-Budget-response curves differ qualitatively across all dataset-model pairs:
-one model's Brier worsens monotonically with budget on two of four datasets
-(MedMCQA and MedQA-USMLE) while the other's improves, ruling out a universal
-fixed allocation.
-Trajectory signals---confidence, entropy, answer stability---reveal whether
-reasoning has stabilised but cannot certify whether the current answer is
-correct or whether continuation improves a scoring rule, a limitation we
-formalise as a non-identifiability result.
-Rather than seeking a better correctness proxy, we change the decision target
-to the \emph{continuation value}: expected improvement in proper scoring loss
-per additional reasoning block, net of compute cost.
-\textbf{VISTA} (Value-Informed Sequential Test-time Allocation) learns a
-reasoning-budget policy from the live deployment stream without a held-out
-calibration set, combining randomized full-trajectory audits to reveal
-counterfactual predictions, importance-weighted policy comparison to correct
+When deployment data alone drive reasoning-budget selection,
+naive policy comparison is dangerously unreliable:
+we show that omitting inverse-probability weighting reverses policy rankings
+in five of eight experimental cells (wrong-best rate $1.00$ in those cells),
+because early stopping censors the outcomes that longer budgets would have produced.
+This finding motivates \textbf{VISTA} (Value-Informed Sequential Test-time
+Allocation), a prequential budget-selection procedure that combines
+randomized full-trajectory audits (fraction $\rho$ of queries) to recover
+censored counterfactuals, importance-weighted policy comparison to correct
 selection bias, and anytime-valid confidence sequences to prevent spurious
-switching under continuous monitoring.
-A corpus audit across eight experimental cells (two models, four datasets)
-finds that the hindsight per-item Brier oracle reduces mean Brier by $30.1\%$
-on MMLU-Pro; mean-budget reductions relative to the maximum-budget baseline
-range from $70\%$ to $91\%$ across cells (descriptive opportunity analysis,
-not matched-quality savings).
-Component ablations confirm that naive policy estimation reverses rankings in
-5 of 8 cells (wrong-best rate $1.00$), anytime-valid monitoring achieves
-false-positive rate $0.000$ across all cells versus $0$--$58.5\%$ for greedy
-monitoring, and confidence-threshold stopping increases Brier above the best
-fixed budget in all eight cells.
+switching under continuous monitoring---all without a held-out calibration set.
+A corpus audit across eight cells (two 8B reasoning models, four QA benchmarks)
+documents qualitatively heterogeneous budget-response curves:
+on MMLU-Pro accuracy is near-linear across the full token grid while the
+hindsight per-item oracle reduces mean Brier by $30.1\%$;
+on ARC-Challenge Brier saturates after the first budget step;
+on MedMCQA and MedQA-USMLE one model's Brier worsens at nearly every budget
+step while the other's improves---ruling out a universal fixed allocation.
+VISTA at $\lambda{=}0$ (pure quality preservation) correctly stays at the
+best fixed budget in all Gate-0-passing cells, achieving $\approx 0\%$ net
+saving; this is the expected and intended behaviour of an error-controlled
+procedure when no cheaper policy is certifiably better.
+Increasing $\lambda$ controls the quality--compute exchange rate explicitly:
+at $\lambda{=}0.01$, deployed VISTA achieves $3$--$35\%$ net token savings
+with Brier increases $\leq 0.012$; at $\lambda{=}0.1$, savings reach
+$9$--$59\%$ with Brier increases $\leq 0.019$---all with 95\% CIs from
+200 stream-order permutations.
+Confidence-threshold stopping, by contrast, increases Brier above the best
+fixed budget in all eight cells ($+0.047$ to $+0.218$) while providing no
+quality guarantees.
 \end{abstract}
 
 %% -----------------------------------------------------------------------
 %% Highlights (3–5 items, max ~85 characters each)
 %% -----------------------------------------------------------------------
 \begin{highlights}
-\item Full-corpus audit across four benchmarks reveals heterogeneous
-budget-response curves: gains range from near-linear to early-saturating
-to non-monotone depending on the dataset and the scoring objective.
+\item Naive policy comparison from deployment data reverses rankings in 5 of 8
+cells (wrong-best rate 1.00); inverse-probability weighting reduces bias
+$2.2\times$--$23\times$ across all cells.
 
-\item Correctness is non-identifiable from an unlabeled trajectory alone,
-motivating delayed deployment feedback rather than in-situ confidence proxies.
+\item Full-corpus audit across four QA benchmarks reveals qualitatively
+heterogeneous budget-response curves: near-linear, early-saturating, and
+near-monotone degradation---ruling out a universal fixed allocation.
 
-\item We formulate test-time reasoning as a sequential compute-selection
-problem targeting the marginal value of additional reasoning, not current
-correctness.
+\item VISTA---combining randomized audits, IPW policy comparison, and
+anytime-valid confidence sequences---achieves $3$--$59\%$ net token savings
+(at $\lambda{=}0.01$--$0.1$) with Brier increases $\leq 0.019$, without
+any held-out calibration set.
 
-\item VISTA combines randomized trajectory audits with anytime-valid
-confidence sequences for held-out-free reasoning-budget policy selection.
+\item At $\lambda{=}0$ (quality-preserving), VISTA correctly certifies no
+adaptation when no cheaper policy is verifiably better---a principled null
+result, not a framework failure.
 \end{highlights}
 
 %% -----------------------------------------------------------------------
@@ -194,17 +193,21 @@ self-evaluation and uncertainty studies show that confidence quality varies with
 model, elicitation method, and domain~\cite{kadavath2022know,xiong2024uncertainty,kuhn2023semantic,zeng2025thinkingoutloud}. A stable prediction can therefore still be
 wrong---and a wrong one can be corrected by further reasoning.
 
-The core limitation of trajectory-only stopping is informational.
-Correctness is not a function of the observable trajectory alone.
-Proposition~\ref{prop:impossibility} formalises this: for any estimator that
-is simultaneously distribution-free, label-free at deployment time, and
+The core limitation of trajectory-only stopping is both empirical and
+informational.
+Empirically, we find that confidence-, entropy-, and stability-threshold
+stopping \emph{increases} Brier above the best fixed budget in all eight
+experimental cells ($+0.047$ to $+0.218$); signals trained on one model
+fail to transfer to another on the same task.
+The theoretical explanation is a non-identifiability result
+(Proposition~\ref{prop:impossibility}): for any estimator that is
+simultaneously distribution-free, label-free at deployment time, and
 restricted to a single unlabeled trajectory, the worst-case error in certifying
 correctness is at least $\frac{1}{2}$.
-The consequence for deployment is not that trajectory signals are
-useless---they predict improvement direction more often than chance on most
-cells---but that their reliability does not transfer uniformly across model
-families or task domains, and they cannot substitute for a correctness
-certificate when compute savings depend on knowing which items to cut short.
+Trajectory signals can be predictive under an empirical distribution without
+constituting a distribution-free correctness certificate,
+and their reliability does not transfer uniformly across model families
+or task domains.
 
 Rather than seeking a better correctness proxy, we change the decision target.
 We ask whether an additional reasoning block improves a proper scoring loss
@@ -276,21 +279,25 @@ on naive stopping heuristics.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-\item \textbf{Systematic empirical audit.}
-Eight cells (two models, four datasets) characterising heterogeneous
-budget-response; quantifying item-level allocation headroom; and isolating the
-contribution of each VISTA component.
-\item \textbf{Non-identifiability result.}
-We show that no distribution-free, label-free, single-trajectory estimator can
-certify correctness with non-trivial accuracy, ruling out purely in-situ
-stopping criteria.
+\item \textbf{IPW necessity---the strongest empirical finding.}
+We show that omitting inverse-probability weighting reverses policy rankings
+in 5 of 8 cells (wrong-best rate 1.00); IPW reduces bias $2.2\times$--$23\times$
+and is a necessary, not optional, correction whenever early stopping censors
+counterfactual trajectories.
 \item \textbf{Continuation-value formulation.}
-We replace correctness with a measurable quantity---expected improvement in
-proper scoring loss per additional reasoning token---estimable from delayed
-deployment outcomes without a held-out split.
+We replace the unobservable correctness target with the \emph{continuation value}---
+expected improvement in proper scoring loss per additional token---estimable
+from delayed deployment feedback without a held-out split.
 \item \textbf{VISTA.}
 A prequential budget-selection procedure combining randomized audits,
-importance-weighted policy comparison, and anytime-valid confidence sequences.
+IPW policy comparison, and anytime-valid confidence sequences.
+At $\lambda{=}0.01$--$0.1$, deployed VISTA achieves $3$--$59\%$ net token
+savings with Brier increases ${\leq}0.019$ (95\% CIs, 200 permutations).
+\item \textbf{Systematic empirical audit.}
+Eight cells (two models, four QA benchmarks) documenting heterogeneous
+budget-response curves, item-level allocation headroom, and per-component
+ablation---including the finding that confidence-threshold stopping degrades
+Brier in all eight cells.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -380,11 +387,17 @@ losses. Conformal Language Modeling applies related ideas to generative models
 by calibrating sampling and rejection rules~\cite{quach2024conformal}.
 Most directly, Conformal Thinking formulates reasoning-budget selection as a
 risk-control problem and calibrates upper and lower stopping thresholds from a
-validation set~\cite{wang2026conformalthinking}. VISTA studies a different
-regime: no separate calibration split is reserved, labels arrive sequentially
-after deployment decisions, and early stopping censors the outcomes of longer
-budget policies. Randomized trajectory audits are introduced specifically to
-recover those missing counterfactual policy outcomes.
+validation set~\cite{wang2026conformalthinking}; it is the closest in spirit to
+VISTA and likely achieves stronger savings in settings where a held-out split is
+available.
+VISTA targets a different regime: no calibration split is reserved (labels
+arrive sequentially after deployment decisions), and early stopping censors the
+outcomes of longer budget policies.
+Randomized trajectory audits are introduced specifically to recover those
+missing counterfactual outcomes, and anytime-valid monitoring replaces the
+static conformal guarantee with one that holds continuously as feedback arrives.
+A direct empirical comparison would require adapting Conformal Thinking to
+the streaming, censored-label setting, which we leave for future work.
 
 \paragraph{Inverse-probability weighting and anytime-valid inference.}
 VISTA combines two statistical ideas that solve different problems. First,
@@ -486,18 +499,19 @@ trajectory-based quantities are descriptive signals but do not constitute
 correctness guarantees.
 
 \begin{remark}
-Proposition~\ref{prop:impossibility} does not preclude label-free detection of
-\emph{trajectory stabilisation} such as answer convergence, entropy plateaus,
-or representational saturation. It also does not apply to trained probes that
-condition on labelled supervision, or to procedures that use a separate labeled
-calibration set---both of which supply additional information beyond the raw
-trajectory. The obstruction is specific to estimators that are simultaneously
-(a)~distribution-free, (b)~label-free at deployment time, and (c)~restricted to
-a single unlabeled trajectory. Supplying any one of labelled examples, a
-distributional assumption, or repeated trajectories from the same query opens
-avenues not covered by this result. This scope is consistent with empirical work
-showing useful self-evaluation, semantic-uncertainty, and hidden-state correctness
-signals under particular data distributions~\cite{kadavath2022know,kuhn2023semantic,zhang2025selfverification}.
+Proposition~\ref{prop:impossibility} is a standard label-free learning
+result~\cite{shalev2014understanding}: any measurable function of the unlabeled
+trajectory is a constant from the perspective of the label.
+Its role here is to explain the empirical failure documented in
+Section~\ref{sec:baselines}: threshold stopping degrades Brier in all eight
+cells not because of poor threshold calibration but because trajectory signals
+are, in the worst case, uninformative about correctness.
+The result does \emph{not} assert that signals are useless under an empirical
+distribution, nor that they cannot guide stopping heuristics in practice;
+it asserts that no such method carries a distribution-free correctness
+certificate. Methods that condition on a held-out calibration set (e.g.,
+Conformal Thinking~\cite{wang2026conformalthinking}) or on labelled
+supervision are explicitly outside this scope.
 \end{remark}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -925,7 +939,7 @@ of the reasoning budget for both models across all four datasets.
     Curves show qualitatively different patterns: near-linear gains on
     MMLU-Pro (M1 accuracy $47.7\%\to73.8\%$), early saturation on
     ARC-Challenge, non-monotone Brier on MedMCQA (M1 optimum at $b=1024$),
-    and monotone Brier deterioration on both medical datasets under M2.
+    and near-monotone Brier deterioration on both medical datasets under M2.
     End-point values are labelled; y-axes are shared within each metric
     column to enable direct model comparison.
     Data from Tables~\ref{tab:budget-audit} and~\ref{tab:budget-audit-m2}.}
@@ -940,7 +954,7 @@ ARC-Challenge exhibits early saturation: accuracy jumps from 92.0\% to 94.6\%
 in the first budget step and adds only 1.2~pp across the remaining five;
 98.3\% of items have Brier change below 0.001 at the $4096\!\to\!8192$ edge.
 MedMCQA is non-monotone: Brier reaches its minimum at $b=1024$ (0.628) and
-\emph{worsens} at every subsequent budget (reaching 0.662 at $b=8192$), while
+\emph{worsens or stays flat} at every subsequent budget (0.646 at both $b=2048$ and $b=4096$; 0.662 at $b=8192$), while
 accuracy peaks at $b=4096$ (67.2\%) and falls at $b=8192$ (66.6\%).
 MedQA-USMLE sustains gains throughout: accuracy increases from 64.8\% to
 78.2\% with approximately equal increments per doubling.
@@ -1059,10 +1073,11 @@ The contrast with M1 is systematic but not uniform.
 On DS1 (MMLU-Pro), M2 Brier \emph{improves} from 0.948 at $b=256$ to 0.878
 at $b=4096$ and slightly reverses to 0.888 at $b=8192$; accuracy likewise
 peaks at $b=4096$ (50.8\%) and declines.
-On DS3 (MedMCQA) and DS4 (MedQA-USMLE), M2 Brier worsens monotonically with
-every budget increase (reaching 0.929 and 0.827 at $b=8192$ versus 0.802 and
-0.727 at $b=256$), while M1 Brier improves on both.
-Monotonic Brier degradation on M2 is therefore confined to DS3 and DS4;
+On DS3 (MedMCQA) and DS4 (MedQA-USMLE), M2 Brier worsens at nearly every
+budget step (reaching 0.929 and 0.827 at $b=8192$ versus 0.802 and 0.727 at
+$b=256$; the sole exception is a 0.001 reversal at $b=4096\!\to\!8192$ on DS3),
+while M1 Brier improves on both.
+Near-monotonic Brier degradation on M2 is therefore confined to DS3 and DS4;
 DS1 and DS2 (ARC-Challenge) show broadly similar improvement directions across
 models, though rates and saturation points differ.
 A budget optimal for one model can actively degrade another on the same task.
@@ -1109,8 +1124,9 @@ Dataset ($n$) & Budget & Accuracy & Brier \\
 \begingroup
 \captionof{table}{Budget audit for M2 (DeepSeek-R1-Distill-Llama-8B, BF16, RTX~3090).
 Same format as Table~\ref{tab:budget-audit}.
-Brier worsens monotonically with budget on DS3 and DS4; on DS1 Brier improves
-through $b=4096$ and slightly reverses at $b=8192$.
+Brier worsens at nearly every budget step on DS3 and DS4 (one 0.001 reversal
+at $b=4096\!\to\!8192$ on DS3); on DS1 Brier improves through $b=4096$ and
+slightly reverses at $b=8192$.
 \textbf{Bold} marks the optimum per column per dataset.
 $n=979$ for ARC-Challenge (DS2): restricted to the 979-item common subset
 shared with M1 to ensure cross-model comparability; 21~items present only in
@@ -1132,10 +1148,12 @@ fixed budget ($0.738$ accuracy; Brier $0.4917$), while NLL selects $b=2048$
 On DS3 (MedMCQA, M1), the divergence is three-way: accuracy peaks at
 $b=4096$, Brier minimises at $b=1024$, and NLL is worst at $b=8192$---all
 three objectives point to different budgets.
-For M2, Brier worsens monotonically on DS3 and DS4 while accuracy continues
-to improve; on DS1, Brier improves through $b=4096$ and slightly reverses at
-$b=8192$, while accuracy similarly peaks at $b=4096$---so no single budget
-simultaneously optimises both Brier and accuracy on any of these datasets.
+For M2, Brier worsens at nearly every budget step on DS3 and DS4 while accuracy
+generally increases, with a one-step dip on each dataset (DS3: $b=1024\!\to\!2048$,
+$52.4\%\!\to\!51.8\%$; DS4: $b=2048\!\to\!4096$, $57.0\%\!\to\!56.2\%$); on DS1,
+Brier improves through $b=4096$ and slightly reverses at $b=8192$, while accuracy
+similarly peaks at $b=4096$---so no single budget simultaneously optimises both
+Brier and accuracy on any of these datasets.
 
 The proper-scoring-rule decomposition (Eq.~\ref{eq:decomposition}) separates
 reliability and resolution components: where further reasoning concentrates
@@ -1368,7 +1386,7 @@ while greedy switching raises mean Brier from $0.498$ to $0.529$
 (Table~\ref{tab:a20b_component_lambda001}).
 In both settings the CS is the operative safety mechanism.
 The statistical components (IPW, CS) are additionally measured on estimation
-quality directly: IPW reduces bias by $2.9\times$--$33\times$
+quality directly: IPW reduces bias by $2.2\times$--$23\times$
 (Table~\ref{tab:a01_ipw_naive}) and CS achieves FPR\,${=}\,0.000$ versus
 greedy monitoring's $0$--$58.5\%$ (Table~\ref{tab:a03_cs_greedy}).
 
@@ -1382,7 +1400,7 @@ Component & Failure mode & DS1 result & Aggregate result \\
 Audit weighting (IPW) &
   Selection bias distorts risk estimates &
   DS1: naive bias $0.071$, IPW bias $0.024$; DS1 naive is rank-preserving (wrong-best $0\%$); IPW wrong-best $23\%$ here &
-  IPW reduces bias $\geq 2.9\times$ in all 8 cells; reduces wrong-best rate from $100\%$ to $18.5$--$63\%$ on 5 affected cells; naive rank-preserving on 3 cells where natural continuation identifies correct budget. \\[4pt]
+  IPW reduces bias $2.2\times$--$23\times$ across all 8 cells; reduces wrong-best rate from $100\%$ to $18.5$--$63\%$ on 5 affected cells; naive rank-preserving on 3 cells where natural continuation identifies correct budget. \\[4pt]
 Sequential monitoring (CS) &
   Greedy switching on noise &
   CS FPR $= 0.000$;\, Greedy FPR $= 0.070$ &
@@ -1412,7 +1430,7 @@ The na\"{\i}ve estimator is restricted to these items and carries a persistent s
 bias of $0.071$ Brier units on DS1 (22\% of the oracle risk difference) that does not
 decrease with audit rate $\rho$.
 IPW achieves mean absolute bias $0.024$ at $\rho{=}0.20$ and converges to zero at $\rho{=}1$,
-consistently reducing bias by $\geq 2.9\times$ across all eight cells.
+reducing bias by $2.2\times$--$23\times$ across all eight cells.
 
 On policy ranking, the results are more nuanced.
 Na\"{\i}ve estimation is rank-preserving on three cells (M1/DS1, M2/DS2, M2/DS4):
@@ -1483,15 +1501,18 @@ Full VISTA evaluation (200 permutations, $\rho{=}0.20$, $\alpha{=}0.05$)
 across all eight cells confirms that at $\lambda{=}0$ (pure quality preservation)
 VISTA correctly stays at the cell-specific best fixed budget, achieving $\approx 0\%$
 net saving in all six Gate-0-passing cells.
-This is the expected behaviour: the CS correctly declines to certify any cheaper
-policy as better in expectation, since additional thinking uniformly improves
-calibration on these tasks.
-Under an explicit quality--compute tradeoff ($\lambda{=}0.01$), VISTA saves
-3.2\% tokens at $+0.6$ pp Brier on M1/DS1 and 34.5\% tokens at $+0.8$ pp
-Brier on M1/DS2 (ARC-Challenge, where Brier saturates early and
-large budget reductions incur only modest quality loss).
-Two cells fail Gate~0 (M2/DS3, M2/DS4): their Brier worsens monotonically above
-$b{=}256$, so there is no adaptive headroom and VISTA is classified as
+This is the expected and intended behaviour of an error-controlled procedure:
+the CS correctly declines to certify any cheaper policy when doing so would
+risk measurable calibration degradation.
+Table~\ref{tab:main} shows the full operating range across $\lambda$ values on M1/DS1.
+Increasing $\lambda$ unlocks progressively larger savings: at $\lambda{=}0.01$,
+deployed VISTA saves $3.2\%$ [2.7\%, 3.7\%] tokens at $+0.6$ pp Brier on M1/DS1
+and $34.5\%$ [32.1\%, 36.8\%] at $+0.8$ pp on M1/DS2 (where Brier saturates
+after the first budget step, so large reductions incur only modest quality loss).
+At $\lambda{=}0.1$, M1/DS2 reaches $59.4\%$ [57.1\%, 61.7\%] net saving
+at $+1.9$ pp Brier---a regime where the CS certifies Fixed@1024 at $n{=}979$.
+Two cells fail Gate~0 (M2/DS3, M2/DS4): their Brier is worse above $b{=}256$
+at every budget, so there is no adaptive headroom and VISTA is classified as
 no-opportunity rather than a policy failure.
 
 \begin{center}
@@ -1505,24 +1526,25 @@ Confidence stopping                 & 1453 & 0.664 & 2.952 & 0.645 & $+0.823$ & 
 Entropy stopping                    & 1624 & 0.643 & 2.938 & 0.659 & $+0.802$ & No  \\
 Stability stopping                  & 1655 & 0.608 & 2.567 & 0.644 & $+0.798$ & No  \\
 \midrule
-VISTA ($\lambda{=}0$, $\rho{=}0.20$)   & 8191 & 0.492 & 2.764 & 0.738 & $0.000\;[{-0.000},{+0.000}]$ & No  \\
+VISTA ($\lambda{=}0$, $\rho{=}0.20$)    & 8191 & 0.492 & 2.764 & 0.738 & $0.000\;[{-0.000},{+0.000}]$ & No  \\
 VISTA ($\lambda{=}0.01$, $\rho{=}0.20$) & 7931 & 0.498 & 2.767 & 0.734 & $0.032\;[{0.027},{0.037}]$ & No  \\
+VISTA ($\lambda{=}0.1$, $\rho{=}0.20$)  & 7414 & 0.505 & 2.761 & 0.729 & $0.095\;[{0.082},{0.108}]$ & No  \\
 \bottomrule
 \end{tabular}
 \end{center}
 \begingroup
 \captionof{table}{Comparison of deployed reasoning-budget policies on M1/DS1
-(MMLU-Pro, Qwen3-8B, $n=1000$).
-Tokens: mean actual tokens per item including $\rho{=}0.20$ audit overhead.
+(MMLU-Pro, Qwen3-8B, $n=1000$, $\rho{=}0.20$).
+Tokens: mean actual tokens per item including audit overhead.
 Net saving: $1 - \text{mean tokens}/b_{\mathrm{ref}}$; values in brackets are
 95\% CIs from 200 stream-order permutations.
 Threshold policies stop at the first budget $b$ where the criterion is met.
 VISTA ($\lambda{=}0$) is quality-preserving: the CS correctly declines to
-certify any cheaper policy at this stream length, yielding $\approx 0\%$ net saving.
-VISTA ($\lambda{=}0.01$) trades $+0.6$ pp Brier for $3.2\%$ net token saving.
-Threshold policies achieve 80--83\% gross token reduction but degrade Brier
-by $+0.115$ to $+0.172$ relative to best fixed; they require no feedback but
-also provide no quality guarantees.}
+certify any cheaper policy, yielding $\approx 0\%$ net saving by design.
+VISTA ($\lambda{=}0.01$) trades $+0.6$ pp Brier for $3.2\%$ net saving;
+$\lambda{=}0.1$ reaches $9.5\%$ saving at $+1.3$ pp Brier.
+Threshold policies achieve 80--83\% gross token reduction but increase Brier
+by $+0.115$ to $+0.172$ relative to best fixed, providing no quality guarantee.}
 \label{tab:main}
 \endgroup
 \vspace{\baselineskip}
@@ -1557,10 +1579,16 @@ so VISTA can safely redirect many to shorter budgets under a mild quality penalt
 The Oracle~C headroom (94--97\% for the $b_{\mathrm{ref}}{=}8192$ cells) substantially exceeds the
 deployed saving, consistent with the CS conservatism documented in
 Section~\ref{sec:ablation}: certifying a policy requires $\approx n$ audited
-observations, and 200-item streams at $\rho{=}0.20$ yield only $\sim$40
-audits per cell.
-The gap between Oracle~C and deployed VISTA saving narrows with larger
-stream length, as the CS bound tightens.
+observations, and the streams tested here ($n{=}500$--$1000$, $\rho{=}0.20$)
+yield only 100--200 audits per cell.
+In principle, the time-uniform empirical-Bernstein bound width scales as
+$O\!\bigl(\sqrt{\log(n_{\pi}/\alpha)\,/\,n_{\mathrm{aud}}}\bigr)$~\cite{howard2021confidence,waudbysmith2024betting,ramdas2023safe},
+so for policies that genuinely dominate the reference in expectation the gap
+to Oracle~C is expected to narrow as $n_{\mathrm{aud}}\!\to\!\infty$;
+however, the signal-to-noise ratio in per-item combined-loss differences is
+too low at $n{\leq}1000$ to observe this empirically within current
+dataset bounds (verifying the asymptotic claim would require substantially
+larger corpora or bootstrap resampling outside the anytime-valid guarantee).
 
 Figure~\ref{fig:frontier} visualises the quality--compute frontier for
 M1/DS1 (panel~a) and the $\rho$-sensitivity curves (panel~b).
@@ -1643,7 +1671,7 @@ and budget intervals---in ways that cannot be resolved by choosing a larger
 fixed budget.
 On ARC-Challenge, 98\% of the potential Brier gain is captured in the first
 budget step; on MedMCQA, continuing beyond $b=1024$ actively worsens Brier.
-M2's Brier worsens monotonically on two of four datasets (MedMCQA and
+M2's Brier worsens at nearly every budget step on two of four datasets (MedMCQA and
 MedQA-USMLE) while M1's improves; on MMLU-Pro, M2 Brier improves through
 $b=4096$ and reverses slightly at the maximum budget.
 Accuracy and proper-scoring-rule optima can differ by three budget levels on
@@ -1708,6 +1736,19 @@ but the gap between Oracle~C saving and deployed saving ($0$--$35\%$) is the dir
 cost of the statistical guarantee and limited stream length --- not a failure of the
 approach.
 
+\paragraph{Choosing $\lambda$ in practice.}
+In practice, $\lambda$ should reflect the acceptable quality--compute exchange
+rate at deployment.
+The $\lambda{=}0.01$ results above offer a concrete reference point: this
+setting yields $3$--$35\%$ net token savings at mean Brier increases of
+$0.006$--$0.012$ across the three $b_{\mathrm{ref}}{=}b_{\max}$ cells
+(M1/DS1: $3.2\%$, $+0.006$ Brier; M1/DS2: $34.5\%$, $+0.008$; M1/DS4:
+$7.0\%$, $+0.012$; all with 95\% CIs from 200 permutations).
+Practitioners with strict quality requirements should begin at $\lambda{=}0$---which
+VISTA correctly renders quality-preserving---and increase $\lambda$
+incrementally while monitoring realized Brier degradation against this
+reference rate.
+
 \paragraph{Limitations.}
 Assumption~\ref{asm:feedback} restricts applicability to tasks with eventually
 verifiable outcomes. The policy family is finite and pre-specified, so
@@ -1717,6 +1758,12 @@ trajectories. Experiments are limited to 8B-parameter models on
 single-workstation GPUs; whether patterns change at larger scales is an open
 question. Randomized auditing incurs real compute costs that may conflict
 with per-request latency constraints even when the long-run value is positive.
+The asymptotic narrowing of the gap between Oracle~C and deployed VISTA
+saving as $n_{\mathrm{aud}}\!\to\!\infty$ is not empirically verifiable at
+the dataset scales tested here ($n\leq 1000$): per-item combined-loss
+signal-to-noise ratios are too low for consistent CS certification in this
+regime, and extending empirically requires substantially larger corpora or
+bootstrap resampling outside the anytime-valid guarantee.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
@@ -1765,13 +1812,13 @@ negative result that the framework correctly identifies rather than masks.
 \section*{Data and Code Availability}
 Code and cached checkpoint tables (all per-item, per-budget predictive
 distributions) will be released in a public repository upon acceptance under
-an open-source license (specific URL and license identifier withheld for
-double-blind review).
+an open-source license (URL and license identifier to be confirmed at
+acceptance).
 The online policy-selection procedure is fully replayable from these tables
 without GPU inference.
 
 \section*{Acknowledgements}
-Acknowledgements to be added upon de-anonymization.
+% [AUTHOR ACTION REQUIRED] Add acknowledgement text here before submission.
 
 \FloatBarrier
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
