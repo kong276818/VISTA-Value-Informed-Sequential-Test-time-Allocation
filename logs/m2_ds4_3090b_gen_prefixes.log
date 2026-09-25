@@ -1,0 +1,741 @@
+[gen-prefixes] 500 items, budgets=[256, 512, 1024, 2048, 4096, 8192], gpu=3090b
+[gen-prefixes] loading tokenizer for deepseek-ai/DeepSeek-R1-Distill-Llama-8B ...
+[gen-prefixes] max_prompt_len=889  B_MAX=8192  cue_len=7  margin=64  → max_model_len=9152
+[gen-prefixes] pre-validation PASS — all 500 items fit in 9152 tokens
+[gen-prefixes] config_hash=2692baac27733e6b
+[gen-prefixes] 500 items to generate (0 already checkpointed)
+INFO 08-18 22:47:40 [utils.py:233] non-default args: {'dtype': 'bfloat16', 'max_model_len': 9152, 'enable_prefix_caching': False, 'gpu_memory_utilization': 0.85, 'disable_log_stats': True, 'model': 'deepseek-ai/DeepSeek-R1-Distill-Llama-8B'}
+INFO 08-18 22:47:42 [model.py:549] Resolved architecture: LlamaForCausalLM
+INFO 08-18 22:47:42 [model.py:1678] Using max model len 9152
+INFO 08-18 22:47:42 [scheduler.py:238] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 08-18 22:47:42 [vllm.py:790] Asynchronous scheduling is enabled.
+(EngineCore pid=193384) INFO 08-18 22:47:45 [core.py:105] Initializing a V1 LLM engine (v0.19.0) with config: model='deepseek-ai/DeepSeek-R1-Distill-Llama-8B', speculative_config=None, tokenizer='deepseek-ai/DeepSeek-R1-Distill-Llama-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=9152, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=deepseek-ai/DeepSeek-R1-Distill-Llama-8B, enable_prefix_caching=False, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_images_per_batch': 0, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore pid=193384) INFO 08-18 22:47:45 [parallel_state.py:1400] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://117.16.137.153:54179 backend=nccl
+(EngineCore pid=193384) INFO 08-18 22:47:45 [parallel_state.py:1716] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=193384) INFO 08-18 22:47:46 [gpu_model_runner.py:4735] Starting to load model deepseek-ai/DeepSeek-R1-Distill-Llama-8B...
+(EngineCore pid=193384) INFO 08-18 22:47:47 [cuda.py:334] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=193384) INFO 08-18 22:47:47 [flash_attn.py:596] Using FlashAttention version 2
+(EngineCore pid=193384) <frozen importlib._bootstrap_external>:1301: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+(EngineCore pid=193384) <frozen importlib._bootstrap_external>:1301: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+(EngineCore pid=193384) Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+(EngineCore pid=193384) Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.35s/it]
+(EngineCore pid=193384) Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:02<00:00,  1.25s/it]
+(EngineCore pid=193384) Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:02<00:00,  1.27s/it]
+(EngineCore pid=193384) 
+(EngineCore pid=193384) INFO 08-18 22:47:51 [default_loader.py:384] Loading weights took 2.57 seconds
+(EngineCore pid=193384) INFO 08-18 22:47:51 [gpu_model_runner.py:4820] Model loading took 14.99 GiB memory and 4.317817 seconds
+(EngineCore pid=193384) INFO 08-18 22:47:55 [backends.py:1051] Using cache directory: /home/sclab/.cache/vllm/torch_compile_cache/8a7cfda6c2/rank_0_0/backbone for vLLM's torch.compile
+(EngineCore pid=193384) INFO 08-18 22:47:55 [backends.py:1111] Dynamo bytecode transform time: 3.98 s
+(EngineCore pid=193384) INFO 08-18 22:47:56 [backends.py:372] Cache the graph of compile range (1, 8192) for later use
+(EngineCore pid=193384) INFO 08-18 22:47:57 [backends.py:390] Compiling a graph for compile range (1, 8192) takes 1.35 s
+(EngineCore pid=193384) INFO 08-18 22:47:58 [decorators.py:640] saved AOT compiled function to /home/sclab/.cache/vllm/torch_compile_cache/torch_aot_compile/6343ff33aff3a469aadbcd91d6252643063563f2867897c5b5418b0b138b5a97/rank_0_0/model
+(EngineCore pid=193384) INFO 08-18 22:47:58 [monitor.py:48] torch.compile took 7.00 s in total
+(EngineCore pid=193384) INFO 08-18 22:47:58 [monitor.py:76] Initial profiling/warmup run took 0.13 s
+(EngineCore pid=193384) INFO 08-18 22:48:00 [kv_cache_utils.py:829] Overriding num_gpu_blocks=0 with num_gpu_blocks_override=512
+(EngineCore pid=193384) INFO 08-18 22:48:00 [gpu_model_runner.py:5876] Profiling CUDA graph memory: PIECEWISE=51 (largest=512), FULL=35 (largest=256)
+(EngineCore pid=193384) INFO 08-18 22:48:02 [gpu_model_runner.py:5955] Estimated CUDA graph memory: 0.53 GiB total
+(EngineCore pid=193384) INFO 08-18 22:48:02 [gpu_worker.py:436] Available KV cache memory: 4.1 GiB
+(EngineCore pid=193384) INFO 08-18 22:48:02 [gpu_worker.py:470] In v0.19, CUDA graph memory profiling will be enabled by default (VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1), which more accurately accounts for CUDA graph memory during KV cache allocation. To try it now, set VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS=1 and increase --gpu-memory-utilization from 0.8500 to 0.8723 to maintain the same effective KV cache size.
+(EngineCore pid=193384) INFO 08-18 22:48:02 [kv_cache_utils.py:1319] GPU KV cache size: 33,568 tokens
+(EngineCore pid=193384) INFO 08-18 22:48:02 [kv_cache_utils.py:1324] Maximum concurrency for 9,152 tokens per request: 3.67x
+(EngineCore pid=193384) Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   2%|▏         | 1/51 [00:00<00:06,  7.91it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:06,  7.98it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   6%|▌         | 3/51 [00:00<00:06,  8.00it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   8%|▊         | 4/51 [00:00<00:05,  7.99it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  10%|▉         | 5/51 [00:00<00:05,  7.99it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:05,  8.00it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▎        | 7/51 [00:00<00:05,  7.99it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▌        | 8/51 [00:01<00:05,  7.98it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  18%|█▊        | 9/51 [00:01<00:05,  8.24it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  20%|█▉        | 10/51 [00:01<00:04,  8.44it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 11/51 [00:01<00:04,  8.62it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  24%|██▎       | 12/51 [00:01<00:04,  8.73it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 13/51 [00:01<00:04,  8.82it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  27%|██▋       | 14/51 [00:01<00:04,  8.88it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  29%|██▉       | 15/51 [00:01<00:04,  8.93it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 16/51 [00:01<00:03,  8.97it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  35%|███▌      | 18/51 [00:02<00:03, 10.71it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  39%|███▉      | 20/51 [00:02<00:02, 11.77it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 22/51 [00:02<00:02, 12.47it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  47%|████▋     | 24/51 [00:02<00:02, 12.87it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  51%|█████     | 26/51 [00:02<00:01, 13.77it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▍    | 28/51 [00:02<00:01, 14.56it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  59%|█████▉    | 30/51 [00:02<00:01, 15.14it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  63%|██████▎   | 32/51 [00:02<00:01, 15.33it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  69%|██████▊   | 35/51 [00:03<00:00, 17.55it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  75%|███████▍  | 38/51 [00:03<00:00, 19.12it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  78%|███████▊  | 40/51 [00:03<00:00, 19.26it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  84%|████████▍ | 43/51 [00:03<00:00, 21.14it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  90%|█████████ | 46/51 [00:03<00:00, 22.97it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  96%|█████████▌| 49/51 [00:03<00:00, 24.70it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:03<00:00, 13.69it/s]
+(EngineCore pid=193384) Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   6%|▌         | 2/35 [00:00<00:02, 13.02it/s]Capturing CUDA graphs (decode, FULL):  11%|█▏        | 4/35 [00:00<00:02, 13.13it/s]Capturing CUDA graphs (decode, FULL):  17%|█▋        | 6/35 [00:00<00:02, 13.23it/s]Capturing CUDA graphs (decode, FULL):  23%|██▎       | 8/35 [00:00<00:02, 13.24it/s]Capturing CUDA graphs (decode, FULL):  29%|██▊       | 10/35 [00:00<00:01, 13.96it/s]Capturing CUDA graphs (decode, FULL):  34%|███▍      | 12/35 [00:00<00:01, 14.62it/s]Capturing CUDA graphs (decode, FULL):  40%|████      | 14/35 [00:00<00:01, 15.14it/s]Capturing CUDA graphs (decode, FULL):  46%|████▌     | 16/35 [00:01<00:01, 15.28it/s]Capturing CUDA graphs (decode, FULL):  54%|█████▍    | 19/35 [00:01<00:00, 17.52it/s]Capturing CUDA graphs (decode, FULL):  63%|██████▎   | 22/35 [00:01<00:00, 19.10it/s]Capturing CUDA graphs (decode, FULL):  71%|███████▏  | 25/35 [00:01<00:00, 20.36it/s]Capturing CUDA graphs (decode, FULL):  80%|████████  | 28/35 [00:01<00:00, 22.08it/s]Capturing CUDA graphs (decode, FULL):  91%|█████████▏| 32/35 [00:01<00:00, 24.75it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:01<00:00, 18.99it/s]
+(EngineCore pid=193384) INFO 08-18 22:48:08 [gpu_model_runner.py:6046] Graph capturing finished in 6 secs, took 0.54 GiB
+(EngineCore pid=193384) INFO 08-18 22:48:08 [gpu_worker.py:597] CUDA graph pool memory: 0.54 GiB (actual), 0.53 GiB (estimated), difference: 0.01 GiB (1.8%).
+(EngineCore pid=193384) INFO 08-18 22:48:08 [core.py:283] init engine (profile, create kv cache, warmup model) took 17.28 seconds
+[gen-prefixes] KV cache query failed ('LLMEngine' object has no attribute 'cache_config'), using batch_size=3
+[gen-prefixes] generating 500 items, batch=3 (checkpoint written after each batch) ...
+[gen-prefixes] heartbeat  elapsed=60s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=120s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=180s  SM=0%  mem=40MiB
+[gen-prefixes] batch 1–3/500  188.6s  130 tok/s  total=3/500
+[gen-prefixes] heartbeat  elapsed=240s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=300s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=360s  SM=0%  mem=40MiB
+[gen-prefixes] batch 4–6/500  188.2s  131 tok/s  total=6/500
+[gen-prefixes] heartbeat  elapsed=420s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=480s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=540s  SM=0%  mem=40MiB
+[gen-prefixes] batch 7–9/500  188.2s  131 tok/s  total=9/500
+[gen-prefixes] heartbeat  elapsed=600s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=661s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=721s  SM=0%  mem=40MiB
+[gen-prefixes] batch 10–12/500  188.2s  131 tok/s  total=12/500
+[gen-prefixes] heartbeat  elapsed=781s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=841s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=901s  SM=0%  mem=40MiB
+[gen-prefixes] batch 13–15/500  187.7s  131 tok/s  total=15/500
+[gen-prefixes] heartbeat  elapsed=961s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1021s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1081s  SM=0%  mem=40MiB
+[gen-prefixes] batch 16–18/500  189.0s  130 tok/s  total=18/500
+[gen-prefixes] heartbeat  elapsed=1141s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1201s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1261s  SM=0%  mem=40MiB
+[gen-prefixes] batch 19–21/500  187.6s  131 tok/s  total=21/500
+[gen-prefixes] heartbeat  elapsed=1321s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1381s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1441s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1501s  SM=0%  mem=40MiB
+[gen-prefixes] batch 22–24/500  187.7s  131 tok/s  total=24/500
+[gen-prefixes] heartbeat  elapsed=1561s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1621s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1681s  SM=0%  mem=40MiB
+[gen-prefixes] batch 25–27/500  187.9s  131 tok/s  total=27/500
+[gen-prefixes] heartbeat  elapsed=1741s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1802s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1862s  SM=0%  mem=40MiB
+[gen-prefixes] batch 28–30/500  188.2s  131 tok/s  total=30/500
+[gen-prefixes] heartbeat  elapsed=1922s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=1982s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2042s  SM=0%  mem=40MiB
+[gen-prefixes] batch 31–33/500  187.7s  131 tok/s  total=33/500
+[gen-prefixes] heartbeat  elapsed=2102s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2162s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2222s  SM=0%  mem=40MiB
+[gen-prefixes] batch 34–36/500  187.8s  131 tok/s  total=36/500
+[gen-prefixes] heartbeat  elapsed=2282s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2342s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2402s  SM=0%  mem=40MiB
+[gen-prefixes] batch 37–39/500  187.6s  131 tok/s  total=39/500
+[gen-prefixes] heartbeat  elapsed=2462s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2522s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2582s  SM=0%  mem=40MiB
+[gen-prefixes] batch 40–42/500  187.8s  131 tok/s  total=42/500
+[gen-prefixes] heartbeat  elapsed=2642s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2702s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2762s  SM=0%  mem=40MiB
+[gen-prefixes] batch 43–45/500  187.6s  131 tok/s  total=45/500
+[gen-prefixes] heartbeat  elapsed=2822s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2882s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=2943s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3003s  SM=0%  mem=40MiB
+[gen-prefixes] batch 46–48/500  187.5s  131 tok/s  total=48/500
+[gen-prefixes] heartbeat  elapsed=3063s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3123s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3183s  SM=0%  mem=40MiB
+[gen-prefixes] batch 49–51/500  187.6s  131 tok/s  total=51/500
+[gen-prefixes] heartbeat  elapsed=3243s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3303s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3363s  SM=0%  mem=40MiB
+[gen-prefixes] batch 52–54/500  187.6s  131 tok/s  total=54/500
+[gen-prefixes] heartbeat  elapsed=3423s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3483s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3543s  SM=0%  mem=40MiB
+[gen-prefixes] batch 55–57/500  187.8s  131 tok/s  total=57/500
+[gen-prefixes] heartbeat  elapsed=3603s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3663s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3723s  SM=0%  mem=40MiB
+[gen-prefixes] batch 58–60/500  187.7s  131 tok/s  total=60/500
+[gen-prefixes] heartbeat  elapsed=3783s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3843s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=3903s  SM=0%  mem=40MiB
+[gen-prefixes] batch 61–63/500  187.8s  131 tok/s  total=63/500
+[gen-prefixes] heartbeat  elapsed=3963s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4023s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4084s  SM=0%  mem=40MiB
+[gen-prefixes] batch 64–66/500  188.7s  130 tok/s  total=66/500
+[gen-prefixes] heartbeat  elapsed=4144s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4204s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4264s  SM=0%  mem=40MiB
+[gen-prefixes] batch 67–69/500  187.9s  131 tok/s  total=69/500
+[gen-prefixes] heartbeat  elapsed=4324s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4384s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4444s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4504s  SM=0%  mem=40MiB
+[gen-prefixes] batch 70–72/500  188.1s  131 tok/s  total=72/500
+[gen-prefixes] heartbeat  elapsed=4564s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4624s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4684s  SM=0%  mem=40MiB
+[gen-prefixes] batch 73–75/500  187.9s  131 tok/s  total=75/500
+[gen-prefixes] heartbeat  elapsed=4744s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4804s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4864s  SM=0%  mem=40MiB
+[gen-prefixes] batch 76–78/500  188.1s  131 tok/s  total=78/500
+[gen-prefixes] heartbeat  elapsed=4924s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=4984s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5044s  SM=0%  mem=40MiB
+[gen-prefixes] batch 79–81/500  187.7s  131 tok/s  total=81/500
+[gen-prefixes] heartbeat  elapsed=5104s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5165s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5225s  SM=0%  mem=40MiB
+[gen-prefixes] batch 82–84/500  188.0s  131 tok/s  total=84/500
+[gen-prefixes] heartbeat  elapsed=5285s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5345s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5405s  SM=0%  mem=40MiB
+[gen-prefixes] batch 85–87/500  187.9s  131 tok/s  total=87/500
+[gen-prefixes] heartbeat  elapsed=5465s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5525s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5585s  SM=0%  mem=40MiB
+[gen-prefixes] batch 88–90/500  187.6s  131 tok/s  total=90/500
+[gen-prefixes] heartbeat  elapsed=5645s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5705s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5765s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5825s  SM=0%  mem=40MiB
+[gen-prefixes] batch 91–93/500  187.9s  131 tok/s  total=93/500
+[gen-prefixes] heartbeat  elapsed=5885s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=5945s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6005s  SM=0%  mem=40MiB
+[gen-prefixes] batch 94–96/500  187.5s  131 tok/s  total=96/500
+[gen-prefixes] heartbeat  elapsed=6065s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6125s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6185s  SM=0%  mem=40MiB
+[gen-prefixes] batch 97–99/500  188.0s  131 tok/s  total=99/500
+[gen-prefixes] heartbeat  elapsed=6245s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6306s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6366s  SM=0%  mem=40MiB
+[gen-prefixes] batch 100–102/500  187.7s  131 tok/s  total=102/500
+[gen-prefixes] heartbeat  elapsed=6426s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6486s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6546s  SM=0%  mem=40MiB
+[gen-prefixes] batch 103–105/500  187.7s  131 tok/s  total=105/500
+[gen-prefixes] heartbeat  elapsed=6606s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6666s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6726s  SM=0%  mem=40MiB
+[gen-prefixes] batch 106–108/500  187.9s  131 tok/s  total=108/500
+[gen-prefixes] heartbeat  elapsed=6786s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6846s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=6906s  SM=0%  mem=40MiB
+[gen-prefixes] batch 109–111/500  187.8s  131 tok/s  total=111/500
+[gen-prefixes] heartbeat  elapsed=6966s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7026s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7086s  SM=0%  mem=40MiB
+[gen-prefixes] batch 112–114/500  188.1s  131 tok/s  total=114/500
+[gen-prefixes] heartbeat  elapsed=7146s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7206s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7266s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7326s  SM=0%  mem=40MiB
+[gen-prefixes] batch 115–117/500  188.2s  131 tok/s  total=117/500
+[gen-prefixes] heartbeat  elapsed=7386s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7447s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7507s  SM=0%  mem=40MiB
+[gen-prefixes] batch 118–120/500  188.2s  131 tok/s  total=120/500
+[gen-prefixes] heartbeat  elapsed=7567s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7627s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7687s  SM=0%  mem=40MiB
+[gen-prefixes] batch 121–123/500  187.8s  131 tok/s  total=123/500
+[gen-prefixes] heartbeat  elapsed=7747s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7807s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7867s  SM=0%  mem=40MiB
+[gen-prefixes] batch 124–126/500  187.6s  131 tok/s  total=126/500
+[gen-prefixes] heartbeat  elapsed=7927s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=7987s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8047s  SM=0%  mem=40MiB
+[gen-prefixes] batch 127–129/500  187.7s  131 tok/s  total=129/500
+[gen-prefixes] heartbeat  elapsed=8107s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8167s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8227s  SM=0%  mem=40MiB
+[gen-prefixes] batch 130–132/500  187.6s  131 tok/s  total=132/500
+[gen-prefixes] heartbeat  elapsed=8287s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8347s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8407s  SM=0%  mem=40MiB
+[gen-prefixes] batch 133–135/500  187.7s  131 tok/s  total=135/500
+[gen-prefixes] heartbeat  elapsed=8467s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8528s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8588s  SM=0%  mem=40MiB
+[gen-prefixes] batch 136–138/500  187.9s  131 tok/s  total=138/500
+[gen-prefixes] heartbeat  elapsed=8648s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8708s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8768s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8828s  SM=0%  mem=40MiB
+[gen-prefixes] batch 139–141/500  187.4s  131 tok/s  total=141/500
+[gen-prefixes] heartbeat  elapsed=8888s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=8948s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9008s  SM=0%  mem=40MiB
+[gen-prefixes] batch 142–144/500  187.7s  131 tok/s  total=144/500
+[gen-prefixes] heartbeat  elapsed=9068s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9128s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9188s  SM=0%  mem=40MiB
+[gen-prefixes] batch 145–147/500  187.5s  131 tok/s  total=147/500
+[gen-prefixes] heartbeat  elapsed=9248s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9308s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9368s  SM=0%  mem=40MiB
+[gen-prefixes] batch 148–150/500  188.2s  131 tok/s  total=150/500
+[gen-prefixes] heartbeat  elapsed=9428s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9488s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9548s  SM=0%  mem=40MiB
+[gen-prefixes] batch 151–153/500  187.7s  131 tok/s  total=153/500
+[gen-prefixes] heartbeat  elapsed=9608s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9669s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9729s  SM=0%  mem=40MiB
+[gen-prefixes] batch 154–156/500  188.3s  131 tok/s  total=156/500
+[gen-prefixes] heartbeat  elapsed=9789s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9849s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=9909s  SM=0%  mem=40MiB
+[gen-prefixes] batch 157–159/500  188.4s  130 tok/s  total=159/500
+[gen-prefixes] heartbeat  elapsed=9969s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10029s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10089s  SM=0%  mem=40MiB
+[gen-prefixes] batch 160–162/500  187.7s  131 tok/s  total=162/500
+[gen-prefixes] heartbeat  elapsed=10149s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10209s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10269s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10329s  SM=0%  mem=40MiB
+[gen-prefixes] batch 163–165/500  187.6s  131 tok/s  total=165/500
+[gen-prefixes] heartbeat  elapsed=10389s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10449s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10509s  SM=0%  mem=40MiB
+[gen-prefixes] batch 166–168/500  187.9s  131 tok/s  total=168/500
+[gen-prefixes] heartbeat  elapsed=10569s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10629s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10689s  SM=0%  mem=40MiB
+[gen-prefixes] batch 169–171/500  188.1s  131 tok/s  total=171/500
+[gen-prefixes] heartbeat  elapsed=10749s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10810s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10870s  SM=0%  mem=40MiB
+[gen-prefixes] batch 172–174/500  188.0s  131 tok/s  total=174/500
+[gen-prefixes] heartbeat  elapsed=10930s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=10990s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11050s  SM=0%  mem=40MiB
+[gen-prefixes] batch 175–177/500  187.9s  131 tok/s  total=177/500
+[gen-prefixes] heartbeat  elapsed=11110s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11170s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11230s  SM=0%  mem=40MiB
+[gen-prefixes] batch 178–180/500  187.9s  131 tok/s  total=180/500
+[gen-prefixes] heartbeat  elapsed=11290s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11350s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11410s  SM=0%  mem=40MiB
+[gen-prefixes] batch 181–183/500  187.6s  131 tok/s  total=183/500
+[gen-prefixes] heartbeat  elapsed=11470s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11530s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11590s  SM=0%  mem=40MiB
+[gen-prefixes] batch 184–186/500  187.9s  131 tok/s  total=186/500
+[gen-prefixes] heartbeat  elapsed=11650s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11710s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11770s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11830s  SM=0%  mem=40MiB
+[gen-prefixes] batch 187–189/500  187.9s  131 tok/s  total=189/500
+[gen-prefixes] heartbeat  elapsed=11890s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=11951s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12011s  SM=0%  mem=40MiB
+[gen-prefixes] batch 190–192/500  187.7s  131 tok/s  total=192/500
+[gen-prefixes] heartbeat  elapsed=12071s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12131s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12191s  SM=0%  mem=40MiB
+[gen-prefixes] batch 193–195/500  187.8s  131 tok/s  total=195/500
+[gen-prefixes] heartbeat  elapsed=12251s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12311s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12371s  SM=0%  mem=40MiB
+[gen-prefixes] batch 196–198/500  187.8s  131 tok/s  total=198/500
+[gen-prefixes] heartbeat  elapsed=12431s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12491s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12551s  SM=0%  mem=40MiB
+[gen-prefixes] batch 199–201/500  187.9s  131 tok/s  total=201/500
+[gen-prefixes] heartbeat  elapsed=12611s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12671s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12731s  SM=0%  mem=40MiB
+[gen-prefixes] batch 202–204/500  187.7s  131 tok/s  total=204/500
+[gen-prefixes] heartbeat  elapsed=12791s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12851s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=12911s  SM=0%  mem=40MiB
+[gen-prefixes] batch 205–207/500  187.8s  131 tok/s  total=207/500
+[gen-prefixes] heartbeat  elapsed=12971s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13032s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13092s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13152s  SM=0%  mem=40MiB
+[gen-prefixes] batch 208–210/500  187.8s  131 tok/s  total=210/500
+[gen-prefixes] heartbeat  elapsed=13212s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13272s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13332s  SM=0%  mem=40MiB
+[gen-prefixes] batch 211–213/500  187.6s  131 tok/s  total=213/500
+[gen-prefixes] heartbeat  elapsed=13392s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13452s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13512s  SM=0%  mem=40MiB
+[gen-prefixes] batch 214–216/500  187.8s  131 tok/s  total=216/500
+[gen-prefixes] heartbeat  elapsed=13572s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13632s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13692s  SM=0%  mem=40MiB
+[gen-prefixes] batch 217–219/500  187.9s  131 tok/s  total=219/500
+[gen-prefixes] heartbeat  elapsed=13752s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13812s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13872s  SM=0%  mem=40MiB
+[gen-prefixes] batch 220–222/500  188.1s  131 tok/s  total=222/500
+[gen-prefixes] heartbeat  elapsed=13932s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=13992s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14052s  SM=0%  mem=40MiB
+[gen-prefixes] batch 223–225/500  187.6s  131 tok/s  total=225/500
+[gen-prefixes] heartbeat  elapsed=14112s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14173s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14233s  SM=0%  mem=40MiB
+[gen-prefixes] batch 226–228/500  188.2s  131 tok/s  total=228/500
+[gen-prefixes] heartbeat  elapsed=14293s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14353s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14413s  SM=0%  mem=40MiB
+[gen-prefixes] batch 229–231/500  188.2s  131 tok/s  total=231/500
+[gen-prefixes] heartbeat  elapsed=14473s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14533s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14593s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14653s  SM=0%  mem=40MiB
+[gen-prefixes] batch 232–234/500  187.9s  131 tok/s  total=234/500
+[gen-prefixes] heartbeat  elapsed=14713s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14773s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14833s  SM=0%  mem=40MiB
+[gen-prefixes] batch 235–237/500  188.4s  130 tok/s  total=237/500
+[gen-prefixes] heartbeat  elapsed=14893s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=14953s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15013s  SM=0%  mem=40MiB
+[gen-prefixes] batch 238–240/500  187.7s  131 tok/s  total=240/500
+[gen-prefixes] heartbeat  elapsed=15073s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15133s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15193s  SM=0%  mem=40MiB
+[gen-prefixes] batch 241–243/500  187.8s  131 tok/s  total=243/500
+[gen-prefixes] heartbeat  elapsed=15253s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15314s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15374s  SM=0%  mem=40MiB
+[gen-prefixes] batch 244–246/500  188.1s  131 tok/s  total=246/500
+[gen-prefixes] heartbeat  elapsed=15434s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15494s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15554s  SM=0%  mem=40MiB
+[gen-prefixes] batch 247–249/500  187.6s  131 tok/s  total=249/500
+[gen-prefixes] heartbeat  elapsed=15614s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15674s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15734s  SM=0%  mem=40MiB
+[gen-prefixes] batch 250–252/500  188.5s  130 tok/s  total=252/500
+[gen-prefixes] heartbeat  elapsed=15794s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15854s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=15914s  SM=0%  mem=40MiB
+[gen-prefixes] batch 253–255/500  187.9s  131 tok/s  total=255/500
+[gen-prefixes] heartbeat  elapsed=15974s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16034s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16094s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16154s  SM=0%  mem=40MiB
+[gen-prefixes] batch 256–258/500  187.9s  131 tok/s  total=258/500
+[gen-prefixes] heartbeat  elapsed=16214s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16274s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16334s  SM=0%  mem=40MiB
+[gen-prefixes] batch 259–261/500  187.7s  131 tok/s  total=261/500
+[gen-prefixes] heartbeat  elapsed=16394s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16455s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16515s  SM=0%  mem=40MiB
+[gen-prefixes] batch 262–264/500  188.0s  131 tok/s  total=264/500
+[gen-prefixes] heartbeat  elapsed=16575s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16635s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16695s  SM=0%  mem=40MiB
+[gen-prefixes] batch 265–267/500  187.5s  131 tok/s  total=267/500
+[gen-prefixes] heartbeat  elapsed=16755s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16815s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16875s  SM=0%  mem=40MiB
+[gen-prefixes] batch 268–270/500  188.2s  131 tok/s  total=270/500
+[gen-prefixes] heartbeat  elapsed=16935s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=16995s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17055s  SM=0%  mem=40MiB
+[gen-prefixes] batch 271–273/500  187.7s  131 tok/s  total=273/500
+[gen-prefixes] heartbeat  elapsed=17115s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17175s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17235s  SM=0%  mem=40MiB
+[gen-prefixes] batch 274–276/500  187.8s  131 tok/s  total=276/500
+[gen-prefixes] heartbeat  elapsed=17295s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17355s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17415s  SM=0%  mem=40MiB
+[gen-prefixes] batch 277–279/500  187.9s  131 tok/s  total=279/500
+[gen-prefixes] heartbeat  elapsed=17475s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17536s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17596s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17656s  SM=0%  mem=40MiB
+[gen-prefixes] batch 280–282/500  187.9s  131 tok/s  total=282/500
+[gen-prefixes] heartbeat  elapsed=17716s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17776s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17836s  SM=0%  mem=40MiB
+[gen-prefixes] batch 283–285/500  188.6s  130 tok/s  total=285/500
+[gen-prefixes] heartbeat  elapsed=17896s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=17956s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18016s  SM=0%  mem=40MiB
+[gen-prefixes] batch 286–288/500  187.8s  131 tok/s  total=288/500
+[gen-prefixes] heartbeat  elapsed=18076s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18136s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18196s  SM=0%  mem=40MiB
+[gen-prefixes] batch 289–291/500  188.3s  131 tok/s  total=291/500
+[gen-prefixes] heartbeat  elapsed=18256s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18316s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18376s  SM=0%  mem=40MiB
+[gen-prefixes] batch 292–294/500  188.1s  131 tok/s  total=294/500
+[gen-prefixes] heartbeat  elapsed=18436s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18496s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18556s  SM=0%  mem=40MiB
+[gen-prefixes] batch 295–297/500  187.9s  131 tok/s  total=297/500
+[gen-prefixes] heartbeat  elapsed=18616s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18677s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18737s  SM=0%  mem=40MiB
+[gen-prefixes] batch 298–300/500  188.0s  131 tok/s  total=300/500
+[gen-prefixes] heartbeat  elapsed=18797s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18857s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18917s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=18977s  SM=0%  mem=40MiB
+[gen-prefixes] batch 301–303/500  187.3s  131 tok/s  total=303/500
+[gen-prefixes] heartbeat  elapsed=19037s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19097s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19157s  SM=0%  mem=40MiB
+[gen-prefixes] batch 304–306/500  187.5s  131 tok/s  total=306/500
+[gen-prefixes] heartbeat  elapsed=19217s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19277s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19337s  SM=0%  mem=40MiB
+[gen-prefixes] batch 307–309/500  187.6s  131 tok/s  total=309/500
+[gen-prefixes] heartbeat  elapsed=19397s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19457s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19517s  SM=0%  mem=40MiB
+[gen-prefixes] batch 310–312/500  188.0s  131 tok/s  total=312/500
+[gen-prefixes] heartbeat  elapsed=19577s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19637s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19697s  SM=0%  mem=40MiB
+[gen-prefixes] batch 313–315/500  187.8s  131 tok/s  total=315/500
+[gen-prefixes] heartbeat  elapsed=19757s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19818s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19878s  SM=0%  mem=40MiB
+[gen-prefixes] batch 316–318/500  187.7s  131 tok/s  total=318/500
+[gen-prefixes] heartbeat  elapsed=19938s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=19998s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20058s  SM=0%  mem=40MiB
+[gen-prefixes] batch 319–321/500  187.7s  131 tok/s  total=321/500
+[gen-prefixes] heartbeat  elapsed=20118s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20178s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20238s  SM=0%  mem=40MiB
+[gen-prefixes] batch 322–324/500  187.3s  131 tok/s  total=324/500
+[gen-prefixes] heartbeat  elapsed=20298s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20358s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20418s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20478s  SM=0%  mem=40MiB
+[gen-prefixes] batch 325–327/500  187.8s  131 tok/s  total=327/500
+[gen-prefixes] heartbeat  elapsed=20538s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20598s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20658s  SM=0%  mem=40MiB
+[gen-prefixes] batch 328–330/500  187.7s  131 tok/s  total=330/500
+[gen-prefixes] heartbeat  elapsed=20718s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20778s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20838s  SM=0%  mem=40MiB
+[gen-prefixes] batch 331–333/500  187.8s  131 tok/s  total=333/500
+[gen-prefixes] heartbeat  elapsed=20898s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=20959s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21019s  SM=0%  mem=40MiB
+[gen-prefixes] batch 334–336/500  188.0s  131 tok/s  total=336/500
+[gen-prefixes] heartbeat  elapsed=21079s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21139s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21199s  SM=0%  mem=40MiB
+[gen-prefixes] batch 337–339/500  187.9s  131 tok/s  total=339/500
+[gen-prefixes] heartbeat  elapsed=21259s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21319s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21379s  SM=0%  mem=40MiB
+[gen-prefixes] batch 340–342/500  188.0s  131 tok/s  total=342/500
+[gen-prefixes] heartbeat  elapsed=21439s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21499s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21559s  SM=0%  mem=40MiB
+[gen-prefixes] batch 343–345/500  187.7s  131 tok/s  total=345/500
+[gen-prefixes] heartbeat  elapsed=21619s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21679s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21739s  SM=0%  mem=40MiB
+[gen-prefixes] batch 346–348/500  187.5s  131 tok/s  total=348/500
+[gen-prefixes] heartbeat  elapsed=21799s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21859s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21919s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=21979s  SM=0%  mem=40MiB
+[gen-prefixes] batch 349–351/500  187.7s  131 tok/s  total=351/500
+[gen-prefixes] heartbeat  elapsed=22040s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22100s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22160s  SM=0%  mem=40MiB
+[gen-prefixes] batch 352–354/500  188.1s  131 tok/s  total=354/500
+[gen-prefixes] heartbeat  elapsed=22220s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22280s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22340s  SM=0%  mem=40MiB
+[gen-prefixes] batch 355–357/500  187.7s  131 tok/s  total=357/500
+[gen-prefixes] heartbeat  elapsed=22400s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22460s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22520s  SM=0%  mem=40MiB
+[gen-prefixes] batch 358–360/500  188.3s  131 tok/s  total=360/500
+[gen-prefixes] heartbeat  elapsed=22580s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22640s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22700s  SM=0%  mem=40MiB
+[gen-prefixes] batch 361–363/500  187.9s  131 tok/s  total=363/500
+[gen-prefixes] heartbeat  elapsed=22760s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22820s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=22880s  SM=0%  mem=40MiB
+[gen-prefixes] batch 364–366/500  187.7s  131 tok/s  total=366/500
+[gen-prefixes] heartbeat  elapsed=22940s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23000s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23060s  SM=0%  mem=40MiB
+[gen-prefixes] batch 367–369/500  187.9s  131 tok/s  total=369/500
+[gen-prefixes] heartbeat  elapsed=23120s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23181s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23241s  SM=0%  mem=40MiB
+[gen-prefixes] batch 370–372/500  187.9s  131 tok/s  total=372/500
+[gen-prefixes] heartbeat  elapsed=23301s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23361s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23421s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23481s  SM=0%  mem=40MiB
+[gen-prefixes] batch 373–375/500  188.0s  131 tok/s  total=375/500
+[gen-prefixes] heartbeat  elapsed=23541s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23601s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23661s  SM=0%  mem=40MiB
+[gen-prefixes] batch 376–378/500  187.9s  131 tok/s  total=378/500
+[gen-prefixes] heartbeat  elapsed=23721s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23781s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23841s  SM=0%  mem=40MiB
+[gen-prefixes] batch 379–381/500  187.6s  131 tok/s  total=381/500
+[gen-prefixes] heartbeat  elapsed=23901s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=23961s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24021s  SM=0%  mem=40MiB
+[gen-prefixes] batch 382–384/500  188.1s  131 tok/s  total=384/500
+[gen-prefixes] heartbeat  elapsed=24081s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24141s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24201s  SM=0%  mem=40MiB
+[gen-prefixes] batch 385–387/500  187.7s  131 tok/s  total=387/500
+[gen-prefixes] heartbeat  elapsed=24261s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24322s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24382s  SM=0%  mem=40MiB
+[gen-prefixes] batch 388–390/500  187.9s  131 tok/s  total=390/500
+[gen-prefixes] heartbeat  elapsed=24442s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24502s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24562s  SM=0%  mem=40MiB
+[gen-prefixes] batch 391–393/500  187.8s  131 tok/s  total=393/500
+[gen-prefixes] heartbeat  elapsed=24622s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24682s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24742s  SM=0%  mem=40MiB
+[gen-prefixes] batch 394–396/500  187.5s  131 tok/s  total=396/500
+[gen-prefixes] heartbeat  elapsed=24802s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24862s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24922s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=24982s  SM=0%  mem=40MiB
+[gen-prefixes] batch 397–399/500  187.7s  131 tok/s  total=399/500
+[gen-prefixes] heartbeat  elapsed=25042s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25102s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25162s  SM=0%  mem=40MiB
+[gen-prefixes] batch 400–402/500  187.9s  131 tok/s  total=402/500
+[gen-prefixes] heartbeat  elapsed=25222s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25282s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25342s  SM=0%  mem=40MiB
+[gen-prefixes] batch 403–405/500  187.8s  131 tok/s  total=405/500
+[gen-prefixes] heartbeat  elapsed=25403s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25463s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25523s  SM=0%  mem=40MiB
+[gen-prefixes] batch 406–408/500  187.7s  131 tok/s  total=408/500
+[gen-prefixes] heartbeat  elapsed=25583s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25643s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25703s  SM=0%  mem=40MiB
+[gen-prefixes] batch 409–411/500  188.4s  130 tok/s  total=411/500
+[gen-prefixes] heartbeat  elapsed=25763s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25823s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=25883s  SM=0%  mem=40MiB
+[gen-prefixes] batch 412–414/500  187.9s  131 tok/s  total=414/500
+[gen-prefixes] heartbeat  elapsed=25943s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26003s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26063s  SM=0%  mem=40MiB
+[gen-prefixes] batch 415–417/500  187.9s  131 tok/s  total=417/500
+[gen-prefixes] heartbeat  elapsed=26123s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26183s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26243s  SM=0%  mem=40MiB
+[gen-prefixes] batch 418–420/500  188.1s  131 tok/s  total=420/500
+[gen-prefixes] heartbeat  elapsed=26303s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26363s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26423s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26483s  SM=0%  mem=40MiB
+[gen-prefixes] batch 421–423/500  187.6s  131 tok/s  total=423/500
+[gen-prefixes] heartbeat  elapsed=26544s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26604s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26664s  SM=0%  mem=40MiB
+[gen-prefixes] batch 424–426/500  187.8s  131 tok/s  total=426/500
+[gen-prefixes] heartbeat  elapsed=26724s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26784s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26844s  SM=0%  mem=40MiB
+[gen-prefixes] batch 427–429/500  188.3s  131 tok/s  total=429/500
+[gen-prefixes] heartbeat  elapsed=26904s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=26964s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27024s  SM=0%  mem=40MiB
+[gen-prefixes] batch 430–432/500  187.5s  131 tok/s  total=432/500
+[gen-prefixes] heartbeat  elapsed=27084s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27144s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27204s  SM=0%  mem=40MiB
+[gen-prefixes] batch 433–435/500  187.6s  131 tok/s  total=435/500
+[gen-prefixes] heartbeat  elapsed=27264s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27324s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27384s  SM=0%  mem=40MiB
+[gen-prefixes] batch 436–438/500  187.9s  131 tok/s  total=438/500
+[gen-prefixes] heartbeat  elapsed=27444s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27504s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27564s  SM=0%  mem=40MiB
+[gen-prefixes] batch 439–441/500  187.6s  131 tok/s  total=441/500
+[gen-prefixes] heartbeat  elapsed=27624s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27685s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27745s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27805s  SM=0%  mem=40MiB
+[gen-prefixes] batch 442–444/500  187.8s  131 tok/s  total=444/500
+[gen-prefixes] heartbeat  elapsed=27865s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27925s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=27985s  SM=0%  mem=40MiB
+[gen-prefixes] batch 445–447/500  187.8s  131 tok/s  total=447/500
+[gen-prefixes] heartbeat  elapsed=28045s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28105s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28165s  SM=0%  mem=40MiB
+[gen-prefixes] batch 448–450/500  187.4s  131 tok/s  total=450/500
+[gen-prefixes] heartbeat  elapsed=28225s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28285s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28345s  SM=0%  mem=40MiB
+[gen-prefixes] batch 451–453/500  187.6s  131 tok/s  total=453/500
+[gen-prefixes] heartbeat  elapsed=28405s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28465s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28525s  SM=0%  mem=40MiB
+[gen-prefixes] batch 454–456/500  187.4s  131 tok/s  total=456/500
+[gen-prefixes] heartbeat  elapsed=28585s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28645s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28705s  SM=0%  mem=40MiB
+[gen-prefixes] batch 457–459/500  187.5s  131 tok/s  total=459/500
+[gen-prefixes] heartbeat  elapsed=28765s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28826s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=28886s  SM=0%  mem=40MiB
+[gen-prefixes] batch 460–462/500  187.8s  131 tok/s  total=462/500
+[gen-prefixes] heartbeat  elapsed=28946s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29006s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29066s  SM=0%  mem=40MiB
+[gen-prefixes] batch 463–465/500  188.2s  131 tok/s  total=465/500
+[gen-prefixes] heartbeat  elapsed=29126s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29186s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29246s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29306s  SM=0%  mem=40MiB
+[gen-prefixes] batch 466–468/500  187.9s  131 tok/s  total=468/500
+[gen-prefixes] heartbeat  elapsed=29366s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29426s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29486s  SM=0%  mem=40MiB
+[gen-prefixes] batch 469–471/500  187.7s  131 tok/s  total=471/500
+[gen-prefixes] heartbeat  elapsed=29546s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29606s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29666s  SM=0%  mem=40MiB
+[gen-prefixes] batch 472–474/500  188.3s  131 tok/s  total=474/500
+[gen-prefixes] heartbeat  elapsed=29726s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29786s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29846s  SM=0%  mem=40MiB
+[gen-prefixes] batch 475–477/500  188.0s  131 tok/s  total=477/500
+[gen-prefixes] heartbeat  elapsed=29907s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=29967s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30027s  SM=0%  mem=40MiB
+[gen-prefixes] batch 478–480/500  188.0s  131 tok/s  total=480/500
+[gen-prefixes] heartbeat  elapsed=30087s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30147s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30207s  SM=0%  mem=40MiB
+[gen-prefixes] batch 481–483/500  188.4s  130 tok/s  total=483/500
+[gen-prefixes] heartbeat  elapsed=30267s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30327s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30387s  SM=0%  mem=40MiB
+[gen-prefixes] batch 484–486/500  188.2s  131 tok/s  total=486/500
+[gen-prefixes] heartbeat  elapsed=30447s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30507s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30567s  SM=0%  mem=40MiB
+[gen-prefixes] batch 487–489/500  188.3s  131 tok/s  total=489/500
+[gen-prefixes] heartbeat  elapsed=30627s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30687s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30747s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30807s  SM=0%  mem=40MiB
+[gen-prefixes] batch 490–492/500  187.4s  131 tok/s  total=492/500
+[gen-prefixes] heartbeat  elapsed=30867s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30927s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=30987s  SM=0%  mem=40MiB
+[gen-prefixes] batch 493–495/500  187.5s  131 tok/s  total=495/500
+[gen-prefixes] heartbeat  elapsed=31048s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=31108s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=31168s  SM=0%  mem=40MiB
+[gen-prefixes] batch 496–498/500  187.8s  131 tok/s  total=498/500
+[gen-prefixes] heartbeat  elapsed=31228s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=31288s  SM=0%  mem=40MiB
+[gen-prefixes] heartbeat  elapsed=31348s  SM=0%  mem=40MiB
+[gen-prefixes] batch 499–500/500  179.5s  91 tok/s  total=500/500
+(EngineCore pid=193384) INFO 08-19 07:30:58 [core.py:1210] Shutdown initiated (timeout=0)
+(EngineCore pid=193384) INFO 08-19 07:30:58 [core.py:1233] Shutdown complete
+[gen-prefixes] consolidating prefixes_m2_ds4_3090b.jsonl → prefixes_m2_ds4_3090b.json ...
+[gen-prefixes] full=500  partial=0  empty=0
+[gen-prefixes] wrote data/prefixes_m2_ds4_3090b.json  (checkpoint kept at data/prefixes_m2_ds4_3090b.jsonl)

@@ -3,3 +3,24 @@ data/d5_logits*.json
 data/d5_prefixes.json
 __pycache__/
 .venv/
+
+# Claude Code internal
+.claude/
+
+# LaTeX build artifacts
+paper.aux
+paper.blg
+paper.log
+paper.out
+paper.bbl.stale
+paper_build*.log
+
+# Scratch / temp
+*.ppm
+refcheck/
+
+# Large prefix data (100 MB+, exceeds GitHub limit)
+data/prefixes_m*.json
+data/prefixes_m*.jsonl
+data/smoke_prefixes.json
+data/smoke_prefixes.jsonl

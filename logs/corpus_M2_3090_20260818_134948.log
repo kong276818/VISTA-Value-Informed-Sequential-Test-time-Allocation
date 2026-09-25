@@ -1,0 +1,30 @@
+Starting 3 parallel GPU tracks
+  Track 0: GPU 4090, model=m1, datasets=['ds1', 'ds2', 'ds3', 'ds4']
+  Track 1: GPU 3090a, model=m2, datasets=['ds1', 'ds2']
+  Track 2: GPU 3090b, model=m2, datasets=['ds3', 'ds4']
+[m1_ds1_4090] SKIP gen-prefixes — data/prefixes_m1_ds1_4090.json already exists
+[m1_ds1_4090] SKIP run-d5 — data/results_m1_ds1_4090.json already exists
+[m2_ds1_3090a] START gen-prefixes → data/prefixes_m2_ds1_3090a.json
+[m1_ds2_4090] SKIP gen-prefixes — data/prefixes_m1_ds2_4090.json already exists
+[m2_ds3_3090b] START gen-prefixes → data/prefixes_m2_ds3_3090b.json
+[m1_ds2_4090] SKIP run-d5 — data/results_m1_ds2_4090.json already exists
+[m1_ds3_4090] SKIP gen-prefixes — data/prefixes_m1_ds3_4090.json already exists
+[m1_ds3_4090] SKIP run-d5 — data/results_m1_ds3_4090.json already exists
+[m1_ds4_4090] SKIP gen-prefixes — data/prefixes_m1_ds4_4090.json already exists
+[m1_ds4_4090] SKIP run-d5 — data/results_m1_ds4_4090.json already exists
+[m2_ds3_3090b] DONE gen-prefixes in 31244s
+[m2_ds3_3090b] START run-d5 → data/results_m2_ds3_3090b.json
+[m2_ds3_3090b] DONE run-d5 in 1022s
+[m2_ds4_3090b] START gen-prefixes → data/prefixes_m2_ds4_3090b.json
+[m2_ds4_3090b] DONE gen-prefixes in 31406s
+[m2_ds4_3090b] START run-d5 → data/results_m2_ds4_3090b.json
+[m2_ds4_3090b] DONE run-d5 in 1044s
+[m2_ds1_3090a] DONE gen-prefixes in 85602s
+[m2_ds1_3090a] START run-d5 → data/results_m2_ds1_3090a.json
+[m2_ds1_3090a] DONE run-d5 in 2158s
+[m2_ds2_3090a] START gen-prefixes → data/prefixes_m2_ds2_3090a.json
+[m2_ds2_3090a] DONE gen-prefixes in 67135s
+[m2_ds2_3090a] START run-d5 → data/results_m2_ds2_3090a.json
+[m2_ds2_3090a] DONE run-d5 in 2127s
+
+All tracks finished in 43.62 h (157021s)

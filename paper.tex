@@ -9,7 +9,7 @@
 %        Comment out \DRAFTMODE to hide all TODOs (dangerous).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[a4paper,fleqn,singleblind]{cas-sc}
+\documentclass[a4paper,fleqn]{cas-sc}
 
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{amsmath}
@@ -65,6 +65,7 @@
 \theoremstyle{plain}
 \newtheorem{proposition}{Proposition}
 \newtheorem{theorem}{Theorem}
+\newtheorem{observation}{Observation}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
@@ -84,29 +85,39 @@
 \renewcommand{\bottomfraction}{0.8}
 
 \shorttitle{VISTA}
-\shortauthors{}
+\shortauthors{Kong and Ha}
 
 \title[mode=title]{VISTA: Value-Informed Sequential Test-time Allocation}
 
-\author[1]{}
+\author[1]{Jun-young Kong}
+\ead{kong3162@konkuk.ac.kr}
 
-\affiliation[1]{organization={}}
+\author[1]{Young-guk Ha\cormark[1]}
+\ead{ygha@konkuk.ac.kr}
+
+\affiliation[1]{organization={Department of Computer Science and Engineering, Konkuk University},
+  addressline={120 Neungdong-ro, Gwangjin-gu},
+  city={Seoul},
+  postcode={05029},
+  country={Republic of Korea}}
+
+\cortext[1]{Corresponding author.}
 
 %% -----------------------------------------------------------------------
 %% Abstract
 %% -----------------------------------------------------------------------
 \begin{abstract}
-When deployment data alone drive reasoning-budget selection,
-naive policy comparison is dangerously unreliable:
-we show that omitting inverse-probability weighting reverses policy rankings
-in five of eight experimental cells (wrong-best rate $1.00$ in those cells),
-because early stopping censors the outcomes that longer budgets would have produced.
-This finding motivates \textbf{VISTA} (Value-Informed Sequential Test-time
-Allocation), a prequential budget-selection procedure that combines
-randomized full-trajectory audits (fraction $\rho$ of queries) to recover
-censored counterfactuals, importance-weighted policy comparison to correct
-selection bias, and anytime-valid confidence sequences to prevent spurious
-switching under continuous monitoring---all without a held-out calibration set.
+We present \textbf{VISTA} (Value-Informed Sequential Test-time Allocation),
+a prequential procedure for selecting reasoning budgets from deployment data
+without a held-out calibration set.
+VISTA combines randomized full-trajectory audits (fraction $\rho$ of queries)
+to recover censored counterfactuals, importance-weighted policy comparison to
+correct selection bias, and anytime-valid confidence sequences to prevent
+spurious switching under continuous monitoring.
+The need for these corrections is acute: omitting inverse-probability weighting
+reverses policy rankings in five of eight experimental cells (wrong-best rate
+$1.00$ in those cells), because early stopping censors the outcomes that longer
+budgets would have produced.
 A corpus audit across eight cells (two 8B reasoning models, four QA benchmarks)
 documents qualitatively heterogeneous budget-response curves:
 on MMLU-Pro accuracy is near-linear across the full token grid while the
@@ -115,7 +126,7 @@ on ARC-Challenge Brier saturates after the first budget step;
 on MedMCQA and MedQA-USMLE one model's Brier worsens at nearly every budget
 step while the other's improves---ruling out a universal fixed allocation.
 VISTA at $\lambda{=}0$ (pure quality preservation) correctly stays at the
-best fixed budget in all Gate-0-passing cells, achieving $\approx 0\%$ net
+best fixed budget in all cells with adaptive headroom, achieving $\approx 0\%$ net
 saving; this is the expected and intended behaviour of an error-controlled
 procedure when no cheaper policy is certifiably better.
 Increasing $\lambda$ controls the quality--compute exchange rate explicitly:
@@ -132,22 +143,13 @@ quality guarantees.
 %% Highlights (3–5 items, max ~85 characters each)
 %% -----------------------------------------------------------------------
 \begin{highlights}
-\item Naive policy comparison from deployment data reverses rankings in 5 of 8
-cells (wrong-best rate 1.00); inverse-probability weighting reduces bias
-$2.2\times$--$23\times$ across all cells.
+\item VISTA saves $3$--$59\%$ tokens with $\leq\!0.019$ Brier loss; no held-out set required.
 
-\item Full-corpus audit across four QA benchmarks reveals qualitatively
-heterogeneous budget-response curves: near-linear, early-saturating, and
-near-monotone degradation---ruling out a universal fixed allocation.
+\item Anytime-valid monitoring: zero false switches; greedy reaches $58.5\%$ FPR.
 
-\item VISTA---combining randomized audits, IPW policy comparison, and
-anytime-valid confidence sequences---achieves $3$--$59\%$ net token savings
-(at $\lambda{=}0.01$--$0.1$) with Brier increases $\leq 0.019$, without
-any held-out calibration set.
+\item Unweighted comparison reverses policy rankings in 5 of 8 cells.
 
-\item At $\lambda{=}0$ (quality-preserving), VISTA correctly certifies no
-adaptation when no cheaper policy is verifiably better---a principled null
-result, not a framework failure.
+\item Budget-response curves differ across tasks and models; no universal fixed allocation.
 \end{highlights}
 
 %% -----------------------------------------------------------------------
@@ -200,7 +202,7 @@ stopping \emph{increases} Brier above the best fixed budget in all eight
 experimental cells ($+0.047$ to $+0.218$); signals trained on one model
 fail to transfer to another on the same task.
 The theoretical explanation is a non-identifiability result
-(Proposition~\ref{prop:impossibility}): for any estimator that is
+(Observation~\ref{prop:impossibility}): for any estimator that is
 simultaneously distribution-free, label-free at deployment time, and
 restricted to a single unlabeled trajectory, the worst-case error in certifying
 correctness is at least $\frac{1}{2}$.
@@ -241,7 +243,7 @@ cells in our finite-sample replay experiments.
 reasoning-budget selection and the VISTA response.
 \textbf{(1)} Trajectory signals---confidence, answer stability,
 entropy---are ambiguous: the same observable pattern is consistent with both
-correct and incorrect predictions (Proposition~\ref{prop:impossibility}).
+correct and incorrect predictions (Observation~\ref{prop:impossibility}).
 \textbf{(2)} Stopping at budget $b$ hides the prediction that a longer
 trajectory would have produced, blocking direct policy comparison from
 deployment data alone.
@@ -271,15 +273,15 @@ grid) to early-saturating (ARC-Challenge, most gain in the first budget step);
 patterns invert across models on the same task.
 The hindsight oracle reduces mean Brier by $30.1\%$ on MMLU-Pro, with
 $76.1\%$ of items meeting a per-item quality threshold at a budget below the
-maximum; a constrained matched-mean-quality oracle passes Gate~0 in six of
-eight cells.
+maximum; a constrained matched-mean-quality oracle passes the adaptive-opportunity
+test (Gate~0) in six of eight cells.
 A fixed confidence gate increases Brier above the best fixed budget in all
 eight cells, confirming that deployable item-adaptive allocation cannot rely
 on naive stopping heuristics.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-\item \textbf{IPW necessity---the strongest empirical finding.}
+\item \textbf{IPW necessity for unbiased policy-risk estimation.}
 We show that omitting inverse-probability weighting reverses policy rankings
 in 5 of 8 cells (wrong-best rate 1.00); IPW reduces bias $2.2\times$--$23\times$
 and is a necessary, not optional, correction whenever early stopping censors
@@ -361,7 +363,7 @@ For reasoning models specifically, hidden-state probes can predict intermediate
 answer correctness~\cite{zhang2025selfverification}, and verbalized confidence
 changes with reasoning-model training and task conditions
 ~\cite{zeng2025thinkingoutloud}. These findings are compatible with
-Proposition~\ref{prop:impossibility}: a signal can be predictive under an
+Observation~\ref{prop:impossibility}: a signal can be predictive under an
 empirical distribution without constituting a distribution-free correctness
 certificate. VISTA therefore treats confidence and related quantities as
 candidate policy features rather than as ground-truth stopping criteria.
@@ -437,7 +439,7 @@ and anytime-valid inference governs repeated policy updates without a held-out
 calibration split.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Preliminaries and an Impossibility Result}
+\section{Preliminaries and a Non-identifiability Observation}
 \label{sec:impossibility}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -454,7 +456,7 @@ observable history as
 and the unobserved correctness indicator as
 $Y_{\budget} = \Ind\{\hat{y}_{\budget} = y^{\star}\}$.
 
-\begin{proposition}[Non-identifiability of label-free correctness]
+\begin{observation}[Non-identifiability of label-free correctness]
 \label{prop:impossibility}
 Let $f$ be any measurable estimator
 $\hat{a}_{\budget} = f(\Hist_{\budget})$.
@@ -468,7 +470,7 @@ a.s.\ under $\Prob_{1}$. Consequently, for every $\Hist_{\budget}$,
 \end{equation}
 and no non-trivial distribution-free finite-sample lower bound on
 $\Prob(Y_{\budget}=1\mid\Hist_{\budget})$ exists.
-\end{proposition}
+\end{observation}
 
 \begin{proof}
 Given any $\Prob_0$ over $(\Hist_b, Y_b)$, construct $\Prob_1$ by relabelling
@@ -499,7 +501,7 @@ trajectory-based quantities are descriptive signals but do not constitute
 correctness guarantees.
 
 \begin{remark}
-Proposition~\ref{prop:impossibility} is a standard label-free learning
+Observation~\ref{prop:impossibility} is a standard label-free learning
 result~\cite{shalev2014understanding}: any measurable function of the unlabeled
 trajectory is a constant from the perspective of the label.
 Its role here is to explain the empirical failure documented in
@@ -537,9 +539,12 @@ We define the deployment loss
   \lossfn^{(\lambda)}_{i,j} = \Brier_{i,j} + \lambda\,\cost_{i,j},
   \qquad \lambda\geq 0,
 \end{equation}
-where $\cost_{i,j}$ is realised compute and $\lambda$ is a user-specified
-exchange rate between predictive quality and compute, reported over a range
-of values rather than at a single operating point.
+where $\cost_{i,j} = b_j / \Bmax \in [0,1]$ is realised compute normalised
+by the maximum budget so that $\lambda$ is on the same scale as the Brier
+score; $\lambda$ is a user-specified quality--compute exchange rate reported
+over a range of values rather than a single operating point.
+At $\lambda{=}0.01$ the maximum cost penalty is $0.01$ Brier units;
+at $\lambda{=}0.1$ it is $0.1$ Brier units.
 
 \subsection{Marginal value and its decomposition}
 
@@ -767,9 +772,11 @@ no re-inference is performed after the initial generation pass.
 For each model--dataset cell we report accuracy, Brier score, NLL, mean
 predictive confidence, answer-flip rate, and correct/wrong transition counts
 at every budget, then compare the best fixed budget against an item-adaptive
-oracle. The primary criterion is whether the oracle reduces compute by at
-least $10\%$ relative to the best fixed budget under matched predictive
-quality.
+oracle. The primary criterion---called the \textbf{adaptive-opportunity test}
+(Gate~0)---is whether the population-level matched-quality oracle (Oracle~C)
+reduces mean compute by at least $10\%$ relative to the best fixed budget.
+A cell \textsc{Pass}es Gate~0 if meaningful adaptive headroom exists;
+it \textsc{Fail}s if the best fixed budget is already near-optimal.
 
 \subsection{Prefix-signal evaluation}
 
@@ -779,17 +786,18 @@ We evaluate observable signals (confidence, entropy, top-1/top-2 margin,
 answer stability, confidence slope) via
 $\mathrm{AUC}(s_{i,j},\Ind\{G_{i,j}>0\})$
 and Spearman $\rho$ between $s_{i,j}$ and $G_{i,j}$.
-The pre-specified threshold is $\mathrm{AUC}\geq0.60$ or
-$|\rho_{\mathrm{Spearman}}|\geq0.30$ on a held-out setting; failure terminates
-the instance-adaptive branch.
+The pre-specified thresholds ($\mathrm{AUC}\geq0.60$,
+$|\rho_{\mathrm{Spearman}}|\geq0.30$) are design constants chosen by
+convention, not fitted to the evaluation data; failure terminates the
+instance-adaptive branch.
 
 \subsection{Baselines and metrics}
 
-We compare fixed-budget policies, training-free stopping signals, calibration-
-based procedures with a separate labeled split, and item-adaptive oracles
-(opportunity measurement only). Primary metrics are multiclass Brier score,
-NLL, accuracy, total reasoning tokens, wall-clock latency, total compute
-including audit overhead, and token savings at matched accuracy or Brier score.
+We compare fixed-budget policies, training-free stopping signals, and
+item-adaptive oracles (opportunity measurement only).
+Primary metrics are multiclass Brier score, NLL, accuracy, total reasoning
+tokens, total compute including audit overhead, and token savings at matched
+accuracy or Brier score.
 
 \subsection{Ablation design}
 \label{sec:ablation-design}
@@ -802,26 +810,24 @@ which requires independent fixed-budget trajectories and is treated as a
 measurement-validity diagnostic).
 
 \paragraph{Essential ablations.}
-Table~\ref{tab:ablation} lists the five essential ablated variants.
+Table~\ref{tab:ablation} lists the four essential ablated variants.
 
 \emph{(A1) Audit weighting correction.}
-``Naive'' policy risk is estimated directly from observed trajectories without
-correcting for the randomized audit probability $\rho$: each trajectory
-is counted at face value regardless of how likely it was to be observed.
-``IPW'' policy risk divides each audited observation by $\rho$, restoring
-the target full-population estimand.
-Ignoring the observation probability attenuates the estimated risk difference
-approximately in proportion to the audit rate; inverse-probability weighting
-recovers the intended estimand.
-We confirm this with a natural-stopping simulation: items halt at the first
-budget where confidence $\max_k\hat p_k\geq 0.85$, making continuation to the
-reference budget (4096 tokens) a counterfactual.
-Under this protocol only $0.1$--$12\%$ of items naturally continue
-to the reference budget (dataset-dependent),
-so the na\"{i}ve estimator operates on a severely selected minority;
-across five of eight cells (ARC-Challenge, MedMCQA, and MedQA on M1;
-MMLU-Pro and MedMCQA on M2)
-the na\"{i}ve estimator selects the wrong policy in 100\% of permutations,
+We simulate deployment under a natural confidence gate ($\max_k\hat p_k\geq 0.85$):
+items halt at the first budget meeting this criterion, making continuation to
+the reference budget (4096 tokens) a counterfactual.
+``Naive'' policy risk is then estimated using only the items that
+\emph{naturally} continued to the reference budget---without any
+probability correction for the fact that continuation was selective.
+``IPW'' additionally includes items that were \emph{audited} with probability
+$\rho$ after early stopping, weighting each audited item's contribution by
+$1/\rho$ (naturally-continued items have observation probability 1 and receive
+no correction), restoring the target full-population estimand.
+Under this protocol only $0.1$--$18\%$ of items naturally continue to the
+reference budget (dataset-dependent), so the na\"{i}ve estimator operates on a
+severely selected minority; across five of eight cells (ARC-Challenge,
+MedMCQA, and MedQA on M1; MMLU-Pro and MedMCQA on M2)
+it selects the wrong policy in 100\% of permutations,
 while the IPW estimator's mean bias is $\leq 0.033$ across all tested $\rho$.
 
 \emph{(A2) Anytime-valid confidence sequences.}
@@ -855,17 +861,8 @@ minimised and report confidently-wrong rates
 ($\max_k \hat{p}_k \geq \tau$, $\tau=0.90$, on incorrect predictions)
 alongside standard accuracy and Brier.
 
-\emph{(A5) Instance-adaptive vs.\ global policy.}
-``Global VISTA'' updates a single per-deployment-stream preferred budget
-without using per-item prefix signals.
-The comparison to full VISTA isolates the incremental value of item-level
-stopping over dataset-level budget adaptation.
-If global adaptation captures most of the oracle gap, the emphasis of the
-paper should shift from instance-adaptive stopping to prequential global
-compute selection.
-
 \paragraph{Additional ablations.}
-\emph{(A6) Prefix-signal ablation.}
+\emph{(A5) Prefix-signal ablation.}
 Each observable signal (confidence, entropy, top-1/top-2 margin, answer
 stability, confidence slope, probability slope) is evaluated independently
 and then in simple combinations.
@@ -873,15 +870,14 @@ The AUC and Spearman $\rho$ reported in Section~\ref{sec:signals}
 serve as the primary diagnostic; policy results
 under each single signal are deferred to the appendix.
 
-\emph{(A7) Audit probability $\rho$ sensitivity.}
+\emph{(A6) Audit probability $\rho$ sensitivity.}
 We evaluate $\rho\in\{0.05,0.10,0.20,0.40,1.0\}$, reporting audit overhead,
 policy convergence time, cumulative regret, and net token saving at each
 exploration rate.
-The curve of net saving versus $\rho$ directly answers the reviewer question
-of how much full-trajectory compute must be consumed to make the adaptive
-policy worthwhile.
+The curve of net saving versus $\rho$ quantifies how much full-trajectory
+compute must be consumed to make the adaptive policy worthwhile.
 
-\emph{(A8) Forced-termination vs.\ independent generation.}
+\emph{(A7) Forced-termination vs.\ independent generation.}
 Forced checkpoint termination (one long trajectory probed at intermediate
 budgets) and independently generated fixed-budget trajectories may produce
 different answer distributions; this is a measurement-validity concern
@@ -891,6 +887,24 @@ protocols on a held-out 50-item subset of M1/DS1. No systematic divergence
 was found: top-1 agreement exceeds 97\% at all budgets and budget-curve shapes
 are visually indistinguishable. This ablation is therefore not reported
 separately; the corpus results use forced-termination trajectories throughout.
+
+\paragraph{Threshold-stopping baseline analyses.}
+The following analyses (A8--A10) characterise the confidence-threshold
+stopping baseline reported in Section~\ref{sec:baselines}; they are not
+ablations of VISTA components.
+
+\emph{(A8) Cross-model threshold transfer.}
+Threshold $\tau$ calibrated on one model family is applied to the other
+to test cross-model transferability.
+
+\emph{(A9) Cross-dataset threshold transfer.}
+Threshold $\tau$ calibrated on one benchmark domain is applied to a different
+domain within the same model to test domain transferability.
+
+\emph{(A10) Confidence-gate deployment failure.}
+A fixed confidence gate $\tau{=}0.85$ is applied at deployment as a
+competitive stopping baseline; Brier and token costs are compared against
+the best fixed-budget policy in all eight cells.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -1243,9 +1257,9 @@ and should not be interpreted as matched-quality deployment gains.
 The constrained matched-mean-quality oracle (Oracle~C, \emph{population-level constraint})
 passing Gate~0 in six of eight cells with savings $74$--$97\%$ relative to best fixed
 is the operative population-level result (Table~\ref{tab:gate0-oracle-c}).
-By contrast, Oracle~B (\emph{per-item threshold}) requires 2431 mean tokens on M1/DS1
-to guarantee individual quality, implying only a 70\% saving --- 24 percentage points
-less than Oracle~C.
+By contrast, Oracle~B (\emph{per-item threshold}) requires ${\approx}2552$ mean tokens on M1/DS1
+to guarantee individual quality, implying only a ${\approx}69\%$ saving --- approximately 25
+percentage points less than Oracle~C.
 The gap quantifies the additional compute cost of per-item versus population-level
 quality assurance on this cell.
 Per-item heterogeneity is substantial even in cells where the mean trajectory
@@ -1337,7 +1351,7 @@ remaining four edges only.}
 \endgroup
 \vspace{\baselineskip}
 
-\paragraph{Cross-model threshold transfer (A13).}
+\paragraph{Cross-model threshold transfer (A8).}
 When the confidence stopping threshold $\tau$ is calibrated on M1 and applied
 to M2, Brier degrades by $+0.073$ (DS3) and $+0.046$ (DS4); reversing the
 direction degrades M1 by $+0.001$ (DS3) and $+0.043$ (DS4).
@@ -1348,7 +1362,7 @@ calibration across model families.
 Fixed stopping thresholds do not transfer reliably between models on
 domain-specific datasets.
 
-\paragraph{Cross-dataset threshold transfer (A14).}
+\paragraph{Cross-dataset threshold transfer (A9).}
 For M1, $\tau{=}0.95$ transfers with zero Brier degradation across all twelve
 source-target dataset pairs, confirming M1's domain-independent confidence
 calibration.
@@ -1358,7 +1372,7 @@ threshold to knowledge datasets degrades Brier by $+0.044$--$+0.068$.
 Any fixed threshold tuned on one domain type will incur measurable quality
 loss on the other for M2.
 
-\paragraph{Confidence-gate deployment failure (A20).}
+\paragraph{Confidence-gate deployment failure (A10).}
 Applying a fixed confidence gate $\tau{=}0.85$ at deployment increases Brier
 above the best fixed budget in all eight cells.
 On DS1 (M1) the gate produces Brier $0.683$ versus best-fixed $0.492$
@@ -1404,7 +1418,7 @@ Audit weighting (IPW) &
 Sequential monitoring (CS) &
   Greedy switching on noise &
   CS FPR $= 0.000$;\, Greedy FPR $= 0.070$ &
-  CS FPR $0.000$ all cells (anytime-valid guarantee); power $\approx 0$ at $n{=}200$, $\rho{=}0.20$ (${\approx}40$ audits); Greedy FPR $0$--$58.5\%$, mean $24.1\%$. \\[4pt]
+  CS FPR $0.000$ all cells (anytime-valid guarantee); power $\approx 0$ at deployment horizon $n{=}200$ of $n{=}500$--$1000$ full stream, $\rho{=}0.20$ (${\approx}40$ audits); Greedy FPR $0$--$58.5\%$, mean $24.1\%$. \\[4pt]
 Prequential update &
   Stale calibration under shift &
   $\Delta = 0.0053$ Brier (DS1) &
@@ -1454,8 +1468,10 @@ false-positive rate $0.000$ on all eight cells; greedy monitoring's FPR ranges
 from $0.000$ to $0.585$ (mean $0.241$).
 
 The FPR guarantee comes at a cost in decision power.
-At $\rho{=}0.20$ and $n{=}200$, approximately 40 audited items are available per cell ---
-too few for the CS bound to tighten sufficiently to certify any policy switch.
+At $\rho{=}0.20$ and deployment horizon $n{=}200$ (a fifth of the DS1 stream;
+full streams are $n{=}500$--$1000$), approximately 40 audited items are
+available per cell --- too few for the CS bound to tighten sufficiently
+to certify any policy switch.
 CS time-to-decide equals or nearly equals the full stream length in all six
 Gate-0-passing cells (mean $\approx n$); the procedure effectively abstains from
 switching rather than certifying no opportunity exists.
@@ -1522,7 +1538,7 @@ Method & Tokens $\downarrow$ & Brier $\downarrow$ & NLL $\downarrow$ &
 Acc.\ $\uparrow$ & Net saving & Held-out? \\
 \midrule
 Best fixed ($b=8192$)               & 8192 & 0.492 & 2.763 & 0.738 & $0.000$ & No  \\
-Confidence stopping                 & 1453 & 0.664 & 2.952 & 0.645 & $+0.823$ & No  \\
+Confidence stopping ($\tau{=}0.90$) & 1453 & 0.664 & 2.952 & 0.645 & $+0.823$ & No  \\
 Entropy stopping                    & 1624 & 0.643 & 2.938 & 0.659 & $+0.802$ & No  \\
 Stability stopping                  & 1655 & 0.608 & 2.567 & 0.644 & $+0.798$ & No  \\
 \midrule
@@ -1636,7 +1652,7 @@ in the remaining 5 (mean disadvantage $-0.007$ Brier).
 The advantage is concentrated in domain-crossing transitions:
 M1 benefits from within-medical shift (MedMCQA$\to$MedQA, $+0.037$), while
 M2 benefits from general-to-medical shift
-(MMLU-Pro$\to$MedMCQA $+0.039$ and General$\to$Medical $+0.039$).
+(MMLU-Pro$\to$MedMCQA $+0.039$ and MMLU-Pro$\to$MedQA\text{-USMLE} $+0.039$).
 Difficulty-level shifts within the same domain (ARC-Challenge$\to$MMLU-Pro)
 favour the fixed policy.
 The prequential advantage requires a shift large enough to invalidate the
@@ -1718,10 +1734,10 @@ Statistical guarantees have a non-trivial cost that must be stated clearly.
 The CS procedure achieves FPR\,${=}\,0.000$ by construction, but this is achieved
 by abstaining from switching when evidence is insufficient --- not by making correct
 decisions.
-At $n{=}200$ with $\rho{=}0.20$ (${\approx}40$ audits per cell), the CS procedure
-essentially never triggers a switch at $\lambda{=}0$; its contribution at this
-deployment horizon is safety (no false switches) rather than adaptation (no switches
-at all).
+At deployment horizon $n{=}200$ with $\rho{=}0.20$ (${\approx}40$ audits per cell;
+full streams are $n{=}500$--$1000$), the CS procedure essentially never triggers
+a switch at $\lambda{=}0$; its contribution at this horizon is safety (no false
+switches) rather than adaptation (no switches at all).
 The framework remains operationally useful at $\lambda{=}0.01$, where the
 certifiable gap is wider and the CS bound can tighten: cells with $b_{\mathrm{ref}}{=}8192$
 deliver 3--35\% net saving with Brier increases $\leq 0.012$.
@@ -1818,13 +1834,10 @@ The online policy-selection procedure is fully replayable from these tables
 without GPU inference.
 
 \section*{Acknowledgements}
-The author thanks the anonymous reviewers for their constructive criticism,
-which materially improved the clarity of the empirical claims and the
-treatment of the asymptotic gap-narrowing argument.
 Experiments were conducted on a personal workstation equipped with one
 NVIDIA RTX~4090 and two RTX~3090 GPUs; no external compute grant was
 used.
-The author gratefully acknowledges the Qwen team at Alibaba Cloud for
+The authors gratefully acknowledge the Qwen team at Alibaba Cloud for
 releasing Qwen3-8B and the DeepSeek team for releasing
 DeepSeek-R1-Distill-Llama-8B under open-source licenses, and the curators
 of MMLU-Pro~\cite{wang2024mmlu}, ARC-Challenge~\cite{clark2018arc},
@@ -1832,6 +1845,15 @@ MedMCQA~\cite{pal2022medmcqa}, and MedQA-USMLE~\cite{jin2021medqa}
 for making their benchmarks publicly available.
 All experiments use publicly available model weights and benchmark data;
 no human subjects were involved.
+
+\section*{Funding}
+This research did not receive any specific grant from funding agencies in
+the public, commercial, or not-for-profit sectors.
+
+\section*{CRediT authorship contribution statement}
+\textbf{Jun-young Kong:} Conceptualization, Methodology, Software, Formal
+analysis, Investigation, Data curation, Visualization, Writing~-- original draft.
+\textbf{Young-guk Ha:} Supervision, Writing~-- review \& editing.
 
 \FloatBarrier
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2049,7 +2071,7 @@ exploration.
 
 
 % ===========================================================================
-% Table 12 — A20 component-removal analysis
+% Table 12 — A10 component-removal analysis
 % ===========================================================================
 
 \Needspace{0.43\textheight}
@@ -2190,7 +2212,7 @@ Removing CS allows greedy certification, which falsely switches in
 ${\approx}27\%$ of streams, increasing mean Brier from $0.498$ to $0.529$
 ($+3.1$ pp) while spuriously appearing to save $34\%$ of tokens.
 The pattern confirms that the CS is the operative safety mechanism across
-both cost-penalty settings: IPW primarily reduces estimation variance for the
+both cost-penalty settings: IPW primarily reduces estimation bias for the
 rare certified-switch events recorded in Table~\ref{tab:a01_ipw_naive}, while
 CS prevents the false-positive switches visible in Table~\ref{tab:a03_cs_greedy}.
 Same column definitions as Table~\ref{tab:a20_component_removal}.

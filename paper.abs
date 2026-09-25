@@ -1,0 +1,30 @@
+We present \textbf{VISTA} (Value-Informed Sequential Test-time Allocation),
+a prequential procedure for selecting reasoning budgets from deployment data
+without a held-out calibration set.
+VISTA combines randomized full-trajectory audits (fraction $\rho$ of queries)
+to recover censored counterfactuals, importance-weighted policy comparison to
+correct selection bias, and anytime-valid confidence sequences to prevent
+spurious switching under continuous monitoring.
+The need for these corrections is acute: omitting inverse-probability weighting
+reverses policy rankings in five of eight experimental cells (wrong-best rate
+$1.00$ in those cells), because early stopping censors the outcomes that longer
+budgets would have produced.
+A corpus audit across eight cells (two 8B reasoning models, four QA benchmarks)
+documents qualitatively heterogeneous budget-response curves:
+on MMLU-Pro accuracy is near-linear across the full token grid while the
+hindsight per-item oracle reduces mean Brier by $30.1\%$;
+on ARC-Challenge Brier saturates after the first budget step;
+on MedMCQA and MedQA-USMLE one model's Brier worsens at nearly every budget
+step while the other's improves---ruling out a universal fixed allocation.
+VISTA at $\lambda{=}0$ (pure quality preservation) correctly stays at the
+best fixed budget in all cells with adaptive headroom, achieving $\approx 0\%$ net
+saving; this is the expected and intended behaviour of an error-controlled
+procedure when no cheaper policy is certifiably better.
+Increasing $\lambda$ controls the quality--compute exchange rate explicitly:
+at $\lambda{=}0.01$, deployed VISTA achieves $3$--$35\%$ net token savings
+with Brier increases $\leq 0.012$; at $\lambda{=}0.1$, savings reach
+$9$--$59\%$ with Brier increases $\leq 0.019$---all with 95\% CIs from
+200 stream-order permutations.
+Confidence-threshold stopping, by contrast, increases Brier above the best
+fixed budget in all eight cells ($+0.047$ to $+0.218$) while providing no
+quality guarantees.

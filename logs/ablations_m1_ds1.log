@@ -1,0 +1,48 @@
+Loaded 1000 items from data/results_m1_ds1_4090.json
+
+=== A1: Audit necessity ===
+  b=256: IPW mean=+1.6004  naive mean=+0.3240
+  b=512: IPW mean=+1.2417  naive mean=+0.2534
+  b=1024: IPW mean=+0.6424  naive mean=+0.1282
+  b=2048: IPW mean=+0.0959  naive mean=+0.0198
+  b=4096: IPW mean=+0.0000  naive mean=+0.0000
+  b=8192: IPW mean=-0.0855  naive mean=-0.0167
+
+=== A2: Anytime-valid CS ===
+  greedy false-positive rate: 0.070  (selected genuinely worse policy)
+  CS false-positive rate:     0.000  (coverage guarantee; 0 expected)
+  oracle best policy: b=8192
+  Note: CS miss-rate (failed to adopt best) should be computed separately as convergence metric
+
+=== A3: Fixed calibration vs prequential ===
+  prequential regret: +0.1524
+  fixed-cal regret:   +0.1577
+
+=== A4: Brier vs accuracy-only ===
+  Budget  Accuracy     Brier     NLL   ConfWrong
+     256     0.477    0.8324   3.186      0.1930
+     512     0.526    0.7618   2.885      0.1810
+    1024     0.612    0.6366   2.609      0.1760
+    2048     0.696    0.5282   2.458      0.1810
+    4096     0.718    0.5084   2.686      0.1990
+    8192     0.738    0.4917   2.763      0.2160
+
+=== A5: Global vs item-adaptive ===
+  best fixed b=8192, Brier=0.4917
+  oracle Brier=0.3437  gap=-0.1480
+
+=== Gate 0: Matched-quality token oracle ===
+  epsilon=0.000: best_fixed=b8192  mean_matched=b2552  pct_reducible=0.761
+  epsilon=0.005: best_fixed=b8192  mean_matched=b2551  pct_reducible=0.761
+  epsilon=0.010: best_fixed=b8192  mean_matched=b2547  pct_reducible=0.761
+  (Gate 0 passes if mean_matched_budget meaningfully < best_fixed_budget)
+
+=== A7: rho sweep ===
+    rho      cs_fp   greedy_fp
+   0.05      0.000       0.250
+   0.10      0.000       0.185
+   0.20      0.000       0.070
+   0.40      0.000       0.020
+   1.00      0.000       0.000
+
+Results written to data/ablations_m1_ds1.json

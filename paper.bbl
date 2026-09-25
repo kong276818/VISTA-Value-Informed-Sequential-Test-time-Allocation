@@ -1,0 +1,380 @@
+\begin{thebibliography}{53}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Wei et~al.(2022)Wei, Wang, Schuurmans, Bosma, Ichter, Xia, Chi, Le,
+  and Zhou]{wei2022cot}
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Brian Ichter, Fei Xia,
+  Ed~Chi, Quoc Le, and Denny Zhou.
+\newblock Chain-of-thought prompting elicits reasoning in large language
+  models.
+\newblock In \emph{Proceedings of NeurIPS 2022}, 2022.
+
+\bibitem[Kojima et~al.(2022)Kojima, Gu, Reid, Matsuo, and
+  Iwasawa]{kojima2022zeroshot}
+Takeshi Kojima, Shixiang~Shane Gu, Machel Reid, Yutaka Matsuo, and Yusuke
+  Iwasawa.
+\newblock Large language models are zero-shot reasoners.
+\newblock In \emph{Proceedings of NeurIPS 2022}, 2022.
+
+\bibitem[Wang et~al.(2023)Wang, Wei, Schuurmans, Le, Chi, Narang, Chowdhery,
+  and Zhou]{wang2023selfconsistency}
+Xuezhi Wang, Jason Wei, Dale Schuurmans, Quoc Le, Ed~Chi, Sharan Narang,
+  Aakanksha Chowdhery, and Denny Zhou.
+\newblock Self-consistency improves chain of thought reasoning in language
+  models.
+\newblock In \emph{Proceedings of ICLR 2023}, 2023.
+
+\bibitem[Yao et~al.(2023)Yao, Yu, Zhao, Shafran, Griffiths, Cao, and
+  Narasimhan]{yao2023tree}
+Shunyu Yao, Dian Yu, Jeffrey Zhao, Izhak Shafran, Thomas~L. Griffiths, Yuan
+  Cao, and Karthik Narasimhan.
+\newblock Tree of thoughts: Deliberate problem solving with large language
+  models.
+\newblock In \emph{Proceedings of NeurIPS 2023}, 2023.
+
+\bibitem[Brown et~al.(2025)Brown, Juravsky, Ehrlich, Clark, Le, Ré, and
+  Mirhoseini]{brown2024monkeys}
+Bradley Brown, Jordan Juravsky, Ryan Ehrlich, Ronald Clark, Quoc~V. Le,
+  Christopher Ré, and Azalia Mirhoseini.
+\newblock Large language monkeys: Scaling inference compute with repeated
+  sampling.
+\newblock In \emph{Proceedings of ICLR 2025}, 2025.
+
+\bibitem[Snell et~al.(2025)Snell, Lee, Xu, and Kumar]{snell2025scaling}
+Charlie Snell, Jaehoon Lee, Kelvin Xu, and Aviral Kumar.
+\newblock Scaling llm test-time compute optimally can be more effective than
+  scaling model parameters.
+\newblock In \emph{Proceedings of ICLR 2025}, 2025.
+
+\bibitem[Chen et~al.(2025)Chen, Xu, Liang, He, Pang, Yu, Song, Liu, Zhou,
+  Zhang, Wang, Tu, Mi, and Yu]{chen2025overthinking}
+Xingyu Chen, Jiahao Xu, Tian Liang, Zhiwei He, Jianhui Pang, Dian Yu, Linfeng
+  Song, Qiuzhi Liu, Mengfei Zhou, Zhuosheng Zhang, Rui Wang, Zhaopeng Tu,
+  Haitao Mi, and Dong Yu.
+\newblock Do not think that much for 2+3=? on the overthinking of o1-like llms,
+  2025.
+
+\bibitem[Zhou et~al.(2026)Zhou, Ling, Chen, Wang, Fan, and
+  Wang]{zhou2026overthinking}
+Shu Zhou, Rui Ling, Junan Chen, Xin Wang, Tao Fan, and Hao Wang.
+\newblock When more thinking hurts: Overthinking in llm test-time compute
+  scaling, 2026.
+
+\bibitem[Yang et~al.(2026)Yang, Si, Duan, Zhu, Zhu, Li, Chen, Lin, and
+  Wang]{yang2026deer}
+Chenxu Yang, Qingyi Si, Yongjie Duan, Zheliang Zhu, Chenyu Zhu, Qiaowei Li,
+  Minghui Chen, Zheng Lin, and Weiping Wang.
+\newblock Dynamic early exit in reasoning models.
+\newblock In \emph{Proceedings of ICLR 2026}, 2026.
+
+\bibitem[Wu et~al.(2025)Wu, Zhou, Bates, and
+  Jaakkola]{wu2025thoughtcalibration}
+Menghua Wu, Cai Zhou, Stephen Bates, and Tommi Jaakkola.
+\newblock Thought calibration: Efficient and confident test-time scaling, 2025.
+
+\bibitem[Zhang et~al.(2025)Zhang, Chen, Pan, Zhao, Panda, Li, and
+  He]{zhang2025selfverification}
+Anqi Zhang, Yulin Chen, Jane Pan, Chen Zhao, Aurojit Panda, Jinyang Li, and
+  He~He.
+\newblock Reasoning models know when they're right: Probing hidden states for
+  self-verification.
+\newblock In \emph{Proceedings of COLM 2025}, 2025.
+
+\bibitem[Liu and Wang(2025)]{liu2025answerconvergence}
+Xin Liu and Lu~Wang.
+\newblock Answer convergence as a signal for early stopping in reasoning, 2025.
+
+\bibitem[Sun et~al.(2026)Sun, Cheng, Li, Chen, and Wang]{sun2026refrain}
+Renliang Sun, Wei Cheng, Dawei Li, Haifeng Chen, and Wei Wang.
+\newblock Stop when enough: Adaptive early-stopping for chain-of-thought
+  reasoning.
+\newblock In Maria Liakata, Viviane~P. Moreira, Jiajun Zhang, and David
+  Jurgens, editors, \emph{Proceedings of the 64th Annual Meeting of the
+  {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  pages 27250--27268, San Diego, California, United States, July 2026.
+  Association for Computational Linguistics.
+\newblock ISBN 979-8-89176-390-6.
+\newblock \doi{10.18653/v1/2026.acl-long.1256}.
+\newblock URL \url{https://aclanthology.org/2026.acl-long.1256/}.
+
+\bibitem[Xie et~al.(2026)Xie, Wang, Mallick, Sun, Noarov, Yu, Mallick, and
+  Dobriban]{xie2026statistical}
+Yangxinyu Xie, Tao Wang, Soham Mallick, Yan Sun, Georgy Noarov, Mengxin Yu,
+  Tanwi Mallick, and Edgar Dobriban.
+\newblock Statistical early stopping for reasoning models.
+\newblock In \emph{Proceedings of ICML 2026}, 2026.
+
+\bibitem[Kadavath et~al.(2022)Kadavath, Conerly, Askell, Henighan, Drain,
+  Perez, Schiefer, Hatfield-Dodds, DasSarma, Tran-Johnson, Johnston, El-Showk,
+  Jones, Elhage, Hume, Chen, Bai, Bowman, Fort, Ganguli, Hernandez, Jacobson,
+  Kernion, Kravec, Lovitt, Ndousse, Olsson, Ringer, Amodei, Brown, Clark,
+  Joseph, Mann, McCandlish, Olah, and Kaplan]{kadavath2022know}
+Saurav Kadavath, Tom Conerly, Amanda Askell, Tom Henighan, Dawn Drain, Ethan
+  Perez, Nicholas Schiefer, Zac Hatfield-Dodds, Nova DasSarma, Eli
+  Tran-Johnson, Scott Johnston, Sheer El-Showk, Andy Jones, Nelson Elhage,
+  Tristan Hume, Anna Chen, Yuntao Bai, Sam Bowman, Stanislav Fort, Deep
+  Ganguli, Danny Hernandez, Josh Jacobson, Jackson Kernion, Shauna Kravec,
+  Liane Lovitt, Kamal Ndousse, Catherine Olsson, Sam Ringer, Dario Amodei, Tom
+  Brown, Jack Clark, Nicholas Joseph, Ben Mann, Sam McCandlish, Chris Olah, and
+  Jared Kaplan.
+\newblock Language models (mostly) know what they know, 2022.
+
+\bibitem[Xiong et~al.(2024)Xiong, Hu, Lu, Li, Fu, He, and
+  Hooi]{xiong2024uncertainty}
+Miao Xiong, Zhiyuan Hu, Xinyang Lu, Yifei Li, Jie Fu, Junxian He, and Bryan
+  Hooi.
+\newblock Can llms express their uncertainty? an empirical evaluation of
+  confidence elicitation in llms.
+\newblock In \emph{Proceedings of ICLR 2024}, 2024.
+
+\bibitem[Kuhn et~al.(2023)Kuhn, Gal, and Farquhar]{kuhn2023semantic}
+Lorenz Kuhn, Yarin Gal, and Sebastian Farquhar.
+\newblock Semantic uncertainty: Linguistic invariances for uncertainty
+  estimation in natural language generation.
+\newblock In \emph{Proceedings of ICLR 2023}, 2023.
+
+\bibitem[Zeng et~al.(2025)Zeng, Xuan, Cui, and Voigt]{zeng2025thinkingoutloud}
+Qingcheng Zeng, Weihao Xuan, Leyang Cui, and Rob Voigt.
+\newblock Thinking out loud: Do reasoning models know when they're right?
+\newblock In \emph{Proceedings of EMNLP 2025}, 2025.
+
+\bibitem[Cobbe et~al.(2021)Cobbe, Kosaraju, Bavarian, Chen, Jun, Kaiser,
+  Plappert, Tworek, Hilton, Nakano, Hesse, and Schulman]{cobbe2021verifiers}
+Karl Cobbe, Vineet Kosaraju, Mohammad Bavarian, Mark Chen, Heewoo Jun, Lukasz
+  Kaiser, Matthias Plappert, Jerry Tworek, Jacob Hilton, Reiichiro Nakano,
+  Christopher Hesse, and John Schulman.
+\newblock Training verifiers to solve math word problems, 2021.
+
+\bibitem[Uesato et~al.(2022)Uesato, Kushman, Kumar, Song, Siegel, Wang,
+  Creswell, Irving, and Higgins]{uesato2022process}
+Jonathan Uesato, Nate Kushman, Ramana Kumar, Francis Song, Noah Siegel, Lisa
+  Wang, Antonia Creswell, Geoffrey Irving, and Irina Higgins.
+\newblock Solving math word problems with process- and outcome-based feedback,
+  2022.
+
+\bibitem[Horvitz and Thompson(1952)]{horvitz1952sampling}
+D.~G. Horvitz and D.~J. Thompson.
+\newblock A generalization of sampling without replacement from a finite
+  universe.
+\newblock \emph{Journal of the American Statistical Association}, 47\penalty0
+  (260):\penalty0 663--685, 1952.
+\newblock \doi{10.1080/01621459.1952.10483446}.
+
+\bibitem[Team(2025)]{qwen3}
+Qwen Team.
+\newblock Qwen3 technical report, 2025.
+
+\bibitem[DeepSeek-AI(2025)]{deepseekr1}
+DeepSeek-AI.
+\newblock Deepseek-r1: Incentivizing reasoning capability in llms via
+  reinforcement learning, 2025.
+
+\bibitem[Zhai et~al.(2026)Zhai, Li, Xiao, Li, and Wang]{zhai2026adaptive}
+Zhiyuan Zhai, Bingcong Li, Bingnan Xiao, Ming Li, and Xin Wang.
+\newblock Adaptive test-time compute allocation for reasoning llms via
+  constrained policy optimization, 2026.
+
+\bibitem[Graves(2016)]{graves2016adaptive}
+Alex Graves.
+\newblock Adaptive computation time for recurrent neural networks, 2016.
+
+\bibitem[Banino et~al.(2021)Banino, Balaguer, and
+  Blundell]{banino2021pondernet}
+Andrea Banino, Jan Balaguer, and Charles Blundell.
+\newblock Pondernet: Learning to ponder, 2021.
+
+\bibitem[Xin et~al.(2020)Xin, Tang, Lee, Yu, and Lin]{xin2020deebert}
+Ji~Xin, Raphael Tang, Jaejun Lee, Yaoliang Yu, and Jimmy Lin.
+\newblock {D}ee{BERT}: Dynamic early exiting for accelerating {BERT} inference.
+\newblock In Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault,
+  editors, \emph{Proceedings of the 58th Annual Meeting of the Association for
+  Computational Linguistics}, pages 2246--2251, Online, July 2020. Association
+  for Computational Linguistics.
+\newblock \doi{10.18653/v1/2020.acl-main.204}.
+\newblock URL \url{https://aclanthology.org/2020.acl-main.204/}.
+
+\bibitem[Liu et~al.(2020)Liu, Zhou, Wang, Zhao, Deng, and Ju]{liu2020fastbert}
+Weijie Liu, Peng Zhou, Zhiruo Wang, Zhe Zhao, Haotang Deng, and Qi~Ju.
+\newblock {F}ast{BERT}: a self-distilling {BERT} with adaptive inference time.
+\newblock In Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault,
+  editors, \emph{Proceedings of the 58th Annual Meeting of the Association for
+  Computational Linguistics}, pages 6035--6044, Online, July 2020. Association
+  for Computational Linguistics.
+\newblock \doi{10.18653/v1/2020.acl-main.537}.
+\newblock URL \url{https://aclanthology.org/2020.acl-main.537/}.
+
+\bibitem[Schwartz et~al.(2020)Schwartz, Stanovsky, Swayamdipta, Dodge, and
+  Smith]{schwartz2020righttool}
+Roy Schwartz, Gabriel Stanovsky, Swabha Swayamdipta, Jesse Dodge, and Noah~A.
+  Smith.
+\newblock The right tool for the job: Matching model and instance complexities.
+\newblock In Dan Jurafsky, Joyce Chai, Natalie Schluter, and Joel Tetreault,
+  editors, \emph{Proceedings of the 58th Annual Meeting of the Association for
+  Computational Linguistics}, pages 6640--6651, Online, July 2020. Association
+  for Computational Linguistics.
+\newblock \doi{10.18653/v1/2020.acl-main.593}.
+\newblock URL \url{https://aclanthology.org/2020.acl-main.593/}.
+
+\bibitem[Nagle et~al.(2026)Nagle, Saydaliev, Garbaya, Gastpar, Makkuva, and
+  Kim]{nagle2026terminator}
+Alliot Nagle, Jakhongir Saydaliev, Dhia Garbaya, Michael Gastpar, Ashok~Vardhan
+  Makkuva, and Hyeji Kim.
+\newblock Terminator: Learning optimal exit points for early stopping in
+  chain-of-thought reasoning.
+\newblock In \emph{Proceedings of ICLR 2026}, 2026.
+
+\bibitem[Cheshmi et~al.(2025)Cheshmi, Khan, Wang, Liu, and
+  Anwar]{cheshmi2025earlyrejection}
+Seyyed~Saeid Cheshmi, Azal~Ahmad Khan, Xinran Wang, Zirui Liu, and Ali Anwar.
+\newblock Accelerating llm reasoning via early rejection with partial reward
+  modeling.
+\newblock In \emph{Findings of EMNLP 2025}, 2025.
+
+\bibitem[Ömer Faruk~Akgül et~al.(2025)Ömer Faruk~Akgül, Kalaycı, Kannan,
+  Neiswanger, and Prasanna]{akgul2025lynx}
+Ömer Faruk~Akgül, Yusuf~Hakan Kalaycı, Rajgopal Kannan, Willie Neiswanger,
+  and Viktor Prasanna.
+\newblock Lynx: Learning dynamic exits for confidence-controlled reasoning,
+  2025.
+
+\bibitem[Guo et~al.(2017)Guo, Pleiss, Sun, and Weinberger]{guo2017calibration}
+Chuan Guo, Geoff Pleiss, Yu~Sun, and Kilian~Q. Weinberger.
+\newblock On calibration of modern neural networks.
+\newblock In \emph{Proceedings of ICML 2017}, 2017.
+
+\bibitem[Manakul et~al.(2023)Manakul, Liusie, and
+  Gales]{manakul2023selfcheckgpt}
+Potsawee Manakul, Adian Liusie, and Mark J.~F. Gales.
+\newblock Selfcheckgpt: Zero-resource black-box hallucination detection for
+  generative large language models.
+\newblock In \emph{Proceedings of EMNLP 2023}, 2023.
+
+\bibitem[Brier(1950)]{brier1950verification}
+Glenn~W. Brier.
+\newblock Verification of forecasts expressed in terms of probability.
+\newblock \emph{Monthly Weather Review}, 78\penalty0 (1):\penalty0 1--3, 1950.
+\newblock \doi{10.1175/1520-0493(1950)078<0001:VOFEIT>2.0.CO;2}.
+
+\bibitem[Gneiting and Raftery(2007)]{gneiting2007strictly}
+Tilmann Gneiting and Adrian~E Raftery.
+\newblock Strictly proper scoring rules, prediction, and estimation.
+\newblock \emph{Journal of the American Statistical Association}, 102\penalty0
+  (477):\penalty0 359--378, 2007.
+\newblock \doi{10.1198/016214506000001437}.
+
+\bibitem[Murphy(1973)]{murphy1973new}
+Allan~H. Murphy.
+\newblock A new vector partition of the probability score.
+\newblock \emph{Journal of Applied Meteorology}, 12\penalty0 (4):\penalty0
+  595--600, 1973.
+\newblock \doi{10.1175/1520-0450(1973)012<0595:ANVPOT>2.0.CO;2}.
+
+\bibitem[Vovk et~al.(2005)Vovk, Gammerman, and Shafer]{vovk2005algorithmic}
+Vladimir Vovk, Alex Gammerman, and Glenn Shafer.
+\newblock \emph{Algorithmic Learning in a Random World}.
+\newblock Springer, 2005.
+\newblock ISBN 978-0-387-00152-4.
+
+\bibitem[Lei et~al.(2017)Lei, G'Sell, Rinaldo, Tibshirani, and
+  Wasserman]{lei2018conformal}
+Jing Lei, Max G'Sell, Alessandro Rinaldo, Ryan~J. Tibshirani, and Larry
+  Wasserman.
+\newblock Distribution-free predictive inference for regression, 2017.
+
+\bibitem[Bates et~al.(2021)Bates, Angelopoulos, Lei, Malik, and
+  Jordan]{bates2021rcps}
+Stephen Bates, Anastasios Angelopoulos, Lihua Lei, Jitendra Malik, and
+  Michael~I. Jordan.
+\newblock Distribution-free, risk-controlling prediction sets.
+\newblock \emph{Journal of the ACM}, 68\penalty0 (6), 2021.
+\newblock \doi{10.1145/3478535}.
+
+\bibitem[Angelopoulos et~al.(2022)Angelopoulos, Bates, Candès, Jordan, and
+  Lei]{angelopoulos2025ltt}
+Anastasios~N. Angelopoulos, Stephen Bates, Emmanuel~J. Candès, Michael~I.
+  Jordan, and Lihua Lei.
+\newblock Learn then test: Calibrating predictive algorithms to achieve risk
+  control, 2022.
+
+\bibitem[Angelopoulos et~al.(2024)Angelopoulos, Bates, Fisch, Lei, and
+  Schuster]{angelopoulos2024crc}
+Anastasios~N. Angelopoulos, Stephen Bates, Adam Fisch, Lihua Lei, and Tal
+  Schuster.
+\newblock Conformal risk control.
+\newblock In \emph{Proceedings of ICLR 2024}, 2024.
+
+\bibitem[Quach et~al.(2024)Quach, Fisch, Schuster, Yala, Sohn, Jaakkola, and
+  Barzilay]{quach2024conformal}
+Victor Quach, Adam Fisch, Tal Schuster, Adam Yala, Jae~Ho Sohn, Tommi~S.
+  Jaakkola, and Regina Barzilay.
+\newblock Conformal language modeling.
+\newblock In \emph{Proceedings of ICLR 2024}, 2024.
+
+\bibitem[Wang et~al.(2026)Wang, Suresh, Zhang, More, Jurayj, Durme, Farajtabar,
+  Khashabi, and Nalisnick]{wang2026conformalthinking}
+Xi~Wang, Anushri Suresh, Alvin Zhang, Rishi More, William Jurayj, Benjamin~Van
+  Durme, Mehrdad Farajtabar, Daniel Khashabi, and Eric Nalisnick.
+\newblock Conformal thinking: Risk control for reasoning on a compute budget,
+  2026.
+
+\bibitem[Howard et~al.(2021)Howard, Ramdas, McAuliffe, and
+  Sekhon]{howard2021confidence}
+Steven~R. Howard, Aaditya Ramdas, Jon McAuliffe, and Jasjeet Sekhon.
+\newblock Time-uniform, nonparametric, nonasymptotic confidence sequences.
+\newblock \emph{The Annals of Statistics}, 49\penalty0 (2), 2021.
+\newblock \doi{10.1214/20-aos1991}.
+
+\bibitem[Waudby-Smith and Ramdas(2024)]{waudbysmith2024betting}
+Ian Waudby-Smith and Aaditya Ramdas.
+\newblock Estimating means of bounded random variables by betting, 2024.
+
+\bibitem[Ramdas et~al.(2023)Ramdas, Grünwald, Vovk, and
+  Shafer]{ramdas2023safe}
+Aaditya Ramdas, Peter Grünwald, Vladimir Vovk, and Glenn Shafer.
+\newblock Game-theoretic statistics and safe anytime-valid inference.
+\newblock \emph{Statistical Science}, 38\penalty0 (4), 2023.
+\newblock \doi{10.1214/23-sts894}.
+
+\bibitem[Yu et~al.(2026)Yu, Zeng, Zhu, Huang, Zeng, and Jing]{yu2026bpac}
+Chengyao Yu, Hao Zeng, Youxin Zhu, Jianguo Huang, Huajun Zeng, and Bingyi Jing.
+\newblock Anytime safe pac efficient reasoning, 2026.
+
+\bibitem[Shalev-Shwartz and Ben-David(2014)]{shalev2014understanding}
+Shai Shalev-Shwartz and Shai Ben-David.
+\newblock \emph{Understanding Machine Learning: From Theory to Algorithms}.
+\newblock Cambridge University Press, 2014.
+\newblock \doi{10.1017/CBO9781107298019}.
+
+\bibitem[Wang et~al.(2024)Wang, Ma, Zhang, Ni, Chandra, Guo, Ren, Arulraj, He,
+  Jiang, Li, Ku, Wang, Zhuang, Fan, Yue, and Chen]{wang2024mmlu}
+Yubo Wang, Xueguang Ma, Ge~Zhang, Yuansheng Ni, Abhranil Chandra, Shiguang Guo,
+  Weiming Ren, Aaran Arulraj, Xuan He, Ziyan Jiang, Tianle Li, Max Ku, Kai
+  Wang, Alex Zhuang, Rongqi Fan, Xiang Yue, and Wenhu Chen.
+\newblock Mmlu-pro: A more robust and challenging multi-task language
+  understanding benchmark.
+\newblock In \emph{Proceedings of NeurIPS 2024}, 2024.
+
+\bibitem[Clark et~al.(2018)Clark, Cowhey, Etzioni, Khot, Sabharwal, Schoenick,
+  and Tafjord]{clark2018arc}
+Peter Clark, Isaac Cowhey, Oren Etzioni, Tushar Khot, Ashish Sabharwal, Carissa
+  Schoenick, and Oyvind Tafjord.
+\newblock Think you have solved question answering? try arc, the ai2 reasoning
+  challenge, 2018.
+
+\bibitem[Pal et~al.(2022)Pal, Umapathi, and Sankarasubbu]{pal2022medmcqa}
+Ankit Pal, Logesh~Kumar Umapathi, and Malaikannan Sankarasubbu.
+\newblock Medmcqa : A large-scale multi-subject multi-choice dataset for
+  medical domain question answering, 2022.
+
+\bibitem[Jin et~al.(2021)Jin, Pan, Oufattole, Weng, Fang, and
+  Szolovits]{jin2021medqa}
+Di~Jin, Eileen Pan, Nassim Oufattole, Wei-Hung Weng, Hanyi Fang, and Peter
+  Szolovits.
+\newblock What disease does this patient have? a large-scale open domain
+  question answering dataset from medical exams, 2021.
+
+\end{thebibliography}
