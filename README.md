@@ -4,7 +4,9 @@
 **Authors:** Jun-young Kong, Young-guk Ha (Konkuk University)  
 **Venue:** Submitted to *Information Sciences* (Elsevier)
 
-> VISTA is a prequential procedure for selecting reasoning-token budgets from deployment data—without a held-out calibration set. It combines randomized full-trajectory audits, importance-weighted policy comparison, and anytime-valid confidence sequences to certify budget reductions with a coverage guarantee.
+This repository contains the full implementation, experimental data, and analysis code for VISTA — a method for adaptive reasoning-budget selection in LLM deployments.
+VISTA uses randomized full-trajectory audits and importance-weighted policy comparison to estimate the marginal value of additional thinking tokens, then applies anytime-valid confidence sequences to certify budget reductions with a statistical coverage guarantee.
+All results for 8 experimental cells (2 models × 4 QA benchmarks, 5 396 items) are reproducible from the cached prefix tables in `data/` without re-running GPU inference.
 
 ---
 

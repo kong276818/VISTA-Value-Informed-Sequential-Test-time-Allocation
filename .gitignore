@@ -9,11 +9,20 @@ __pycache__/
 
 # LaTeX build artifacts
 paper.aux
+paper.bbl
+paper.abs
 paper.blg
 paper.log
 paper.out
 paper.bbl.stale
 paper_build*.log
+paper.pdf
+
+# Internal / template
+thumbnails/
+CLAUDE.md
+REVIEWER_RESPONSES.md
+.claude/
 
 # Scratch / temp
 *.ppm
