@@ -2,7 +2,7 @@
 
 **Paper:** *VISTA: Value-Informed Sequential Test-time Allocation*  
 **Authors:** Jun-young Kong, Young-guk Ha (Konkuk University)  
-**Venue:** Submitted to *Information Sciences* (Elsevier)
+
 
 This repository contains the full implementation, experimental data, and analysis code for VISTA — a method for adaptive reasoning-budget selection in LLM deployments.
 VISTA uses randomized full-trajectory audits and importance-weighted policy comparison to estimate the marginal value of additional thinking tokens, then applies anytime-valid confidence sequences to certify budget reductions with a statistical coverage guarantee.
